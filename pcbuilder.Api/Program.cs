@@ -1,9 +1,13 @@
 using System.Text;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using pcbuilder.Api.Validators;
 using pcbuilder.Application.Interfaces;
+using pcbuilder.Application.Services;
 using pcbuilder.Domain.Models;
 using pcbuilder.Infrastructure.Authentication;
 using pcbuilder.Infrastructure.Persistence;
@@ -46,6 +50,9 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterUserRequestValidator>();
 
 var app = builder.Build();
 
@@ -56,6 +63,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+    MinimumSameSitePolicy = SameSiteMode.Strict,
+    HttpOnly = HttpOnlyPolicy.Always,
+    Secure = CookieSecurePolicy.Always
+});
 
 app.UseAuthorization();
 

@@ -8,10 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\pcbuilder.Domain\pcbuilder.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Services\" />
+      <ProjectReference Include="..\pcbuilder.Shared\pcbuilder.Shared.csproj" />
     </ItemGroup>
 
 </Project>

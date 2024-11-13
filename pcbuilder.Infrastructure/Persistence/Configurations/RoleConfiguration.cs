@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace pcbuilder.Infrastructure.Persistence.Configurations;
 
-public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
+public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole<int>>
 {
-    public void Configure(EntityTypeBuilder<IdentityRole> builder)
+    public void Configure(EntityTypeBuilder<IdentityRole<int>> builder)
     {
         builder.HasData(
-            new IdentityRole
+            new IdentityRole<int>
             {
-                Id = "1",
+                Id = 1,
                 Name = "Admin",
                 NormalizedName = "ADMIN"
             },
-            new IdentityRole
+            new IdentityRole<int>
             {
-                Id = "2",
+                Id = 2,
                 Name = "User",
                 NormalizedName = "USER"
             });

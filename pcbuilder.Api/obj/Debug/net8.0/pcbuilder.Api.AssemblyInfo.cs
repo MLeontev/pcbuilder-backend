@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("pcbuilder.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0591b4f6940b0e8c5070400a59f32fd93f1a0ac0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f1c068976dc2d824b7b28348fdc4e5cde2f5f5c")]
 [assembly: System.Reflection.AssemblyProductAttribute("pcbuilder.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("pcbuilder.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

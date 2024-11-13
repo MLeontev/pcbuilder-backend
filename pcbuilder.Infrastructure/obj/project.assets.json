@@ -1048,7 +1048,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "pcbuilder.Domain": "1.0.0"
+          "pcbuilder.Domain": "1.0.0",
+          "pcbuilder.Shared": "1.0.0"
         },
         "compile": {
           "bin/placeholder/pcbuilder.Application.dll": {}
@@ -1061,13 +1062,24 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.11"
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.11",
+          "pcbuilder.Shared": "1.0.0"
         },
         "compile": {
           "bin/placeholder/pcbuilder.Domain.dll": {}
         },
         "runtime": {
           "bin/placeholder/pcbuilder.Domain.dll": {}
+        }
+      },
+      "pcbuilder.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/pcbuilder.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/pcbuilder.Shared.dll": {}
         }
       }
     }
@@ -2654,6 +2666,11 @@
       "type": "project",
       "path": "../pcbuilder.Domain/pcbuilder.Domain.csproj",
       "msbuildProject": "../pcbuilder.Domain/pcbuilder.Domain.csproj"
+    },
+    "pcbuilder.Shared/1.0.0": {
+      "type": "project",
+      "path": "../pcbuilder.Shared/pcbuilder.Shared.csproj",
+      "msbuildProject": "../pcbuilder.Shared/pcbuilder.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
