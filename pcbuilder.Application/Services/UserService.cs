@@ -18,12 +18,12 @@ public class UserService : IUserService
         _jwtProvider = jwtProvider;
     }
     
-    public async Task<Result<UserRegistrationResult>> RegisterUser(string username, string password)
+    public async Task<Result<LoginDto>> RegisterUser(string username, string password)
     {
         var existingUser = await _userManager.FindByNameAsync(username);
         if (existingUser != null)
         {
-            return Result.Failure<UserRegistrationResult>(UserErrors.UsernameTaken);
+            return Result.Failure<LoginDto>(UserErrors.UsernameTaken);
         }
         
         var user = new User { UserName = username };
@@ -33,7 +33,7 @@ public class UserService : IUserService
         if (!result.Succeeded)
         {
             var error = result.Errors.FirstOrDefault();
-            return Result.Failure<UserRegistrationResult>(
+            return Result.Failure<LoginDto>(
                 error != null 
                     ? Error.Validation(error.Code, error.Description) 
                     : Error.Failure("UnknownError", "Регистрация не удалась по неизвестной причине"));
@@ -48,11 +48,15 @@ public class UserService : IUserService
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30);
         await _userManager.UpdateAsync(user);
         
-        var registrationResult = new UserRegistrationResult
+        var roles = await _userManager.GetRolesAsync(user);
+    
+        var registrationResult = new LoginDto
         {
             Id = user.Id,
             UserName = user.UserName,
-            AccessToken = accessToken
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+            Roles = roles.ToList()
         };
 
         return Result.Success(registrationResult);

@@ -34,9 +34,24 @@ public class AuthController : ControllerBase
         }
         
         var result = await _userService.RegisterUser(request.Username, request.Password);
+
+        if (result.IsFailure)
+        {
+            return result.ToErrorResponse();
+        }
         
-        return result.IsFailure 
-            ? result.ToErrorResponse()
-            : Ok(result.Value);
+        var loginDto = result.Value;
+        
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            Expires = DateTime.UtcNow.AddDays(30),
+            SameSite = SameSiteMode.Strict
+        };
+
+        Response.Cookies.Append("RefreshToken", loginDto.RefreshToken, cookieOptions);
+        
+        return Ok(RegisterUserResponse.FromLoginDto(loginDto));
     } 
 }
