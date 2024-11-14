@@ -1,6 +1,6 @@
 namespace pcbuilder.Application.DTOs.Users;
 
-public class LoginDto
+public class AuthResult
 {
     public int Id { get; set; }
     public string UserName { get; set; } = string.Empty;

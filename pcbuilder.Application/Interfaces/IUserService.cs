@@ -5,6 +5,9 @@ namespace pcbuilder.Application.Interfaces;
 
 public interface IUserService
 {
-    public Task<Result<LoginDto>> RegisterUser(string username, string password);
-    public Task<Result<LoginDto>> Login(string username, string password);
+    public Task<Result<AuthResult>> RegisterUser(string username, string password);
+    
+    public Task<Result<AuthResult>> Login(string username, string password);
+    
+    public Task<Result<AuthResult>> RefreshToken(string accessToken, string refreshToken);
 }

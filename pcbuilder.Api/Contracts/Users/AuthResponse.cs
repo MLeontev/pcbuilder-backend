@@ -2,21 +2,21 @@ using pcbuilder.Application.DTOs.Users;
 
 namespace pcbuilder.Api.Contracts.Users;
 
-public class UserResponse
+public class AuthResponse
 {
     public int Id { get; set; }
     public string UserName { get; set; } = string.Empty;
     public string AccessToken { get; set; } = string.Empty;
     public List<string> Roles { get; set; } = [];
 
-    public static UserResponse FromLoginDto(LoginDto loginDto)
+    public static AuthResponse FromLoginDto(AuthResult authResult)
     {
-        return new UserResponse
+        return new AuthResponse
         {
-            Id = loginDto.Id,
-            UserName = loginDto.UserName,
-            AccessToken = loginDto.AccessToken,
-            Roles = loginDto.Roles
+            Id = authResult.Id,
+            UserName = authResult.UserName,
+            AccessToken = authResult.AccessToken,
+            Roles = authResult.Roles
         };
     }
 }

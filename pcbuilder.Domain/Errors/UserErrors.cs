@@ -9,4 +9,7 @@ public static class UserErrors
     
     public static Error InvalidCredentials = Error.Unauthorized(
         "Users.InvalidCredentials", $"Неверный логин или пароль");
+    
+    public static Error InvalidToken = Error.Unauthorized(
+        "Users.InvalidToken", $"Неверный токен");
 }

@@ -18,12 +18,12 @@ public class UserService : IUserService
         _jwtProvider = jwtProvider;
     }
     
-    public async Task<Result<LoginDto>> RegisterUser(string username, string password)
+    public async Task<Result<AuthResult>> RegisterUser(string username, string password)
     {
         var existingUser = await _userManager.FindByNameAsync(username);
         if (existingUser != null)
         {
-            return Result.Failure<LoginDto>(UserErrors.UsernameTaken);
+            return Result.Failure<AuthResult>(UserErrors.UsernameTaken);
         }
         
         var user = new User { UserName = username };
@@ -33,7 +33,7 @@ public class UserService : IUserService
         if (!result.Succeeded)
         {
             var error = result.Errors.FirstOrDefault();
-            return Result.Failure<LoginDto>(
+            return Result.Failure<AuthResult>(
                 error != null 
                     ? Error.Validation(error.Code, error.Description) 
                     : Error.Failure("UnknownError", "Регистрация не удалась по неизвестной причине"));
@@ -50,7 +50,7 @@ public class UserService : IUserService
         
         var roles = await _userManager.GetRolesAsync(user);
     
-        var registrationResult = new LoginDto
+        var registrationResult = new AuthResult
         {
             Id = user.Id,
             UserName = user.UserName,
@@ -62,20 +62,20 @@ public class UserService : IUserService
         return Result.Success(registrationResult);
     }
 
-    public async Task<Result<LoginDto>> Login(string username, string password)
+    public async Task<Result<AuthResult>> Login(string username, string password)
     {
         var user = await _userManager.FindByNameAsync(username);
 
         if (user == null)
         {
-            return Result.Failure<LoginDto>(UserErrors.InvalidCredentials);
+            return Result.Failure<AuthResult>(UserErrors.InvalidCredentials);
         }
         
         var passwordValid = await _userManager.CheckPasswordAsync(user, password);
 
         if (!passwordValid)
         {
-            return Result.Failure<LoginDto>(UserErrors.InvalidCredentials);
+            return Result.Failure<AuthResult>(UserErrors.InvalidCredentials);
         }
         
         var roles = await _userManager.GetRolesAsync(user);
@@ -87,7 +87,7 @@ public class UserService : IUserService
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30);
         await _userManager.UpdateAsync(user);
         
-        var loginResult = new LoginDto
+        var loginResult = new AuthResult
         {
             Id = user.Id,
             UserName = user.UserName!,
@@ -97,5 +97,44 @@ public class UserService : IUserService
         };
 
         return Result.Success(loginResult);
+    }
+
+    public async Task<Result<AuthResult>> RefreshToken(string accessToken, string refreshToken)
+    {
+        var principal = _jwtProvider.GetPrincipalFromExpiredToken(accessToken);
+
+        if (principal == null)
+        {
+            return Result.Failure<AuthResult>(UserErrors.InvalidToken);
+        }
+        
+        var user = await _userManager.FindByNameAsync(principal.Identity!.Name!);
+
+        if (user == null
+            || user.RefreshToken != refreshToken
+            || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+        {
+            return Result.Failure<AuthResult>(UserErrors.InvalidToken);
+        }
+        
+        var roles = await _userManager.GetRolesAsync(user);
+        
+        var newAccessToken = _jwtProvider.GenerateAccessToken(user, roles);
+        var newRefreshToken = _jwtProvider.GenerateRefreshToken();
+        
+        user.RefreshToken = newRefreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30);
+        await _userManager.UpdateAsync(user);
+        
+        var refreshResult = new AuthResult
+        {
+            Id = user.Id,
+            UserName = user.UserName!,
+            AccessToken = newAccessToken,
+            RefreshToken = newRefreshToken,
+            Roles = roles.ToList()
+        };
+
+        return Result.Success(refreshResult);
     }
 }

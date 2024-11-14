@@ -1,10 +1,10 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using pcbuilder.Api.Contracts;
 using pcbuilder.Api.Contracts.Users;
 using pcbuilder.Api.Extensions;
 using pcbuilder.Application.Interfaces;
+using pcbuilder.Domain.Errors;
 
 namespace pcbuilder.Api.Controllers;
 
@@ -44,7 +44,7 @@ public class AuthController : ControllerBase
             return result.ToErrorResponse();
         }
         
-        var loginDto = result.Value;
+        var authResult = result.Value;
         
         var cookieOptions = new CookieOptions
         {
@@ -54,9 +54,9 @@ public class AuthController : ControllerBase
             SameSite = SameSiteMode.Strict
         };
 
-        Response.Cookies.Append("RefreshToken", loginDto.RefreshToken, cookieOptions);
+        Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
         
-        return Ok(UserResponse.FromLoginDto(loginDto));
+        return Ok(AuthResponse.FromLoginDto(authResult));
     }
 
     [HttpPost("login")]
@@ -77,7 +77,7 @@ public class AuthController : ControllerBase
             return result.ToErrorResponse();
         }
         
-        var loginDto = result.Value;
+        var authResult = result.Value;
         
         var cookieOptions = new CookieOptions
         {
@@ -87,8 +87,47 @@ public class AuthController : ControllerBase
             SameSite = SameSiteMode.Strict
         };
 
-        Response.Cookies.Append("RefreshToken", loginDto.RefreshToken, cookieOptions);
+        Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
         
-        return Ok(UserResponse.FromLoginDto(loginDto));
+        return Ok(AuthResponse.FromLoginDto(authResult));
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh()
+    {
+        var accessToken = Request.Headers.Authorization.ToString();
+        
+        if (string.IsNullOrEmpty(accessToken) || !accessToken.StartsWith("Bearer "))
+        {
+            return Unauthorized(ErrorResponse.FromError(UserErrors.InvalidToken));
+        }
+
+        var refreshToken = Request.Cookies["RefreshToken"];
+        
+        if (string.IsNullOrEmpty(refreshToken))
+        {
+            return Unauthorized(ErrorResponse.FromError(UserErrors.InvalidToken));
+        }
+        
+        var result = await _userService.RefreshToken(accessToken.Substring("Bearer ".Length), refreshToken);
+        
+        if (result.IsFailure)
+        {
+            return result.ToErrorResponse();
+        }
+        
+        var authResult = result.Value;
+        
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            Expires = DateTime.UtcNow.AddDays(30),
+            SameSite = SameSiteMode.Strict
+        };
+
+        Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
+        
+        return Ok(AuthResponse.FromLoginDto(authResult));
     }
 }
