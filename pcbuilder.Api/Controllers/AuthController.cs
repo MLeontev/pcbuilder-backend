@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using pcbuilder.Api.Contracts;
 using pcbuilder.Api.Contracts.Users;
@@ -129,5 +130,27 @@ public class AuthController : ControllerBase
         Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
         
         return Ok(AuthResponse.FromLoginDto(authResult));
+    }
+    
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        var refreshToken = Request.Cookies["RefreshToken"];
+        
+        if (string.IsNullOrEmpty(refreshToken))
+        {
+            return Unauthorized(ErrorResponse.FromError(UserErrors.InvalidToken));
+        }
+        
+        var result = await _userService.Logout(refreshToken);
+        
+        if (result.IsFailure)
+        {
+            return result.ToErrorResponse();
+        }
+        
+        Response.Cookies.Delete("RefreshToken");
+        return Ok();
     }
 }

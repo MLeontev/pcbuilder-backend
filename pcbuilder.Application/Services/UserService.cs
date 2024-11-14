@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using pcbuilder.Application.DTOs.Users;
 using pcbuilder.Application.Interfaces;
 using pcbuilder.Domain.Errors;
@@ -136,5 +137,21 @@ public class UserService : IUserService
         };
 
         return Result.Success(refreshResult);
+    }
+
+    public async Task<Result> Logout(string refreshToken)
+    {
+        var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshToken == refreshToken);
+        
+        if (user == null)
+        {
+            return Result.Failure(UserErrors.InvalidToken);
+        }
+        
+        user.RefreshToken = string.Empty;
+        user.RefreshTokenExpiryTime = null;
+        await _userManager.UpdateAsync(user);
+        
+        return Result.Success();
     }
 }
