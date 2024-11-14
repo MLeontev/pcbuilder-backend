@@ -61,4 +61,41 @@ public class UserService : IUserService
 
         return Result.Success(registrationResult);
     }
+
+    public async Task<Result<LoginDto>> Login(string username, string password)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+
+        if (user == null)
+        {
+            return Result.Failure<LoginDto>(UserErrors.InvalidCredentials);
+        }
+        
+        var passwordValid = await _userManager.CheckPasswordAsync(user, password);
+
+        if (!passwordValid)
+        {
+            return Result.Failure<LoginDto>(UserErrors.InvalidCredentials);
+        }
+        
+        var roles = await _userManager.GetRolesAsync(user);
+        
+        var accessToken = _jwtProvider.GenerateAccessToken(user, roles);
+        var refreshToken = _jwtProvider.GenerateRefreshToken();
+        
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30);
+        await _userManager.UpdateAsync(user);
+        
+        var loginResult = new LoginDto
+        {
+            Id = user.Id,
+            UserName = user.UserName!,
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+            Roles = roles.ToList()
+        };
+
+        return Result.Success(loginResult);
+    }
 }
