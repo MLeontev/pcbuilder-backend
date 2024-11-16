@@ -96,13 +96,6 @@ public class AuthController : ControllerBase
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh()
     {
-        var accessToken = Request.Headers.Authorization.ToString();
-        
-        if (string.IsNullOrEmpty(accessToken) || !accessToken.StartsWith("Bearer "))
-        {
-            return Unauthorized(ErrorResponse.FromError(UserErrors.InvalidToken));
-        }
-
         var refreshToken = Request.Cookies["RefreshToken"];
         
         if (string.IsNullOrEmpty(refreshToken))
@@ -110,7 +103,7 @@ public class AuthController : ControllerBase
             return Unauthorized(ErrorResponse.FromError(UserErrors.InvalidToken));
         }
         
-        var result = await _userService.RefreshToken(accessToken.Substring("Bearer ".Length), refreshToken);
+        var result = await _userService.RefreshToken(refreshToken);
         
         if (result.IsFailure)
         {

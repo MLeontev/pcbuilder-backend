@@ -100,16 +100,9 @@ public class UserService : IUserService
         return Result.Success(loginResult);
     }
 
-    public async Task<Result<AuthResult>> RefreshToken(string accessToken, string refreshToken)
+    public async Task<Result<AuthResult>> RefreshToken(string refreshToken)
     {
-        var principal = _jwtProvider.GetPrincipalFromExpiredToken(accessToken);
-
-        if (principal == null)
-        {
-            return Result.Failure<AuthResult>(UserErrors.InvalidToken);
-        }
-        
-        var user = await _userManager.FindByNameAsync(principal.Identity!.Name!);
+        var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshToken == refreshToken);
 
         if (user == null
             || user.RefreshToken != refreshToken
