@@ -50,9 +50,9 @@ public class AuthController : ControllerBase
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
+            Secure = false,
             Expires = DateTime.UtcNow.AddDays(30),
-            SameSite = SameSiteMode.Strict
+            SameSite = SameSiteMode.None
         };
 
         Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
@@ -83,9 +83,9 @@ public class AuthController : ControllerBase
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
+            Secure = false,
             Expires = DateTime.UtcNow.AddDays(30),
-            SameSite = SameSiteMode.Strict
+            SameSite = SameSiteMode.None
         };
 
         Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
@@ -93,7 +93,7 @@ public class AuthController : ControllerBase
         return Ok(AuthResponse.FromLoginDto(authResult));
     }
 
-    [HttpPost("refresh")]
+    [HttpGet("refresh")]
     public async Task<IActionResult> Refresh()
     {
         var refreshToken = Request.Cookies["RefreshToken"];
@@ -115,9 +115,9 @@ public class AuthController : ControllerBase
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
+            Secure = false,
             Expires = DateTime.UtcNow.AddDays(30),
-            SameSite = SameSiteMode.Strict
+            SameSite = SameSiteMode.None
         };
 
         Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
@@ -125,7 +125,6 @@ public class AuthController : ControllerBase
         return Ok(AuthResponse.FromLoginDto(authResult));
     }
     
-    [Authorize]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
