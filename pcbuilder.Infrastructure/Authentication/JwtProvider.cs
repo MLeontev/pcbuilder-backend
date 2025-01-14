@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using pcbuilder.Application.Interfaces;
 using pcbuilder.Domain.Models;
+using pcbuilder.Domain.Models.Common;
 
 namespace pcbuilder.Infrastructure.Authentication;
 

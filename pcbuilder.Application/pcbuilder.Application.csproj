@@ -11,4 +11,8 @@
       <ProjectReference Include="..\pcbuilder.Shared\pcbuilder.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="DTOs\Components\" />
+    </ItemGroup>
+
 </Project>

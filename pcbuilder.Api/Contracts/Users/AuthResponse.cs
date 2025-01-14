@@ -9,7 +9,7 @@ public class AuthResponse
     public string AccessToken { get; set; } = string.Empty;
     public List<string> Roles { get; set; } = [];
 
-    public static AuthResponse FromLoginDto(AuthResult authResult)
+    public static AuthResponse FromAuthResult(AuthResult authResult)
     {
         return new AuthResponse
         {

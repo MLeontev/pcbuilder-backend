@@ -168,7 +168,145 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("pcbuilder.Domain.Models.User", b =>
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseMotherboardFormFactor", b =>
+                {
+                    b.Property<int>("CaseId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MotherboardFormFactorId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CaseId", "MotherboardFormFactorId");
+
+                    b.HasIndex("MotherboardFormFactorId");
+
+                    b.ToTable("CaseMotherboardFormFactors");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseStorageFormFactor", b =>
+                {
+                    b.Property<int>("CaseId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StorageFormFactorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CaseId", "StorageFormFactorId");
+
+                    b.HasIndex("StorageFormFactorId");
+
+                    b.ToTable("CaseStorageFormFactors");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseWaterCoolingSize", b =>
+                {
+                    b.Property<int>("CaseId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WaterCoolingSizeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CaseId", "WaterCoolingSizeId");
+
+                    b.HasIndex("WaterCoolingSizeId");
+
+                    b.ToTable("CaseWaterCoolingSizes");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Common.Brand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brands");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Common.Build", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Builds");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Common.BuildComponent", b =>
+                {
+                    b.Property<int>("BuildId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PcComponentId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("BuildId", "PcComponentId");
+
+                    b.HasIndex("PcComponentId");
+
+                    b.ToTable("BuildComponents");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Common.PcComponent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BrandId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("PcComponents");
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Common.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -242,6 +380,577 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("pcbuilder.Domain.Models.Coolers.CoolerSocket", b =>
+                {
+                    b.Property<int>("CoolerId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SocketId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CoolerId", "SocketId");
+
+                    b.HasIndex("SocketId");
+
+                    b.ToTable("CoolerSockets");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Coolers.WaterCoolingSize", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Size")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WaterCoolingSizes");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.CpuMemory", b =>
+                {
+                    b.Property<int>("CpuId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MemoryTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MaxMemorySpeed")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CpuId", "MemoryTypeId");
+
+                    b.HasIndex("MemoryTypeId");
+
+                    b.ToTable("CpuMemories");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.CpuSeries", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CpuSeries");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.Socket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sockets");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.GpuChipset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GpuChipsets");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.GpuPowerConnector", b =>
+                {
+                    b.Property<int>("PowerConnectorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("GpuId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("PowerConnectorId", "GpuId");
+
+                    b.HasIndex("GpuId");
+
+                    b.ToTable("GpuPowerConnectors");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardChipset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MotherboardChipsets");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardFormFactor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MotherboardFormFactors");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPciSlot", b =>
+                {
+                    b.Property<int>("MotherboardId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PciSlotId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MotherboardId", "PciSlotId");
+
+                    b.HasIndex("PciSlotId");
+
+                    b.ToTable("MotherboardPciSlots");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPowerConnector", b =>
+                {
+                    b.Property<int>("MotherboardId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PowerConnectorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MotherboardId", "PowerConnectorId");
+
+                    b.HasIndex("PowerConnectorId");
+
+                    b.ToTable("MotherboardPowerConnectors");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardStorage", b =>
+                {
+                    b.Property<int>("MotherboardId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StorageInterfaceId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MotherboardId", "StorageInterfaceId");
+
+                    b.HasIndex("StorageInterfaceId");
+
+                    b.ToTable("MotherboardStorages");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.PciSlot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Bandwidth")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PciSlots");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerConnector", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Pins")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PowerConnectors");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PsuEfficiency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PsuEfficiencies");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PsuPowerConnector", b =>
+                {
+                    b.Property<int>("PsuId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PowerConnectorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PowerSupplyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("PsuId", "PowerConnectorId");
+
+                    b.HasIndex("PowerConnectorId");
+
+                    b.HasIndex("PowerSupplyId");
+
+                    b.ToTable("PsuPowerConnectors");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Ram.MemoryType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MemoryTypes");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Storage.StorageFormFactor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StorageFormFactors");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Storage.StorageInterface", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StorageInterfaces");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Storage.StorageType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StorageTypes");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.Case", b =>
+                {
+                    b.HasBaseType("pcbuilder.Domain.Models.Common.PcComponent");
+
+                    b.Property<int>("MaxCoolerHeight")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MaxGpuLength")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MaxPsuLength")
+                        .HasColumnType("integer");
+
+                    b.ToTable("Cases");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Coolers.Cooler", b =>
+                {
+                    b.HasBaseType("pcbuilder.Domain.Models.Common.PcComponent");
+
+                    b.Property<int?>("Height")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Tdp")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("WaterCoolingSizeId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("WaterCoolingSizeId");
+
+                    b.ToTable("Coolers");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.Cpu", b =>
+                {
+                    b.HasBaseType("pcbuilder.Domain.Models.Common.PcComponent");
+
+                    b.Property<decimal>("BaseClock")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("BoostClock")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("Cores")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IntegratedGpu")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("MaxMemoryCapacity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SeriesId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SocketId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Tdp")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Threads")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("SeriesId");
+
+                    b.HasIndex("SocketId");
+
+                    b.ToTable("Cpus");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.Gpu", b =>
+                {
+                    b.HasBaseType("pcbuilder.Domain.Models.Common.PcComponent");
+
+                    b.Property<int>("BoostClock")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("BusWidth")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ChipsetId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CoreClock")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Length")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MemoryCapacity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PciSlotId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RecommendedPsuPower")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Tdp")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("ChipsetId");
+
+                    b.HasIndex("PciSlotId");
+
+                    b.ToTable("Gpus");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.Motherboard", b =>
+                {
+                    b.HasBaseType("pcbuilder.Domain.Models.Common.PcComponent");
+
+                    b.Property<int>("FormFactorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MaxMemoryCapacity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MaxMemorySpeed")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MemorySlots")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MemoryTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MotherboardChipsetId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MotherboardFormFactorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SocketId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("MemoryTypeId");
+
+                    b.HasIndex("MotherboardChipsetId");
+
+                    b.HasIndex("MotherboardFormFactorId");
+
+                    b.HasIndex("SocketId");
+
+                    b.ToTable("Motherboards");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerSupply", b =>
+                {
+                    b.HasBaseType("pcbuilder.Domain.Models.Common.PcComponent");
+
+                    b.Property<int>("Power")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PsuEfficiencyId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("PsuEfficiencyId");
+
+                    b.ToTable("PowerSupplies");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Ram.Ram", b =>
+                {
+                    b.HasBaseType("pcbuilder.Domain.Models.Common.PcComponent");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Frequency")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MemoryTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Modules")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Timing")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasIndex("MemoryTypeId");
+
+                    b.ToTable("Rams");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Storage.Storage", b =>
+                {
+                    b.HasBaseType("pcbuilder.Domain.Models.Common.PcComponent");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ReadSpeed")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StorageFormFactorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StorageInterfaceId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StorageTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WriteSpeed")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("StorageFormFactorId");
+
+                    b.HasIndex("StorageInterfaceId");
+
+                    b.HasIndex("StorageTypeId");
+
+                    b.ToTable("Storage");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
@@ -253,7 +962,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("pcbuilder.Domain.Models.User", null)
+                    b.HasOne("pcbuilder.Domain.Models.Common.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -262,7 +971,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("pcbuilder.Domain.Models.User", null)
+                    b.HasOne("pcbuilder.Domain.Models.Common.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -277,7 +986,7 @@ namespace pcbuilder.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("pcbuilder.Domain.Models.User", null)
+                    b.HasOne("pcbuilder.Domain.Models.Common.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -286,11 +995,482 @@ namespace pcbuilder.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("pcbuilder.Domain.Models.User", null)
+                    b.HasOne("pcbuilder.Domain.Models.Common.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseMotherboardFormFactor", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Cases.Case", "Case")
+                        .WithMany("CaseMotherboardFormFactors")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Motherboards.MotherboardFormFactor", "MotherboardFormFactor")
+                        .WithMany()
+                        .HasForeignKey("MotherboardFormFactorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+
+                    b.Navigation("MotherboardFormFactor");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseStorageFormFactor", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Cases.Case", "Case")
+                        .WithMany("CaseStorageFormFactors")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Storage.StorageFormFactor", "StorageFormFactor")
+                        .WithMany()
+                        .HasForeignKey("StorageFormFactorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+
+                    b.Navigation("StorageFormFactor");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseWaterCoolingSize", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Cases.Case", "Case")
+                        .WithMany("CaseWaterCoolingSizes")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Coolers.WaterCoolingSize", "WaterCoolingSize")
+                        .WithMany()
+                        .HasForeignKey("WaterCoolingSizeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+
+                    b.Navigation("WaterCoolingSize");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Common.Build", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Common.User", "User")
+                        .WithMany("Builds")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Common.BuildComponent", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Common.Build", "Build")
+                        .WithMany("BuildComponents")
+                        .HasForeignKey("BuildId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Common.PcComponent", "PcComponent")
+                        .WithMany()
+                        .HasForeignKey("PcComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Build");
+
+                    b.Navigation("PcComponent");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Common.PcComponent", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Common.Brand", "Brand")
+                        .WithMany("PcComponents")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Coolers.CoolerSocket", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Coolers.Cooler", "Cooler")
+                        .WithMany("CoolerSockets")
+                        .HasForeignKey("CoolerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Cpus.Socket", "Socket")
+                        .WithMany()
+                        .HasForeignKey("SocketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cooler");
+
+                    b.Navigation("Socket");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.CpuMemory", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Cpus.Cpu", "Cpu")
+                        .WithMany("CpuMemories")
+                        .HasForeignKey("CpuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Ram.MemoryType", "MemoryType")
+                        .WithMany()
+                        .HasForeignKey("MemoryTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cpu");
+
+                    b.Navigation("MemoryType");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.GpuPowerConnector", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Gpus.Gpu", "Gpu")
+                        .WithMany("GpuPowerConnectors")
+                        .HasForeignKey("GpuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.PowerSupplies.PowerConnector", "PowerConnector")
+                        .WithMany()
+                        .HasForeignKey("PowerConnectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Gpu");
+
+                    b.Navigation("PowerConnector");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPciSlot", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Motherboards.Motherboard", "Motherboard")
+                        .WithMany("MotherboardPciSlots")
+                        .HasForeignKey("MotherboardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Motherboards.PciSlot", "PciSlot")
+                        .WithMany()
+                        .HasForeignKey("PciSlotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Motherboard");
+
+                    b.Navigation("PciSlot");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPowerConnector", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Motherboards.Motherboard", "Motherboard")
+                        .WithMany("MotherboardPowerConnectors")
+                        .HasForeignKey("MotherboardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.PowerSupplies.PowerConnector", "PowerConnector")
+                        .WithMany()
+                        .HasForeignKey("PowerConnectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Motherboard");
+
+                    b.Navigation("PowerConnector");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardStorage", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Motherboards.Motherboard", "Motherboard")
+                        .WithMany("MotherboardStorages")
+                        .HasForeignKey("MotherboardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Storage.StorageInterface", "StorageInterface")
+                        .WithMany()
+                        .HasForeignKey("StorageInterfaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Motherboard");
+
+                    b.Navigation("StorageInterface");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PsuPowerConnector", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.PowerSupplies.PowerConnector", "PowerConnector")
+                        .WithMany()
+                        .HasForeignKey("PowerConnectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.PowerSupplies.PowerSupply", "PowerSupply")
+                        .WithMany("PsuPowerConnectors")
+                        .HasForeignKey("PowerSupplyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PowerConnector");
+
+                    b.Navigation("PowerSupply");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.Case", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Common.PcComponent", null)
+                        .WithOne()
+                        .HasForeignKey("pcbuilder.Domain.Models.Cases.Case", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Coolers.Cooler", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Common.PcComponent", null)
+                        .WithOne()
+                        .HasForeignKey("pcbuilder.Domain.Models.Coolers.Cooler", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Coolers.WaterCoolingSize", "WaterCoolingSize")
+                        .WithMany()
+                        .HasForeignKey("WaterCoolingSizeId");
+
+                    b.Navigation("WaterCoolingSize");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.Cpu", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Common.PcComponent", null)
+                        .WithOne()
+                        .HasForeignKey("pcbuilder.Domain.Models.Cpus.Cpu", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Cpus.CpuSeries", "Series")
+                        .WithMany("Cpus")
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Cpus.Socket", "Socket")
+                        .WithMany()
+                        .HasForeignKey("SocketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Series");
+
+                    b.Navigation("Socket");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.Gpu", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Gpus.GpuChipset", "Chipset")
+                        .WithMany()
+                        .HasForeignKey("ChipsetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Common.PcComponent", null)
+                        .WithOne()
+                        .HasForeignKey("pcbuilder.Domain.Models.Gpus.Gpu", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Motherboards.PciSlot", "PciSlot")
+                        .WithMany()
+                        .HasForeignKey("PciSlotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chipset");
+
+                    b.Navigation("PciSlot");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.Motherboard", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Common.PcComponent", null)
+                        .WithOne()
+                        .HasForeignKey("pcbuilder.Domain.Models.Motherboards.Motherboard", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Ram.MemoryType", "MemoryType")
+                        .WithMany()
+                        .HasForeignKey("MemoryTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Motherboards.MotherboardChipset", "MotherboardChipset")
+                        .WithMany()
+                        .HasForeignKey("MotherboardChipsetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Motherboards.MotherboardFormFactor", "MotherboardFormFactor")
+                        .WithMany()
+                        .HasForeignKey("MotherboardFormFactorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Cpus.Socket", "Socket")
+                        .WithMany()
+                        .HasForeignKey("SocketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MemoryType");
+
+                    b.Navigation("MotherboardChipset");
+
+                    b.Navigation("MotherboardFormFactor");
+
+                    b.Navigation("Socket");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerSupply", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Common.PcComponent", null)
+                        .WithOne()
+                        .HasForeignKey("pcbuilder.Domain.Models.PowerSupplies.PowerSupply", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.PowerSupplies.PsuEfficiency", "PsuEfficiency")
+                        .WithMany()
+                        .HasForeignKey("PsuEfficiencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PsuEfficiency");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Ram.Ram", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Common.PcComponent", null)
+                        .WithOne()
+                        .HasForeignKey("pcbuilder.Domain.Models.Ram.Ram", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Ram.MemoryType", "MemoryType")
+                        .WithMany()
+                        .HasForeignKey("MemoryTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MemoryType");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Storage.Storage", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Common.PcComponent", null)
+                        .WithOne()
+                        .HasForeignKey("pcbuilder.Domain.Models.Storage.Storage", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Storage.StorageFormFactor", "StorageFormFactor")
+                        .WithMany()
+                        .HasForeignKey("StorageFormFactorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Storage.StorageInterface", "StorageInterface")
+                        .WithMany()
+                        .HasForeignKey("StorageInterfaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Storage.StorageType", "StorageType")
+                        .WithMany()
+                        .HasForeignKey("StorageTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StorageFormFactor");
+
+                    b.Navigation("StorageInterface");
+
+                    b.Navigation("StorageType");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Common.Brand", b =>
+                {
+                    b.Navigation("PcComponents");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Common.Build", b =>
+                {
+                    b.Navigation("BuildComponents");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Common.User", b =>
+                {
+                    b.Navigation("Builds");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.CpuSeries", b =>
+                {
+                    b.Navigation("Cpus");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.Case", b =>
+                {
+                    b.Navigation("CaseMotherboardFormFactors");
+
+                    b.Navigation("CaseStorageFormFactors");
+
+                    b.Navigation("CaseWaterCoolingSizes");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Coolers.Cooler", b =>
+                {
+                    b.Navigation("CoolerSockets");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.Cpu", b =>
+                {
+                    b.Navigation("CpuMemories");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.Gpu", b =>
+                {
+                    b.Navigation("GpuPowerConnectors");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.Motherboard", b =>
+                {
+                    b.Navigation("MotherboardPciSlots");
+
+                    b.Navigation("MotherboardPowerConnectors");
+
+                    b.Navigation("MotherboardStorages");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerSupply", b =>
+                {
+                    b.Navigation("PsuPowerConnectors");
                 });
 #pragma warning restore 612, 618
         }

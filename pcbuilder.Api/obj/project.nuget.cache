@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UDMwSAqwllA=",
+  "dgSpecHash": "vG/uAK5RyNA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Api\\pcbuilder.Api.csproj",
+  "projectFilePath": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Api\\pcbuilder.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\LMax\\.nuget\\packages\\fluentvalidation\\11.10.0\\fluentvalidation.11.10.0.nupkg.sha512",
     "C:\\Users\\LMax\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.10.0\\fluentvalidation.dependencyinjectionextensions.11.10.0.nupkg.sha512",

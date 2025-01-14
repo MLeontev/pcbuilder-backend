@@ -1,43 +1,36 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Application\\pcbuilder.Application.csproj": {}
+    "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Application\\pcbuilder.Application.csproj": {}
   },
   "projects": {
-    "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Application\\pcbuilder.Application.csproj": {
+    "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Application\\pcbuilder.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Application\\pcbuilder.Application.csproj",
+        "projectUniqueName": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Application\\pcbuilder.Application.csproj",
         "projectName": "pcbuilder.Application",
-        "projectPath": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Application\\pcbuilder.Application.csproj",
+        "projectPath": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Application\\pcbuilder.Application.csproj",
         "packagesPath": "C:\\Users\\LMax\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Application\\obj\\",
+        "outputPath": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Application\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\LMax\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\LMax\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Domain\\pcbuilder.Domain.csproj": {
-                "projectPath": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Domain\\pcbuilder.Domain.csproj"
+              "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Domain\\pcbuilder.Domain.csproj": {
+                "projectPath": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Domain\\pcbuilder.Domain.csproj"
               },
-              "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj": {
-                "projectPath": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj"
+              "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj": {
+                "projectPath": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj"
               }
             }
           }
@@ -50,7 +43,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -72,41 +65,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-preview.7.24407.12/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Domain\\pcbuilder.Domain.csproj": {
+    "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Domain\\pcbuilder.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Domain\\pcbuilder.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Domain\\pcbuilder.Domain.csproj",
         "projectName": "pcbuilder.Domain",
-        "projectPath": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Domain\\pcbuilder.Domain.csproj",
+        "projectPath": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Domain\\pcbuilder.Domain.csproj",
         "packagesPath": "C:\\Users\\LMax\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Domain\\obj\\",
+        "outputPath": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Domain\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\LMax\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\LMax\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj": {
-                "projectPath": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj"
+              "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj": {
+                "projectPath": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj"
               }
             }
           }
@@ -119,7 +105,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -147,33 +133,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-preview.7.24407.12/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj": {
+    "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj",
+        "projectUniqueName": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj",
         "projectName": "pcbuilder.Shared",
-        "projectPath": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj",
+        "projectPath": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\pcbuilder.Shared.csproj",
         "packagesPath": "C:\\Users\\LMax\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\obj\\",
+        "outputPath": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Shared\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\LMax\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\LMax\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -190,7 +169,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -212,7 +191,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-preview.7.24407.12/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

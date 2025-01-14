@@ -57,7 +57,7 @@ public class AuthController : ControllerBase
 
         Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
         
-        return Ok(AuthResponse.FromLoginDto(authResult));
+        return Ok(AuthResponse.FromAuthResult(authResult));
     }
 
     [HttpPost("login")]
@@ -90,7 +90,7 @@ public class AuthController : ControllerBase
 
         Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
         
-        return Ok(AuthResponse.FromLoginDto(authResult));
+        return Ok(AuthResponse.FromAuthResult(authResult));
     }
 
     [HttpGet("refresh")]
@@ -122,7 +122,7 @@ public class AuthController : ControllerBase
 
         Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
         
-        return Ok(AuthResponse.FromLoginDto(authResult));
+        return Ok(AuthResponse.FromAuthResult(authResult));
     }
     
     [HttpPost("logout")]

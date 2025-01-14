@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using pcbuilder.Api.Validators;
 using pcbuilder.Application.Interfaces;
 using pcbuilder.Application.Services;
-using pcbuilder.Domain.Models;
+using pcbuilder.Domain.Models.Common;
 using pcbuilder.Infrastructure.Authentication;
 using pcbuilder.Infrastructure.Persistence;
 

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lzYXmiJUaUY=",
+  "dgSpecHash": "qu/iOQzR9RA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\LMax\\source\\repos\\pcbuilder\\pcbuilder-backend\\pcbuilder.Infrastructure\\pcbuilder.Infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\LMax\\HSE\\Курсовая 3\\pcbuilder\\pcbuilder-backend\\pcbuilder.Infrastructure\\pcbuilder.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\LMax\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\LMax\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.11\\microsoft.aspnetcore.authentication.jwtbearer.8.0.11.nupkg.sha512",
