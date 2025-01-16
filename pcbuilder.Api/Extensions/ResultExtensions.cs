@@ -8,10 +8,7 @@ public static class ResultExtensions
 {
     public static IActionResult ToErrorResponse(this Result result)
     {
-        if (result.IsSuccess)
-        {
-            throw new InvalidOperationException();
-        }
+        if (result.IsSuccess) throw new InvalidOperationException();
 
         var response = new ErrorResponse
         {
@@ -25,8 +22,9 @@ public static class ResultExtensions
         };
     }
 
-    private static int GetStatusCode(ErrorType errorType) =>
-        errorType switch
+    private static int GetStatusCode(ErrorType errorType)
+    {
+        return errorType switch
         {
             ErrorType.Validation => StatusCodes.Status400BadRequest,
             ErrorType.NotFound => StatusCodes.Status404NotFound,
@@ -34,4 +32,5 @@ public static class ResultExtensions
             ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
             _ => StatusCodes.Status500InternalServerError
         };
+    }
 }

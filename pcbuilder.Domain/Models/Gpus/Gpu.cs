@@ -27,5 +27,5 @@ public class Gpu : PcComponent
 
     public int RecommendedPsuPower { get; set; }
 
-    public List<GpuPowerConnector> GpuPowerConnectors { get; set; } = new List<GpuPowerConnector>();
+    public List<GpuPowerConnector> GpuPowerConnectors { get; set; } = [];
 }

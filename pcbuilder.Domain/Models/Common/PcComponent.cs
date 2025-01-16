@@ -12,4 +12,6 @@ public class PcComponent
     public string Name { get; set; } = string.Empty;
     
     public string? ImagePath { get; set; }
+    
+    //public string FullName => $"{Brand.Name} {Name}";
 }

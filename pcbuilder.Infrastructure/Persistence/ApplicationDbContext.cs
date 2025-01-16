@@ -75,7 +75,8 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
     {
         builder.ApplyConfiguration(new RoleConfiguration());
         
-        // Настройка составных ключей
+        #region Настройка составных ключей
+        
         builder.Entity<BuildComponent>()
             .HasKey(bc => new { bc.BuildId, bc.PcComponentId });
         
@@ -108,6 +109,152 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
 
         builder.Entity<MotherboardPowerConnector>()
             .HasKey(mpc => new { mpc.MotherboardId, mpc.PowerConnectorId });
+        
+        #endregion
+
+        #region Заполнение справочных таблиц
+
+        builder.Entity<Brand>().HasData(
+            new Brand { Id = 1, Name = "Intel" },
+            new Brand { Id = 2, Name = "AMD" },
+            new Brand { Id = 3, Name = "MSI" }
+        );
+        
+        builder.Entity<MemoryType>().HasData(
+            new MemoryType { Id = 1, Name = "DDR3" },
+            new MemoryType { Id = 2, Name = "DDR4" },
+            new MemoryType { Id = 3, Name = "DDR5" }
+        );
+        
+        builder.Entity<Socket>().HasData(
+            new Socket { Id = 1, Name = "LGA1700" },
+            new Socket { Id = 2, Name = "AM4" },
+            new Socket { Id = 3, Name = "AM5" }
+        );
+        
+        builder.Entity<CpuSeries>().HasData(
+            new CpuSeries { Id = 1, BrandId = 1, Name = "Core i5" },
+            new CpuSeries { Id = 2, BrandId = 2, Name = "Ryzen 5" }
+        );
+        
+        builder.Entity<PciSlot>().HasData(
+            new PciSlot { Id = 1, Version = "4.0", Bandwidth = 16 }
+        );
+        
+        builder.Entity<MotherboardChipset>().HasData(
+            new MotherboardChipset { Id = 1, BrandId = 1, Name = "H610" }
+        );
+        
+        builder.Entity<MotherboardFormFactor>().HasData(
+            new MotherboardFormFactor { Id = 1, Name = "Micro-ATX" },
+            new MotherboardFormFactor { Id = 2, Name = "ATX" }
+        );
+        
+        #endregion
+
+        #region Заполнение процессоров
+        
+        builder.Entity<Cpu>().HasData(
+            new Cpu
+            {
+                Id = 2,
+                BrandId = 2,
+                Name = "Ryzen 5 5600X 3.7 GHz 6-Core Processor",
+                SeriesId = 2,
+                SocketId = 2,
+                Cores = 6,
+                Threads = 12,
+                BaseClock = 3.7M,
+                BoostClock = 4.6M,
+                Tdp = 65,
+                IntegratedGpu = false,
+                MaxMemoryCapacity = 128
+            }
+        );
+        builder.Entity<CpuMemory>().HasData(
+            new CpuMemory { CpuId = 2, MemoryTypeId = 2, MaxMemorySpeed = 3200}
+        );
+        
+        builder.Entity<Cpu>().HasData(
+            new Cpu
+            {
+                Id = 3,
+                BrandId = 2,
+                Name = "Ryzen 5 7500F 3.7 GHz 6-Core Processor",
+                SeriesId = 2,
+                SocketId = 3,
+                Cores = 6,
+                Threads = 12,
+                BaseClock = 3.7M,
+                BoostClock = 5M,
+                Tdp = 65,
+                IntegratedGpu = false,
+                MaxMemoryCapacity = 128
+            }
+        );
+        builder.Entity<CpuMemory>().HasData(
+            new CpuMemory { CpuId = 3, MemoryTypeId = 3, MaxMemorySpeed = 5200}
+        );
+        
+        builder.Entity<Cpu>().HasData(
+            new Cpu
+            {
+                Id = 4,
+                BrandId = 1,
+                Name = "Core i5-12400F 2.5 GHz 6-Core Processor",
+                SeriesId = 1,
+                SocketId = 1,
+                Cores = 6,
+                Threads = 12,
+                BaseClock = 2.5M,
+                BoostClock = 4.4M,
+                Tdp = 65,
+                IntegratedGpu = false,
+                MaxMemoryCapacity = 128
+            }
+        );
+        builder.Entity<CpuMemory>().HasData(
+            new CpuMemory { CpuId = 4, MemoryTypeId = 2, MaxMemorySpeed = 3200},
+            new CpuMemory { CpuId = 4, MemoryTypeId = 3, MaxMemorySpeed = 4800}
+        );
+
+        #endregion
+
+        #region Заполнение материнских плат
+
+        builder.Entity<Motherboard>().HasData(
+            new Motherboard
+            {
+                Id = 2,
+                BrandId = 3,
+                Name = "PRO H610M-E DDR4",
+                MotherboardChipsetId = 1,
+                SocketId = 1,
+                FormFactorId = 1,
+                MemoryTypeId = 2,
+                MemorySlots = 2,
+                MaxMemoryCapacity = 64,
+                MaxMemorySpeed = 3200
+            }
+        );
+        
+        builder.Entity<Motherboard>().HasData(
+            new Motherboard
+            {
+                Id = 2,
+                BrandId = 3,
+                Name = "PRO H610M-E DDR4",
+                MotherboardChipsetId = 1,
+                SocketId = 1,
+                FormFactorId = 1,
+                MemoryTypeId = 2,
+                MemorySlots = 2,
+                MaxMemoryCapacity = 64,
+                MaxMemorySpeed = 3200
+            }
+        );
+
+        #endregion
         
         base.OnModelCreating(builder);
     }

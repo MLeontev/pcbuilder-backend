@@ -231,6 +231,18 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brands");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Intel"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "AMD"
+                        });
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.Build", b =>
@@ -427,6 +439,32 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.HasIndex("MemoryTypeId");
 
                     b.ToTable("CpuMemories");
+
+                    b.HasData(
+                        new
+                        {
+                            CpuId = 2,
+                            MemoryTypeId = 2,
+                            MaxMemorySpeed = 3200
+                        },
+                        new
+                        {
+                            CpuId = 3,
+                            MemoryTypeId = 3,
+                            MaxMemorySpeed = 5200
+                        },
+                        new
+                        {
+                            CpuId = 4,
+                            MemoryTypeId = 2,
+                            MaxMemorySpeed = 3200
+                        },
+                        new
+                        {
+                            CpuId = 4,
+                            MemoryTypeId = 3,
+                            MaxMemorySpeed = 4800
+                        });
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.CpuSeries", b =>
@@ -437,13 +475,32 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BrandId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BrandId");
+
                     b.ToTable("CpuSeries");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BrandId = 1,
+                            Name = "Core i5"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BrandId = 2,
+                            Name = "Ryzen 5"
+                        });
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.Socket", b =>
@@ -461,6 +518,23 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sockets");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "LGA1700"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "AM4"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "AM5"
+                        });
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.GpuChipset", b =>
@@ -678,6 +752,23 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MemoryTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "DDR3"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "DDR4"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "DDR5"
+                        });
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Storage.StorageFormFactor", b =>
@@ -801,6 +892,53 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.HasIndex("SocketId");
 
                     b.ToTable("Cpus");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2,
+                            BrandId = 2,
+                            Name = "Ryzen 5 5600X 3.7 GHz 6-Core Processor",
+                            BaseClock = 3.7m,
+                            BoostClock = 4.6m,
+                            Cores = 6,
+                            IntegratedGpu = false,
+                            MaxMemoryCapacity = 128,
+                            SeriesId = 2,
+                            SocketId = 2,
+                            Tdp = 65,
+                            Threads = 12
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BrandId = 2,
+                            Name = "Ryzen 5 7500F 3.7 GHz 6-Core Processor",
+                            BaseClock = 3.7m,
+                            BoostClock = 5m,
+                            Cores = 6,
+                            IntegratedGpu = false,
+                            MaxMemoryCapacity = 128,
+                            SeriesId = 2,
+                            SocketId = 3,
+                            Tdp = 65,
+                            Threads = 12
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BrandId = 1,
+                            Name = "Core i5-12400F 2.5 GHz 6-Core Processor",
+                            BaseClock = 2.5m,
+                            BoostClock = 4.4m,
+                            Cores = 6,
+                            IntegratedGpu = false,
+                            MaxMemoryCapacity = 128,
+                            SeriesId = 1,
+                            SocketId = 1,
+                            Tdp = 65,
+                            Threads = 12
+                        });
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.Gpu", b =>
@@ -1138,6 +1276,17 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Navigation("MemoryType");
                 });
 
+            modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.CpuSeries", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Common.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+                });
+
             modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.GpuPowerConnector", b =>
                 {
                     b.HasOne("pcbuilder.Domain.Models.Gpus.Gpu", "Gpu")
@@ -1266,7 +1415,7 @@ namespace pcbuilder.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("pcbuilder.Domain.Models.Cpus.CpuSeries", "Series")
-                        .WithMany("Cpus")
+                        .WithMany()
                         .HasForeignKey("SeriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1428,11 +1577,6 @@ namespace pcbuilder.Infrastructure.Migrations
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.User", b =>
                 {
                     b.Navigation("Builds");
-                });
-
-            modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.CpuSeries", b =>
-                {
-                    b.Navigation("Cpus");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.Case", b =>
