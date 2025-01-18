@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace pcbuilder.Domain.Models.Common;
 
 public class PcComponent
@@ -13,5 +11,6 @@ public class PcComponent
     
     public string? ImagePath { get; set; }
     
-    //public string FullName => $"{Brand.Name} {Name}";
+    public virtual string FullName => $"{Brand.Name} {Name}";
+    public virtual string Description => $"{Brand.Name} {Name}";
 }

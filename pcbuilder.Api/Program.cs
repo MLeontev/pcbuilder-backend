@@ -8,9 +8,13 @@ using Microsoft.IdentityModel.Tokens;
 using pcbuilder.Api.Validators;
 using pcbuilder.Application.Interfaces;
 using pcbuilder.Application.Services;
+using pcbuilder.Application.Services.CpuService;
+using pcbuilder.Application.Services.UserService;
+using pcbuilder.Domain.Interfaces;
 using pcbuilder.Domain.Models.Common;
 using pcbuilder.Infrastructure.Authentication;
 using pcbuilder.Infrastructure.Persistence;
+using pcbuilder.Infrastructure.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +67,9 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<ICpuService, CpuService>();
+builder.Services.AddScoped<ICpuRepository, CpuRepository>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterUserRequestValidator>();
 

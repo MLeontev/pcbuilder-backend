@@ -242,6 +242,11 @@ namespace pcbuilder.Infrastructure.Migrations
                         {
                             Id = 2,
                             Name = "AMD"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "MSI"
                         });
                 });
 
@@ -475,16 +480,11 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BrandId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BrandId");
 
                     b.ToTable("CpuSeries");
 
@@ -492,14 +492,12 @@ namespace pcbuilder.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            BrandId = 1,
-                            Name = "Core i5"
+                            Name = "Intel Core i5"
                         },
                         new
                         {
                             Id = 2,
-                            BrandId = 2,
-                            Name = "Ryzen 5"
+                            Name = "AMD Ryzen 5"
                         });
                 });
 
@@ -584,6 +582,18 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MotherboardChipsets");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Intel H610"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "AMD B650"
+                        });
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardFormFactor", b =>
@@ -601,6 +611,18 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MotherboardFormFactors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Micro-ATX"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "ATX"
+                        });
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPciSlot", b =>
@@ -650,7 +672,12 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
+                    b.Property<int>("StorageFormFactorId")
+                        .HasColumnType("integer");
+
                     b.HasKey("MotherboardId", "StorageInterfaceId");
+
+                    b.HasIndex("StorageFormFactorId");
 
                     b.HasIndex("StorageInterfaceId");
 
@@ -675,6 +702,14 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PciSlots");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Bandwidth = 16,
+                            Version = "4.0"
+                        });
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerConnector", b =>
@@ -1001,21 +1036,46 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Property<int>("MotherboardChipsetId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("MotherboardFormFactorId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("SocketId")
                         .HasColumnType("integer");
+
+                    b.HasIndex("FormFactorId");
 
                     b.HasIndex("MemoryTypeId");
 
                     b.HasIndex("MotherboardChipsetId");
 
-                    b.HasIndex("MotherboardFormFactorId");
-
                     b.HasIndex("SocketId");
 
                     b.ToTable("Motherboards");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 5,
+                            BrandId = 3,
+                            Name = "PRO H610M-E DDR4",
+                            FormFactorId = 1,
+                            MaxMemoryCapacity = 64,
+                            MaxMemorySpeed = 3200,
+                            MemorySlots = 2,
+                            MemoryTypeId = 2,
+                            MotherboardChipsetId = 1,
+                            SocketId = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            BrandId = 3,
+                            Name = "PRO B650-S WIFI",
+                            FormFactorId = 2,
+                            MaxMemoryCapacity = 256,
+                            MaxMemorySpeed = 4800,
+                            MemorySlots = 4,
+                            MemoryTypeId = 3,
+                            MotherboardChipsetId = 2,
+                            SocketId = 3
+                        });
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerSupply", b =>
@@ -1276,17 +1336,6 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Navigation("MemoryType");
                 });
 
-            modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.CpuSeries", b =>
-                {
-                    b.HasOne("pcbuilder.Domain.Models.Common.Brand", "Brand")
-                        .WithMany()
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Brand");
-                });
-
             modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.GpuPowerConnector", b =>
                 {
                     b.HasOne("pcbuilder.Domain.Models.Gpus.Gpu", "Gpu")
@@ -1352,6 +1401,12 @@ namespace pcbuilder.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("pcbuilder.Domain.Models.Storage.StorageFormFactor", "StorageFormFactor")
+                        .WithMany()
+                        .HasForeignKey("StorageFormFactorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("pcbuilder.Domain.Models.Storage.StorageInterface", "StorageInterface")
                         .WithMany()
                         .HasForeignKey("StorageInterfaceId")
@@ -1359,6 +1414,8 @@ namespace pcbuilder.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Motherboard");
+
+                    b.Navigation("StorageFormFactor");
 
                     b.Navigation("StorageInterface");
                 });
@@ -1458,6 +1515,12 @@ namespace pcbuilder.Infrastructure.Migrations
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.Motherboard", b =>
                 {
+                    b.HasOne("pcbuilder.Domain.Models.Motherboards.MotherboardFormFactor", "FormFactor")
+                        .WithMany()
+                        .HasForeignKey("FormFactorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("pcbuilder.Domain.Models.Common.PcComponent", null)
                         .WithOne()
                         .HasForeignKey("pcbuilder.Domain.Models.Motherboards.Motherboard", "Id")
@@ -1476,23 +1539,17 @@ namespace pcbuilder.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("pcbuilder.Domain.Models.Motherboards.MotherboardFormFactor", "MotherboardFormFactor")
-                        .WithMany()
-                        .HasForeignKey("MotherboardFormFactorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("pcbuilder.Domain.Models.Cpus.Socket", "Socket")
                         .WithMany()
                         .HasForeignKey("SocketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("FormFactor");
+
                     b.Navigation("MemoryType");
 
                     b.Navigation("MotherboardChipset");
-
-                    b.Navigation("MotherboardFormFactor");
 
                     b.Navigation("Socket");
                 });

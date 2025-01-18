@@ -1,10 +1,9 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using pcbuilder.Api.Contracts;
 using pcbuilder.Api.Contracts.Users;
 using pcbuilder.Api.Extensions;
-using pcbuilder.Application.Interfaces;
+using pcbuilder.Application.Services.UserService;
 using pcbuilder.Domain.Errors;
 
 namespace pcbuilder.Api.Controllers;

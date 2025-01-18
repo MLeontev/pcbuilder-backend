@@ -3,11 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using pcbuilder.Application.DTOs.Users;
 using pcbuilder.Application.Interfaces;
 using pcbuilder.Domain.Errors;
-using pcbuilder.Domain.Models;
 using pcbuilder.Domain.Models.Common;
 using pcbuilder.Shared;
 
-namespace pcbuilder.Application.Services;
+namespace pcbuilder.Application.Services.UserService;
 
 public class UserService : IUserService
 {

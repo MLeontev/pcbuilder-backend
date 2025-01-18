@@ -25,4 +25,6 @@ public class Cpu : PcComponent
     public int MaxMemoryCapacity { get; set; }
     
     public List<CpuMemory> CpuMemories { get; set; } = [];
+
+    public override string Description => $"{Socket.Name}, {Cores} x {BaseClock} ГГц, TDP {Tdp}";
 }

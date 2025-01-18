@@ -10,14 +10,13 @@ public class CompatibilityChecker
 
     public List<CompatibilityError> GetErrors() => _errors;
     
-    public bool CheckProcessorAndMotherboardCompatibility(Cpu cpu, Motherboard motherboard)
+    public bool CheckProcessorAndMotherboardCompatibility(Cpu? cpu, Motherboard? motherboard)
     {
-        if (cpu.SocketId != motherboard.SocketId)
-        {
-            _errors.Add(CompatibilityErrors.SocketMismatch(cpu, motherboard));
-            return false;
-        }
+        if (cpu == null || motherboard == null) return true;
         
-        return true;
+        if (cpu.SocketId == motherboard.SocketId) return true;
+        
+        _errors.Add(CompatibilityErrors.SocketMismatch(cpu, motherboard));
+        return false;
     }
 }

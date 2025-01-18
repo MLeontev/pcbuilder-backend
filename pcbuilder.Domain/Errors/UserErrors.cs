@@ -4,12 +4,12 @@ namespace pcbuilder.Domain.Errors;
 
 public static class UserErrors
 {
-    public static Error UsernameTaken = Error.Conflict(
+    public static readonly Error UsernameTaken = Error.Conflict(
         "Users.UsernameIsTaken", $"Имя уже занято");
     
-    public static Error InvalidCredentials = Error.Unauthorized(
+    public static readonly Error InvalidCredentials = Error.Unauthorized(
         "Users.InvalidCredentials", $"Неверный логин или пароль");
     
-    public static Error InvalidToken = Error.Unauthorized(
+    public static readonly Error InvalidToken = Error.Unauthorized(
         "Users.InvalidToken", $"Неверный токен");
 }

@@ -15,7 +15,7 @@ public class Motherboard : PcComponent
     public Socket Socket { get; set; } = null!;
 
     public int FormFactorId { get; set; }
-    public MotherboardFormFactor MotherboardFormFactor { get; set; } = null!;
+    public MotherboardFormFactor FormFactor { get; set; } = null!;
 
     public int MemoryTypeId { get; set; }
     public MemoryType MemoryType { get; set; } = null!;

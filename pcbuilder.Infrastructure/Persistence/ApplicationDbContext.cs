@@ -133,8 +133,8 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
         );
         
         builder.Entity<CpuSeries>().HasData(
-            new CpuSeries { Id = 1, BrandId = 1, Name = "Core i5" },
-            new CpuSeries { Id = 2, BrandId = 2, Name = "Ryzen 5" }
+            new CpuSeries { Id = 1, Name = "Intel Core i5" },
+            new CpuSeries { Id = 2, Name = "AMD Ryzen 5" }
         );
         
         builder.Entity<PciSlot>().HasData(
@@ -142,7 +142,8 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
         );
         
         builder.Entity<MotherboardChipset>().HasData(
-            new MotherboardChipset { Id = 1, BrandId = 1, Name = "H610" }
+            new MotherboardChipset { Id = 1, Name = "Intel H610" },
+            new MotherboardChipset { Id = 2, Name = "AMD B650" }
         );
         
         builder.Entity<MotherboardFormFactor>().HasData(
@@ -225,7 +226,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
         builder.Entity<Motherboard>().HasData(
             new Motherboard
             {
-                Id = 2,
+                Id = 5,
                 BrandId = 3,
                 Name = "PRO H610M-E DDR4",
                 MotherboardChipsetId = 1,
@@ -241,16 +242,16 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
         builder.Entity<Motherboard>().HasData(
             new Motherboard
             {
-                Id = 2,
+                Id = 6,
                 BrandId = 3,
-                Name = "PRO H610M-E DDR4",
-                MotherboardChipsetId = 1,
-                SocketId = 1,
-                FormFactorId = 1,
-                MemoryTypeId = 2,
-                MemorySlots = 2,
-                MaxMemoryCapacity = 64,
-                MaxMemorySpeed = 3200
+                Name = "PRO B650-S WIFI",
+                MotherboardChipsetId = 2,
+                SocketId = 3,
+                FormFactorId = 2,
+                MemoryTypeId = 3,
+                MemorySlots = 4,
+                MaxMemoryCapacity = 256,
+                MaxMemorySpeed = 4800
             }
         );
 

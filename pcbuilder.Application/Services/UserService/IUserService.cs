@@ -1,7 +1,7 @@
 using pcbuilder.Application.DTOs.Users;
 using pcbuilder.Shared;
 
-namespace pcbuilder.Application.Interfaces;
+namespace pcbuilder.Application.Services.UserService;
 
 public interface IUserService
 {
