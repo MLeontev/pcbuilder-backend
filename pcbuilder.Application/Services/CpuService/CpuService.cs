@@ -1,3 +1,4 @@
+using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Errors;
 using pcbuilder.Domain.Interfaces;
 using pcbuilder.Domain.Models.Cpus;
@@ -21,5 +22,11 @@ public class CpuService : ICpuService
         return cpu == null
             ? Result.Failure<Cpu>(ComponentErrors.NotFound(id))
             : Result.Success(cpu);
+    }
+
+    public async Task<Result<PagedList<Cpu>>> Get(string searchQuery, int page, int pageSize)
+    {
+        var cpus = await _cpuRepository.Get(searchQuery, page, pageSize);
+        return Result.Success(cpus);
     }
 }

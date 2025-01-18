@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Interfaces;
 using pcbuilder.Domain.Models.Cpus;
 
@@ -12,7 +13,7 @@ public class CpuRepository : ICpuRepository
     {
         _dbContext = dbContext;
     }
-    
+
     public async Task<Cpu?> GetById(int id)
     {
         return await _dbContext.Cpus
@@ -20,7 +21,31 @@ public class CpuRepository : ICpuRepository
             .Include(c => c.Socket)
             .Include(c => c.Brand)
             .Include(c => c.CpuMemories)
-                .ThenInclude(cm => cm.MemoryType)
+            .ThenInclude(cm => cm.MemoryType)
             .FirstOrDefaultAsync(c => c.Id == id);
+    }
+
+    public async Task<PagedList<Cpu>> Get(string searchQuery, int page, int pageSize)
+    {
+        IQueryable<Cpu> query = _dbContext.Cpus
+            .Include(c => c.Series)
+            .Include(c => c.Socket)
+            .Include(c => c.Brand)
+            .Include(c => c.CpuMemories)
+            .ThenInclude(cm => cm.MemoryType);
+
+        if (!string.IsNullOrWhiteSpace(searchQuery))
+            query = query.Where(c => (c.Brand.Name + " " + c.Name).Contains(searchQuery));
+
+        var totalCount = await query.CountAsync();
+
+        var cpus = await query
+            .OrderBy(c => c.Brand.Name)
+            .ThenBy(c => c.Name)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PagedList<Cpu>(cpus, page, pageSize, totalCount);
     }
 }

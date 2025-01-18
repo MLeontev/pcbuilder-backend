@@ -1,4 +1,4 @@
-namespace pcbuilder.Domain.Models.Common;
+namespace pcbuilder.Domain.DTOs;
 
 public class PagedList<T>
 {
@@ -18,9 +18,9 @@ public class PagedList<T>
     
     public int TotalCount { get; set; }
     
+    public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
+    
     public bool HasPreviousPage => Page > 1;
     
     public bool HasNextPage => Page * PageSize < TotalCount;
-    
-    
 }

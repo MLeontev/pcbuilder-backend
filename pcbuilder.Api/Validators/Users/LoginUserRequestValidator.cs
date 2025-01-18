@@ -1,7 +1,7 @@
 using FluentValidation;
 using pcbuilder.Api.Contracts.Users;
 
-namespace pcbuilder.Api.Validators;
+namespace pcbuilder.Api.Validators.Users;
 
 public class LoginUserRequestValidator : AbstractValidator<LoginUserRequest>
 {

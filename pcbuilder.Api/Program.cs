@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using pcbuilder.Api.Validators;
+using pcbuilder.Api.Validators.Users;
 using pcbuilder.Application.Interfaces;
 using pcbuilder.Application.Services;
 using pcbuilder.Application.Services.CpuService;
@@ -69,6 +70,7 @@ builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<ICpuService, CpuService>();
+
 builder.Services.AddScoped<ICpuRepository, CpuRepository>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterUserRequestValidator>();

@@ -1,4 +1,7 @@
+using pcbuilder.Api.Contracts;
 using pcbuilder.Api.Contracts.Components;
+using pcbuilder.Api.Contracts.Components.Cpus;
+using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Models.Cpus;
 
 namespace pcbuilder.Api.Extensions;
@@ -31,6 +34,27 @@ public static class MappingExtensions
                 { "Максимально поддерживаемый объем памяти", $"{cpu.MaxMemoryCapacity} ГБ" },
                 { "Поддерживаемая память", string.Join(", ", cpuMemories) }
             }
+        };
+    }
+
+    public static PagedResponse<CpuDto> ToPagedResponse(this PagedList<Cpu> pagedList)
+    {
+        var cpuDtos = pagedList.Items.Select(cpu => new CpuDto
+        {
+            Id = cpu.Id,
+            FullName = cpu.FullName,
+            Description = cpu.Description
+        }).ToList();
+
+        return new PagedResponse<CpuDto>
+        {
+            Items = cpuDtos,
+            Page = pagedList.Page,
+            PageSize = pagedList.PageSize,
+            TotalCount = pagedList.TotalCount,
+            TotalPages = pagedList.TotalPages,
+            HasPreviousPage = pagedList.HasPreviousPage,
+            HasNextPage = pagedList.HasNextPage
         };
     }
 }

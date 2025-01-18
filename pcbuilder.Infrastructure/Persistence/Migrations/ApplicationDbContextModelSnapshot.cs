@@ -1290,7 +1290,7 @@ namespace pcbuilder.Infrastructure.Migrations
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.PcComponent", b =>
                 {
                     b.HasOne("pcbuilder.Domain.Models.Common.Brand", "Brand")
-                        .WithMany("PcComponents")
+                        .WithMany()
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1619,11 +1619,6 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Navigation("StorageInterface");
 
                     b.Navigation("StorageType");
-                });
-
-            modelBuilder.Entity("pcbuilder.Domain.Models.Common.Brand", b =>
-                {
-                    b.Navigation("PcComponents");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.Build", b =>
