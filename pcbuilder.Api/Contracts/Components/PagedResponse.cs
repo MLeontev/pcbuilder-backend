@@ -1,4 +1,4 @@
-namespace pcbuilder.Api.Contracts;
+namespace pcbuilder.Api.Contracts.Components;
 
 public class PagedResponse<T>
 {

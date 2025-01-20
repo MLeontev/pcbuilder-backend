@@ -12,11 +12,11 @@ public class Error
         Type = type;
     }
 
-    public string Code { get; set; }
+    public string Code { get; }
     
-    public string Message { get; set; }
+    public string Message { get; }
     
-    public ErrorType Type { get; set; }
+    public ErrorType Type { get; }
     
     public static Error Failure(string code, string message) =>
         new(code, message, ErrorType.Failure);

@@ -14,17 +14,6 @@ public class CpuRepository : ICpuRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Cpu?> GetById(int id)
-    {
-        return await _dbContext.Cpus
-            .Include(c => c.Series)
-            .Include(c => c.Socket)
-            .Include(c => c.Brand)
-            .Include(c => c.CpuMemories)
-            .ThenInclude(cm => cm.MemoryType)
-            .FirstOrDefaultAsync(c => c.Id == id);
-    }
-
     public async Task<PagedList<Cpu>> Get(string searchQuery, int page, int pageSize)
     {
         IQueryable<Cpu> query = _dbContext.Cpus
@@ -47,5 +36,16 @@ public class CpuRepository : ICpuRepository
             .ToListAsync();
 
         return new PagedList<Cpu>(cpus, page, pageSize, totalCount);
+    }
+    
+    public async Task<Cpu?> GetById(int id)
+    {
+        return await _dbContext.Cpus
+            .Include(c => c.Series)
+            .Include(c => c.Socket)
+            .Include(c => c.Brand)
+            .Include(c => c.CpuMemories)
+            .ThenInclude(cm => cm.MemoryType)
+            .FirstOrDefaultAsync(c => c.Id == id);
     }
 }

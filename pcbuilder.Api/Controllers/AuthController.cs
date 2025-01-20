@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using pcbuilder.Api.Contracts;
+using pcbuilder.Api.Contracts.Errors;
 using pcbuilder.Api.Contracts.Users;
 using pcbuilder.Api.Extensions;
 using pcbuilder.Application.Services.UserService;

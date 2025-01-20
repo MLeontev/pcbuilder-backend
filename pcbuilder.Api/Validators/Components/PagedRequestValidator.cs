@@ -1,5 +1,5 @@
 using FluentValidation;
-using pcbuilder.Api.Contracts.Components.Cpus;
+using pcbuilder.Api.Contracts.Components;
 
 namespace pcbuilder.Api.Validators.Components;
 

@@ -1,13 +1,44 @@
 using pcbuilder.Api.Contracts;
+using pcbuilder.Api.Contracts.Builds;
 using pcbuilder.Api.Contracts.Components;
-using pcbuilder.Api.Contracts.Components.Cpus;
+using pcbuilder.Application.DTOs.Builds;
 using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Models.Cpus;
+using pcbuilder.Domain.Models.Motherboards;
+using pcbuilder.Domain.Services;
 
 namespace pcbuilder.Api.Extensions;
 
 public static class MappingExtensions
 {
+    #region DTO
+
+    public static CheckBuildCompatibilityDto ToCheckBuildCompatibilityDto(this CheckBuildCompatibilityRequest request)
+    {
+        return new CheckBuildCompatibilityDto
+        {
+            CpuId = request.CpuId,
+            MotherboardId = request.MotherboardId
+        };
+    }
+
+    public static CompatibilityResponse ToCompatibilityResponse(this CompatibilityResult result)
+    {
+        return new CompatibilityResponse
+        {
+            Status = (int)result.Status,
+            Errors = result.Errors.Select(error => new CompatibilityErrorResponse
+            {
+                Status = (int)error.Status,
+                Message = error.Message
+            }).ToList()
+        };
+    }
+
+    #endregion
+    
+    #region Комплектующие с характеристиками
+
     public static ComponentDetailsResponse ToComponentDetailsResponse(this Cpu cpu)
     {
         var cpuMemories = cpu.CpuMemories
@@ -36,17 +67,57 @@ public static class MappingExtensions
             }
         };
     }
-
-    public static PagedResponse<CpuDto> ToPagedResponse(this PagedList<Cpu> pagedList)
+    
+    public static ComponentDetailsResponse ToComponentDetailsResponse(this Motherboard motherboard)
     {
-        var cpuDtos = pagedList.Items.Select(cpu => new CpuDto
+        // var pciSlots = motherboard.MotherboardPciSlots
+        //     .OrderBy(mps => mps.PciSlot.Version)
+        //     .Select(mps => $"{mps.PciSlot.Version} - {mps.PciSlot.Bandwidth} Гбит/с")
+        //     .ToList();
+        //
+        // var storages = motherboard.MotherboardStorages
+        //     .Select(ms => $"{ms.StorageInterface.Name} - {ms.StorageFormFactor.Name}")
+        //     .ToList();
+
+        return new ComponentDetailsResponse
+        {
+            Id = motherboard.Id,
+            ImagePath = motherboard.ImagePath,
+            Name = motherboard.FullName,
+            Description = motherboard.Description,
+            Specifications = new Dictionary<string, string>
+            {
+                { "Чипсет", motherboard.MotherboardChipset.Name },
+                { "Сокет", motherboard.Socket.Name },
+                { "Форм-фактор", motherboard.FormFactor.Name },
+                { "Тип памяти", motherboard.MemoryType.Name },
+                { "Максимальный объем памяти", $"{motherboard.MaxMemoryCapacity} ГБ" },
+                { "Максимальная частота памяти", $"{motherboard.MaxMemorySpeed} МГц" },
+                // { "Слотов PCIe x16", $""},
+                // { "Слотов PCIe x8", $""},
+                // { "Слотов PCIe x4", $""},
+                // { "Слотов PCIe x1", $""},
+                // { "Количество разъемов M.2", $""},
+                // { "Разъемы M.2", $""},
+                // { "Количество портов SATA", $""},
+            }
+        };
+    }
+
+    #endregion
+
+    #region Списки комплектующих
+
+    public static PagedResponse<ComponentDto> ToPagedResponse(this PagedList<Cpu> pagedList)
+    {
+        var cpuDtos = pagedList.Items.Select(cpu => new ComponentDto
         {
             Id = cpu.Id,
             FullName = cpu.FullName,
             Description = cpu.Description
         }).ToList();
 
-        return new PagedResponse<CpuDto>
+        return new PagedResponse<ComponentDto>
         {
             Items = cpuDtos,
             Page = pagedList.Page,
@@ -57,4 +128,6 @@ public static class MappingExtensions
             HasNextPage = pagedList.HasNextPage
         };
     }
+
+    #endregion
 }

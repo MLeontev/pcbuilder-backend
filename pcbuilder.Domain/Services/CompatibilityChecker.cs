@@ -1,4 +1,4 @@
-using pcbuilder.Domain.Errors;
+using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Motherboards;
 
@@ -6,17 +6,30 @@ namespace pcbuilder.Domain.Services;
 
 public class CompatibilityChecker
 {
-    private readonly List<CompatibilityError> _errors = [];
-
-    public List<CompatibilityError> GetErrors() => _errors;
-    
-    public bool CheckProcessorAndMotherboardCompatibility(Cpu? cpu, Motherboard? motherboard)
+    public CompatibilityResult CheckProcessorAndMotherboardCompatibility(Cpu? cpu, Motherboard? motherboard)
     {
-        if (cpu == null || motherboard == null) return true;
+        var result = new CompatibilityResult();
         
-        if (cpu.SocketId == motherboard.SocketId) return true;
+        if (cpu == null || motherboard == null) return result;
         
-        _errors.Add(CompatibilityErrors.SocketMismatch(cpu, motherboard));
-        return false;
+        if (cpu.SocketId == motherboard.SocketId) return result;
+        
+        result.AddError(CompatibilityErrors.CpuMotherboardSocketMismatch(cpu, motherboard));
+        
+        return result;
+    }
+
+    public CompatibilityResult CheckBuildCompatibility(BuildWithComponentsDto buildWithComponentsDto)
+    {
+        var result = new CompatibilityResult();
+        
+        var cpuMotherboardResult = CheckProcessorAndMotherboardCompatibility(buildWithComponentsDto.Cpu, buildWithComponentsDto.Motherboard);
+        
+        foreach (var error in cpuMotherboardResult.Errors)
+        {
+            result.AddError(error);
+        }
+        
+        return result;
     }
 }

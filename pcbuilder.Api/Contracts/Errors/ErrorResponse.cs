@@ -1,6 +1,6 @@
 using pcbuilder.Shared;
 
-namespace pcbuilder.Api.Contracts;
+namespace pcbuilder.Api.Contracts.Errors;
 
 public class ErrorResponse
 {

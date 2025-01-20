@@ -1,4 +1,4 @@
-namespace pcbuilder.Api.Contracts.Components.Cpus;
+namespace pcbuilder.Api.Contracts.Components;
 
 public class PagedRequest
 {

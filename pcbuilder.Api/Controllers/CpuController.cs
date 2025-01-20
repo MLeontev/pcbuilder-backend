@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using pcbuilder.Api.Contracts.Components.Cpus;
+using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Api.Extensions;
 using pcbuilder.Api.Validators.Components;
 using pcbuilder.Application.Services.CpuService;
-using pcbuilder.Domain.Models.Common;
 
 namespace pcbuilder.Api.Controllers;
 
