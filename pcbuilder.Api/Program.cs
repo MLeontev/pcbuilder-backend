@@ -93,6 +93,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
+
 app.UseCors();
 
 app.UseCookiePolicy(new CookiePolicyOptions

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Api.Extensions;
 using pcbuilder.Api.Validators.Components;
 using pcbuilder.Application.Services.MotherboardService;
@@ -17,6 +18,24 @@ public class MotherboardController : ControllerBase
     {
         _pagedRequestValidator = pagedRequestValidator;
         _motherboardService = motherboardService;
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> Get([FromQuery] PagedRequest request)
+    {
+        var validationResult = await _pagedRequestValidator.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var errorResponse = validationResult.ToValidationErrorResponse();
+            return BadRequest(errorResponse);
+        }
+        
+        var result = await _motherboardService.Get(request.SearchQuery, request.Page, request.PageSize);
+        
+        return result.IsFailure
+            ? result.ToErrorResponse() 
+            : Ok(result.Value.ToPagedResponse());
     }
 
     [HttpGet("{id:int}")]

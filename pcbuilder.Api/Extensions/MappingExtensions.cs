@@ -1,4 +1,3 @@
-using pcbuilder.Api.Contracts;
 using pcbuilder.Api.Contracts.Builds;
 using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Application.DTOs.Builds;
@@ -109,6 +108,27 @@ public static class MappingExtensions
     #region Списки комплектующих
 
     public static PagedResponse<ComponentDto> ToPagedResponse(this PagedList<Cpu> pagedList)
+    {
+        var cpuDtos = pagedList.Items.Select(cpu => new ComponentDto
+        {
+            Id = cpu.Id,
+            FullName = cpu.FullName,
+            Description = cpu.Description
+        }).ToList();
+
+        return new PagedResponse<ComponentDto>
+        {
+            Items = cpuDtos,
+            Page = pagedList.Page,
+            PageSize = pagedList.PageSize,
+            TotalCount = pagedList.TotalCount,
+            TotalPages = pagedList.TotalPages,
+            HasPreviousPage = pagedList.HasPreviousPage,
+            HasNextPage = pagedList.HasNextPage
+        };
+    }
+    
+    public static PagedResponse<ComponentDto> ToPagedResponse(this PagedList<Motherboard> pagedList)
     {
         var cpuDtos = pagedList.Items.Select(cpu => new ComponentDto
         {

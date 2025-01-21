@@ -26,6 +26,7 @@ public class MotherboardService : IMotherboardService
 
     public async Task<Result<PagedList<Motherboard>>> Get(string searchQuery, int page, int pageSize)
     {
-        throw new NotImplementedException();
+        var motherboards = await _motherboardRepository.Get(searchQuery, page, pageSize);
+        return Result.Success(motherboards);
     }
 }

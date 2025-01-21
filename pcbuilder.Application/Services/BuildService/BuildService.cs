@@ -54,6 +54,7 @@ public class BuildService : IBuildService
         };
         
         var compatibilityResult = _compatibilityChecker.CheckBuildCompatibility(buildWithComponentsDto);
+        
         return Result.Success(compatibilityResult);
     }
 }

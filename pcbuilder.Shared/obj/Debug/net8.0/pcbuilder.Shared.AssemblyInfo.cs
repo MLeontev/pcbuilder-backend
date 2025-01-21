@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("pcbuilder.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a327e34b4d6914c063bfffd51c62ba995166800d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+621b6cbc394603391d80a56e7a0bd2fcd20e6876")]
 [assembly: System.Reflection.AssemblyProductAttribute("pcbuilder.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("pcbuilder.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

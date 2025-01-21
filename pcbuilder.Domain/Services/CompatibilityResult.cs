@@ -20,6 +20,8 @@ public class CompatibilityResult
             _ => Status
         };
     }
+    
+    public bool HasErrors() => Errors.Any(error => error.Status == CompatibilityErrorStatus.Problem);
 }
 
 public enum CompatibilityStatus

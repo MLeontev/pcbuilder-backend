@@ -22,4 +22,8 @@
       <ProjectReference Include="..\pcbuilder.Infrastructure\pcbuilder.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\images\cpus\" />
+    </ItemGroup>
+
 </Project>
