@@ -34,7 +34,7 @@ public class CpuController : ControllerBase
         
         return result.IsFailure
             ? result.ToErrorResponse() 
-            : Ok(result.Value.ToPagedResponse());
+            : Ok(result.Value.ToGetComponentsResponse());
     }
     
     [HttpGet("{id:int}")]

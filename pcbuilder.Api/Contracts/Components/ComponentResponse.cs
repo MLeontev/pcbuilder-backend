@@ -1,6 +1,6 @@
 namespace pcbuilder.Api.Contracts.Components;
 
-public class ComponentDto
+public class ComponentResponse
 {
     public int Id { get; set; }
     public string? ImagePath { get; set; }
