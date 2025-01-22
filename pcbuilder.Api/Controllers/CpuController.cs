@@ -11,18 +11,18 @@ namespace pcbuilder.Api.Controllers;
 public class CpuController : ControllerBase
 {
     private readonly ICpuService _cpuService;
-    private readonly PagedRequestValidator _pagedRequestValidator;
+    private readonly GetComponentsRequestValidator _getComponentsRequestValidator;
 
-    public CpuController(ICpuService cpuService, PagedRequestValidator pagedRequestValidator)
+    public CpuController(ICpuService cpuService, GetComponentsRequestValidator getComponentsRequestValidator)
     {
         _cpuService = cpuService;
-        _pagedRequestValidator = pagedRequestValidator;
+        _getComponentsRequestValidator = getComponentsRequestValidator;
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] PagedRequest request)
+    public async Task<IActionResult> Get([FromQuery] GetComponentsRequest request)
     {
-        var validationResult = await _pagedRequestValidator.ValidateAsync(request);
+        var validationResult = await _getComponentsRequestValidator.ValidateAsync(request);
 
         if (!validationResult.IsValid)
         {

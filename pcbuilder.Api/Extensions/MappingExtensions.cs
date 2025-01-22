@@ -107,16 +107,17 @@ public static class MappingExtensions
 
     #region Списки комплектующих
 
-    public static PagedResponse<ComponentDto> ToPagedResponse(this PagedList<Cpu> pagedList)
+    public static GetComponentsResponse<ComponentDto> ToPagedResponse(this PagedList<Cpu> pagedList)
     {
         var cpuDtos = pagedList.Items.Select(cpu => new ComponentDto
         {
             Id = cpu.Id,
+            ImagePath = cpu.ImagePath,
             FullName = cpu.FullName,
             Description = cpu.Description
         }).ToList();
 
-        return new PagedResponse<ComponentDto>
+        return new GetComponentsResponse<ComponentDto>
         {
             Items = cpuDtos,
             Page = pagedList.Page,
@@ -128,18 +129,19 @@ public static class MappingExtensions
         };
     }
     
-    public static PagedResponse<ComponentDto> ToPagedResponse(this PagedList<Motherboard> pagedList)
+    public static GetComponentsResponse<ComponentDto> ToPagedResponse(this PagedList<Motherboard> pagedList)
     {
-        var cpuDtos = pagedList.Items.Select(cpu => new ComponentDto
+        var motherboardDtos = pagedList.Items.Select(motherboard => new ComponentDto
         {
-            Id = cpu.Id,
-            FullName = cpu.FullName,
-            Description = cpu.Description
+            Id = motherboard.Id,
+            ImagePath = motherboard.ImagePath,
+            FullName = motherboard.FullName,
+            Description = motherboard.Description
         }).ToList();
 
-        return new PagedResponse<ComponentDto>
+        return new GetComponentsResponse<ComponentDto>
         {
-            Items = cpuDtos,
+            Items = motherboardDtos,
             Page = pagedList.Page,
             PageSize = pagedList.PageSize,
             TotalCount = pagedList.TotalCount,

@@ -12,18 +12,18 @@ namespace pcbuilder.Api.Controllers;
 public class MotherboardController : ControllerBase
 {
     private readonly IMotherboardService _motherboardService;
-    private readonly PagedRequestValidator _pagedRequestValidator;
+    private readonly GetComponentsRequestValidator _getComponentsRequestValidator;
 
-    public MotherboardController(PagedRequestValidator pagedRequestValidator, IMotherboardService motherboardService)
+    public MotherboardController(GetComponentsRequestValidator getComponentsRequestValidator, IMotherboardService motherboardService)
     {
-        _pagedRequestValidator = pagedRequestValidator;
+        _getComponentsRequestValidator = getComponentsRequestValidator;
         _motherboardService = motherboardService;
     }
     
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] PagedRequest request)
+    public async Task<IActionResult> Get([FromQuery] GetComponentsRequest request)
     {
-        var validationResult = await _pagedRequestValidator.ValidateAsync(request);
+        var validationResult = await _getComponentsRequestValidator.ValidateAsync(request);
 
         if (!validationResult.IsValid)
         {
