@@ -24,7 +24,7 @@ public class MotherboardService : IMotherboardService
             : Result.Success(motherboard);
     }
 
-    public async Task<Result<PagedList<Motherboard>>> Get(string searchQuery, int page, int pageSize)
+    public async Task<Result<PagedList<Motherboard>>> Get(string? searchQuery, int page, int pageSize)
     {
         var motherboards = await _motherboardRepository.Get(searchQuery, page, pageSize);
         return Result.Success(motherboards);

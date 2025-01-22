@@ -14,7 +14,7 @@ public class MotherboardRepository : IMotherboardRepository
         _dbContext = dbContext;
     }
     
-    public async Task<PagedList<Motherboard>> Get(string searchQuery, int page, int pageSize)
+    public async Task<PagedList<Motherboard>> Get(string? searchQuery, int page, int pageSize)
     {
         IQueryable<Motherboard> query = _dbContext.Motherboards
             .Include(m => m.Brand)

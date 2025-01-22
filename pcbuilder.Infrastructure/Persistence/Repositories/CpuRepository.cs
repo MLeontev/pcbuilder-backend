@@ -14,7 +14,7 @@ public class CpuRepository : ICpuRepository
         _dbContext = dbContext;
     }
 
-    public async Task<PagedList<Cpu>> Get(string searchQuery, int page, int pageSize)
+    public async Task<PagedList<Cpu>> Get(string? searchQuery, int page, int pageSize)
     {
         IQueryable<Cpu> query = _dbContext.Cpus
             .Include(c => c.Series)

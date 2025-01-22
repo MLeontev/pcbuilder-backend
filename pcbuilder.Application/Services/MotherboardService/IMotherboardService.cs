@@ -8,5 +8,5 @@ public interface IMotherboardService
 {
     public Task<Result<Motherboard>> GetById(int id);
     
-    public Task<Result<PagedList<Motherboard>>> Get(string searchQuery, int page, int pageSize);
+    public Task<Result<PagedList<Motherboard>>> Get(string? searchQuery, int page, int pageSize);
 }

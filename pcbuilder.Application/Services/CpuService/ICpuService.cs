@@ -8,5 +8,5 @@ public interface ICpuService
 {
     public Task<Result<Cpu>> GetById(int id);
     
-    public Task<Result<PagedList<Cpu>>> Get(string searchQuery, int page, int pageSize);
+    public Task<Result<PagedList<Cpu>>> Get(string? searchQuery, int page, int pageSize);
 }

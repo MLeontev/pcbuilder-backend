@@ -24,7 +24,7 @@ public class CpuService : ICpuService
             : Result.Success(cpu);
     }
 
-    public async Task<Result<PagedList<Cpu>>> Get(string searchQuery, int page, int pageSize)
+    public async Task<Result<PagedList<Cpu>>> Get(string? searchQuery, int page, int pageSize)
     {
         var cpus = await _cpuRepository.Get(searchQuery, page, pageSize);
         return Result.Success(cpus);
