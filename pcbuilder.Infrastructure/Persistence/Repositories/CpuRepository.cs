@@ -24,7 +24,8 @@ public class CpuRepository : ICpuRepository
             .ThenInclude(cm => cm.MemoryType);
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
-            query = query.Where(c => (c.Brand.Name + " " + c.Name).Contains(searchQuery));
+            query = query.Where(c =>
+                (c.Brand.Name + " " + c.Name).ToLower().Contains(searchQuery.ToLower()));
 
         var totalCount = await query.CountAsync();
 

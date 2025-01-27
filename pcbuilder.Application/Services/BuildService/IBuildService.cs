@@ -6,5 +6,7 @@ namespace pcbuilder.Application.Services.BuildService;
 
 public interface IBuildService
 {
-    public Task<Result<CompatibilityResult>> CheckBuildCompatibility(CheckBuildCompatibilityDto buildDto);
+    public Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentsDto buildDto);
+    
+    public Task<Result<int>> SaveBuild(BuildDto buildDto);
 }

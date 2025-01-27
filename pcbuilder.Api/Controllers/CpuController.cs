@@ -37,6 +37,24 @@ public class CpuController : ControllerBase
             : Ok(result.Value.ToGetComponentsResponse());
     }
     
+    [HttpGet("compatible")]
+    public async Task<IActionResult> GetCompatible([FromQuery] GetComponentsRequest request)
+    {
+        var validationResult = await _getComponentsRequestValidator.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var errorResponse = validationResult.ToValidationErrorResponse();
+            return BadRequest(errorResponse);
+        }
+        
+        var result = await _cpuService.Get(request.SearchQuery, request.Page, request.PageSize);
+        
+        return result.IsFailure
+            ? result.ToErrorResponse() 
+            : Ok(result.Value.ToGetComponentsResponse());
+    }
+    
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {

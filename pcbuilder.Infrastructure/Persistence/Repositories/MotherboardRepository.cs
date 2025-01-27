@@ -13,7 +13,7 @@ public class MotherboardRepository : IMotherboardRepository
     {
         _dbContext = dbContext;
     }
-    
+
     public async Task<PagedList<Motherboard>> Get(string? searchQuery, int page, int pageSize)
     {
         IQueryable<Motherboard> query = _dbContext.Motherboards
@@ -23,22 +23,23 @@ public class MotherboardRepository : IMotherboardRepository
             .Include(m => m.FormFactor)
             .Include(m => m.MemoryType)
             .Include(m => m.MotherboardPciSlots)
-                .ThenInclude(mps => mps.PciSlot)
+            .ThenInclude(mps => mps.PciSlot)
             .Include(m => m.MotherboardStorages)
-                .ThenInclude(ms => ms.StorageInterface)
+            .ThenInclude(ms => ms.StorageInterface)
             .Include(m => m.MotherboardStorages)
-                .ThenInclude(ms => ms.StorageFormFactor)
+            .ThenInclude(ms => ms.StorageFormFactor)
             .Include(m => m.MotherboardPowerConnectors)
-                .ThenInclude(mpc => mpc.PowerConnector);
+            .ThenInclude(mpc => mpc.PowerConnector);
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
-            query = query.Where(c => (c.Brand.Name + " " + c.Name).Contains(searchQuery));
+            query = query.Where(m =>
+                (m.Brand.Name + " " + m.Name).ToLower().Contains(searchQuery.ToLower()));
 
         var totalCount = await query.CountAsync();
 
         var motherboards = await query
-            .OrderBy(c => c.Brand.Name)
-            .ThenBy(c => c.Name)
+            .OrderBy(m => m.Brand.Name)
+            .ThenBy(m => m.Name)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -55,13 +56,13 @@ public class MotherboardRepository : IMotherboardRepository
             .Include(m => m.FormFactor)
             .Include(m => m.MemoryType)
             .Include(m => m.MotherboardPciSlots)
-                .ThenInclude(mps => mps.PciSlot)
+            .ThenInclude(mps => mps.PciSlot)
             .Include(m => m.MotherboardStorages)
-                .ThenInclude(ms => ms.StorageInterface)
+            .ThenInclude(ms => ms.StorageInterface)
             .Include(m => m.MotherboardStorages)
-                .ThenInclude(ms => ms.StorageFormFactor)
+            .ThenInclude(ms => ms.StorageFormFactor)
             .Include(m => m.MotherboardPowerConnectors)
-                .ThenInclude(mpc => mpc.PowerConnector)
+            .ThenInclude(mpc => mpc.PowerConnector)
             .FirstOrDefaultAsync(m => m.Id == id);
     }
 }

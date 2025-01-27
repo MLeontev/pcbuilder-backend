@@ -12,9 +12,9 @@ public static class MappingExtensions
 {
     #region DTO
 
-    public static CheckBuildCompatibilityDto ToCheckBuildCompatibilityDto(this CheckBuildCompatibilityRequest request)
+    public static BuildComponentsDto ToBuildComponentsDto(this BuildComponentsRequest request)
     {
-        return new CheckBuildCompatibilityDto
+        return new BuildComponentsDto
         {
             CpuId = request.CpuId,
             MotherboardId = request.MotherboardId

@@ -1,6 +1,6 @@
-namespace pcbuilder.Api.Contracts.Builds;
+namespace pcbuilder.Application.DTOs.Builds;
 
-public class CheckBuildCompatibilityRequest
+public class BuildComponentsDto
 {
     public int? CpuId { get; set; }
     

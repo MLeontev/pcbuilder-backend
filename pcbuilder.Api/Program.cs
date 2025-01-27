@@ -79,6 +79,7 @@ builder.Services.AddScoped<IMotherboardService, MotherboardService>();
 builder.Services.AddScoped<IMotherboardRepository, MotherboardRepository>();
 
 builder.Services.AddScoped<IBuildService, BuildService>();
+builder.Services.AddScoped<IBuildRepository, BuildRepository>();
 builder.Services.AddScoped<CompatibilityChecker>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterUserRequestValidator>();
