@@ -4,5 +4,7 @@ namespace pcbuilder.Domain.Interfaces;
 
 public interface IBuildRepository
 {
-    Task<int> AddAsync(Build build);
+    Task<Build?> GetById(int id);
+    
+    Task<int> Add(Build build);
 }

@@ -1,6 +1,6 @@
-namespace pcbuilder.Application.DTOs.Builds;
+namespace pcbuilder.Api.Contracts.Builds;
 
-public class BuildDto
+public class GetBuildResponse
 {
     public int Id { get; set; }
     
@@ -8,8 +8,8 @@ public class BuildDto
     
     public string? Description { get; set; }
     
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
+    public string CreatedAt { get; set; } = string.Empty;
+    public string? UpdatedAt { get; set; }
     
     public int? CpuId { get; set; }
     

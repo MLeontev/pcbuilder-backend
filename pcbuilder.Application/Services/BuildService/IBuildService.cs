@@ -8,5 +8,7 @@ public interface IBuildService
 {
     public Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentsDto buildDto);
     
-    public Task<Result<int>> SaveBuild(BuildDto buildDto);
+    public Task<Result<BuildDto>> GetById(int buildId, int userId);
+    
+    public Task<Result<int>> SaveBuild(SaveBuildDto saveBuildDto);
 }

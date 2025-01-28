@@ -45,12 +45,40 @@ public class BuildService : IBuildService
         return Result.Success(compatibilityResult);
     }
 
-    public async Task<Result<int>> SaveBuild(BuildDto buildDto)
+    public async Task<Result<BuildDto>> GetById(int buildId, int userId)
+    {
+        var build = await _buildRepository.GetById(buildId);
+
+        if (build == null)
+        {
+            return Result.Failure<BuildDto>(BuildErrors.NotFound(buildId));
+        }
+        
+        if (build.UserId != userId)
+        {
+            return Result.Failure<BuildDto>(BuildErrors.ForbiddenAccess);
+        }
+
+        var buildDto = new BuildDto
+        {
+            Id = build.Id,
+            Name = build.Name,
+            Description = build.Description,
+            CreatedAt = build.CreatedAt,
+            UpdatedAt = build.UpdatedAt,
+            CpuId = build.BuildComponents.FirstOrDefault(bc => bc.PcComponent is Cpu)?.PcComponentId,
+            MotherboardId = build.BuildComponents.FirstOrDefault(bc => bc.PcComponent is Motherboard)?.PcComponentId
+        };
+        
+        return Result.Success(buildDto);
+    }
+
+    public async Task<Result<int>> SaveBuild(SaveBuildDto saveBuildDto)
     {
         var getComponentsResult = await GetAllComponents(new BuildComponentsDto
         {
-            CpuId = buildDto.CpuId,
-            MotherboardId = buildDto.MotherboardId,
+            CpuId = saveBuildDto.CpuId,
+            MotherboardId = saveBuildDto.MotherboardId,
         });
 
         if (getComponentsResult.IsFailure)
@@ -63,14 +91,14 @@ public class BuildService : IBuildService
         
         var build = new Build
         {
-            Name = buildDto.Name,
-            Description = buildDto.Description,
+            Name = saveBuildDto.Name,
+            Description = saveBuildDto.Description,
             CreatedAt = DateTime.UtcNow,
-            UserId = buildDto.UserId,
+            UserId = saveBuildDto.UserId,
             BuildComponents = buildComponents
         };
 
-        var saveResult = await _buildRepository.AddAsync(build);
+        var saveResult = await _buildRepository.Add(build);
 
         return Result.Success(saveResult);
     }

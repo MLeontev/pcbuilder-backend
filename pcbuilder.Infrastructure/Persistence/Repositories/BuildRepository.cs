@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using pcbuilder.Domain.Interfaces;
 using pcbuilder.Domain.Models.Common;
 
@@ -12,7 +13,15 @@ public class BuildRepository : IBuildRepository
         _dbContext = dbContext;
     }
 
-    public async Task<int> AddAsync(Build build)
+    public async Task<Build?> GetById(int id)
+    {
+        return await _dbContext.Builds
+            .Include(b => b.BuildComponents)
+            .ThenInclude(bc => bc.PcComponent)
+            .FirstOrDefaultAsync(b => b.Id == id);
+    }
+
+    public async Task<int> Add(Build build)
     {
         _dbContext.Builds.Add(build);
         await _dbContext.SaveChangesAsync();

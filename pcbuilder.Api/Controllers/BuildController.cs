@@ -5,7 +5,6 @@ using pcbuilder.Api.Contracts.Builds;
 using pcbuilder.Api.Extensions;
 using pcbuilder.Application.DTOs.Builds;
 using pcbuilder.Application.Services.BuildService;
-using pcbuilder.Domain.Models.Common;
 
 namespace pcbuilder.Api.Controllers;
 
@@ -20,13 +19,35 @@ public class BuildController : ControllerBase
         _buildService = buildService;
     }
 
+    [HttpGet("{id:int}")]
+    [Authorize]
+    public async Task<IActionResult> GetBuildById(int id)
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
+        var result = await _buildService.GetById(id, userId);
+        
+        return result.IsFailure
+            ? result.ToErrorResponse()
+            : Ok(new GetBuildResponse
+            {
+                Id = result.Value.Id,
+                Name = result.Value.Name,
+                Description = result.Value.Description,
+                CreatedAt = result.Value.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss"),
+                UpdatedAt = result.Value.UpdatedAt?.ToString("dd.MM.yyyy HH:mm:ss"),
+                CpuId = result.Value.CpuId,
+                MotherboardId = result.Value.MotherboardId
+            });
+    }
+    
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> SaveBuild(SaveBuildRequest request)
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-        var result = await _buildService.SaveBuild(new BuildDto
+        var result = await _buildService.SaveBuild(new SaveBuildDto
         {
             UserId = userId,
             Name = request.Name,
