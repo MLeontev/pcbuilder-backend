@@ -1,6 +1,6 @@
 namespace pcbuilder.Api.Contracts.Builds;
 
-public class BuildComponentsRequest
+public class CheckBuildRequest
 {
     public int? CpuId { get; set; }
     

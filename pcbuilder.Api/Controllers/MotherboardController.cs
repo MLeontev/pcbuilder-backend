@@ -35,7 +35,7 @@ public class MotherboardController : ControllerBase
         
         return result.IsFailure
             ? result.ToErrorResponse() 
-            : Ok(result.Value.ToGetComponentsResponse());
+            : Ok(result.Value.ToPagedResponse());
     }
 
     [HttpGet("{id:int}")]

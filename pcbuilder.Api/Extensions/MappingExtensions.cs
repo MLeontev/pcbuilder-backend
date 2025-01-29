@@ -1,3 +1,4 @@
+using pcbuilder.Api.Contracts;
 using pcbuilder.Api.Contracts.Builds;
 using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Application.DTOs.Builds;
@@ -12,7 +13,7 @@ public static class MappingExtensions
 {
     #region DTO
 
-    public static BuildComponentsDto ToBuildComponentsDto(this BuildComponentsRequest request)
+    public static BuildComponentsDto ToBuildComponentsDto(this CheckBuildRequest request)
     {
         return new BuildComponentsDto
         {
@@ -107,7 +108,7 @@ public static class MappingExtensions
 
     #region Списки комплектующих
 
-    public static GetComponentsResponse<ComponentResponse> ToGetComponentsResponse(this PagedList<Cpu> pagedList)
+    public static PagedResponse<ComponentResponse> ToPagedResponse(this PagedList<Cpu> pagedList)
     {
         var cpuDtos = pagedList.Items.Select(cpu => new ComponentResponse
         {
@@ -117,7 +118,7 @@ public static class MappingExtensions
             Description = cpu.Description
         }).ToList();
 
-        return new GetComponentsResponse<ComponentResponse>
+        return new PagedResponse<ComponentResponse>
         {
             Items = cpuDtos,
             Page = pagedList.Page,
@@ -129,7 +130,7 @@ public static class MappingExtensions
         };
     }
     
-    public static GetComponentsResponse<ComponentResponse> ToGetComponentsResponse(this PagedList<Motherboard> pagedList)
+    public static PagedResponse<ComponentResponse> ToPagedResponse(this PagedList<Motherboard> pagedList)
     {
         var motherboardDtos = pagedList.Items.Select(motherboard => new ComponentResponse
         {
@@ -139,7 +140,7 @@ public static class MappingExtensions
             Description = motherboard.Description
         }).ToList();
 
-        return new GetComponentsResponse<ComponentResponse>
+        return new PagedResponse<ComponentResponse>
         {
             Items = motherboardDtos,
             Page = pagedList.Page,

@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace pcbuilder.Domain.Models.Cpus;
 
 public class Socket

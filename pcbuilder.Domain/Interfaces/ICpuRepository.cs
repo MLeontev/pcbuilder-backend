@@ -7,5 +7,5 @@ public interface ICpuRepository
 {
     public Task<PagedList<Cpu>> Get(string? searchQuery, int page, int pageSize);
     
-    Task<Cpu?> GetById(int id);
+    public Task<Cpu?> GetById(int id);
 }

@@ -1,7 +1,9 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using pcbuilder.Api.Contracts;
 using pcbuilder.Api.Contracts.Builds;
+using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Api.Extensions;
 using pcbuilder.Application.DTOs.Builds;
 using pcbuilder.Application.Services.BuildService;
@@ -19,6 +21,39 @@ public class BuildController : ControllerBase
         _buildService = buildService;
     }
 
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> Get([FromQuery] GetBuildsRequest request)
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
+        var result = await _buildService.Get(userId, request.SearchQuery, request.Page, request.PageSize);
+
+        var pagedList = result.Value;
+        
+        var buildList = pagedList.Items.Select(b => new BuildListResponse
+        {
+            Id = b.Id,
+            Name = b.Name,
+            Description = b.Description,
+            CreatedAt = b.CreatedAt,
+            UpdatedAt = b.UpdatedAt
+        }).ToList();
+        
+        return result.IsFailure
+            ? result.ToErrorResponse() 
+            : Ok(new PagedResponse<BuildListResponse>
+            {
+                Items = buildList,
+                Page = pagedList.Page,
+                PageSize = pagedList.PageSize,
+                TotalCount = pagedList.TotalCount,
+                TotalPages = pagedList.TotalPages,
+                HasPreviousPage = pagedList.HasPreviousPage,
+                HasNextPage = pagedList.HasNextPage
+            });
+    }
+    
     [HttpGet("{id:int}")]
     [Authorize]
     public async Task<IActionResult> GetBuildById(int id)
@@ -35,7 +70,7 @@ public class BuildController : ControllerBase
                 Name = result.Value.Name,
                 Description = result.Value.Description,
                 CreatedAt = result.Value.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss"),
-                UpdatedAt = result.Value.UpdatedAt?.ToString("dd.MM.yyyy HH:mm:ss"),
+                UpdatedAt = result.Value.UpdatedAt.ToString("dd.MM.yyyy HH:mm:ss"),
                 CpuId = result.Value.CpuId,
                 MotherboardId = result.Value.MotherboardId
             });
@@ -43,7 +78,7 @@ public class BuildController : ControllerBase
     
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> SaveBuild(SaveBuildRequest request)
+    public async Task<IActionResult> Save(SaveBuildRequest request)
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
@@ -60,9 +95,22 @@ public class BuildController : ControllerBase
             ? result.ToErrorResponse() 
             : Ok(result.Value);
     }
+
+    [HttpDelete("{id:int}")]
+    [Authorize]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
+        var result = await _buildService.DeleteBuild(id, userId);
+        
+        return result.IsFailure 
+            ? result.ToErrorResponse() 
+            : NoContent();
+    }
     
     [HttpPost("check")]
-    public async Task<IActionResult> CheckBuildCompatibility(BuildComponentsRequest request)
+    public async Task<IActionResult> CheckBuildCompatibility(CheckBuildRequest request)
     {
         var result = await _buildService.CheckBuildCompatibility(request.ToBuildComponentsDto());
         

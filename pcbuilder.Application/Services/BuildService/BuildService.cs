@@ -45,6 +45,26 @@ public class BuildService : IBuildService
         return Result.Success(compatibilityResult);
     }
 
+    public async Task<Result<PagedList<BuildDto>>> Get(int userId, string? searchQuery, int page, int pageSize)
+    {
+        var builds = await _buildRepository.Get(userId, searchQuery, page, pageSize);
+        
+        var buildDtos = builds.Items.Select(b => new BuildDto
+        {
+            Id = b.Id,
+            Name = b.Name,
+            Description = b.Description,
+            CreatedAt = b.CreatedAt,
+            UpdatedAt = b.UpdatedAt,
+            CpuId = b.BuildComponents.FirstOrDefault(bc => bc.PcComponent is Cpu)?.PcComponentId,
+            MotherboardId = b.BuildComponents.FirstOrDefault(bc => bc.PcComponent is Motherboard)?.PcComponentId
+        }).ToList();
+        
+        var pagedBuildDtoList = new PagedList<BuildDto>(buildDtos, page, pageSize, builds.TotalCount);
+
+        return Result.Success(pagedBuildDtoList);
+    }
+
     public async Task<Result<BuildDto>> GetById(int buildId, int userId)
     {
         var build = await _buildRepository.GetById(buildId);
@@ -94,6 +114,7 @@ public class BuildService : IBuildService
             Name = saveBuildDto.Name,
             Description = saveBuildDto.Description,
             CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
             UserId = saveBuildDto.UserId,
             BuildComponents = buildComponents
         };
@@ -101,6 +122,25 @@ public class BuildService : IBuildService
         var saveResult = await _buildRepository.Add(build);
 
         return Result.Success(saveResult);
+    }
+
+    public async Task<Result> DeleteBuild(int buildId, int userId)
+    {
+        var build = await _buildRepository.GetById(buildId);
+
+        if (build == null)
+        {
+            return Result.Failure(BuildErrors.NotFound(buildId));
+        }
+
+        if (build.UserId != userId)
+        {
+            return Result.Failure(BuildErrors.ForbiddenAccess);
+        }
+        
+        await _buildRepository.Delete(build);
+
+        return Result.Success();
     }
 
     private async Task<Result<BuildWithComponentsDto>> GetAllComponents(BuildComponentsDto buildDto)

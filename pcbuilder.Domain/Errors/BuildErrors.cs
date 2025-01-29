@@ -8,5 +8,5 @@ public class BuildErrors
         "Builds.NotFound", $"Сборка с id={id} не найдена");
     
     public static Error ForbiddenAccess => Error.Unauthorized(
-        "Builds.ForbiddenAccess", "У вас нет прав на просмотр этой сборки");
+        "Builds.ForbiddenAccess", "У вас нет прав на доступ к этой сборке");
 }

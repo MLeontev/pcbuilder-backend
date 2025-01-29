@@ -21,6 +21,14 @@ public class CompatibilityResult
         };
     }
     
+    public void AddErrors(IEnumerable<CompatibilityError> errors)
+    {
+        foreach (var error in errors)
+        {
+            AddError(error);
+        }
+    }
+    
     public bool HasErrors() => Errors.Any(error => error.Status == CompatibilityErrorStatus.Problem);
 }
 

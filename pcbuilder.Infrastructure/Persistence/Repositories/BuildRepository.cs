@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Interfaces;
 using pcbuilder.Domain.Models.Common;
 
@@ -11,6 +12,26 @@ public class BuildRepository : IBuildRepository
     public BuildRepository(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public async Task<PagedList<Build>> Get(int userId, string? searchQuery, int page, int pageSize)
+    {
+        var query = _dbContext.Builds.Where(b => b.UserId == userId);
+
+        if (!string.IsNullOrEmpty(searchQuery))
+            query = query.Where(b => b.Name.ToLower().Contains(searchQuery.ToLower())
+                                     || (b.Description != null &&
+                                         b.Description.ToLower().Contains(searchQuery.ToLower())));
+        
+        var totalCount = await query.CountAsync();
+        
+        var items = await query
+            .OrderByDescending(b => b.UpdatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        
+        return new PagedList<Build>(items, page, pageSize, totalCount);
     }
 
     public async Task<Build?> GetById(int id)
@@ -26,5 +47,11 @@ public class BuildRepository : IBuildRepository
         _dbContext.Builds.Add(build);
         await _dbContext.SaveChangesAsync();
         return build.Id;
+    }
+
+    public async Task Delete(Build build)
+    {
+        _dbContext.Builds.Remove(build);
+        await _dbContext.SaveChangesAsync();
     }
 }

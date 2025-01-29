@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using pcbuilder.Domain.Models.Ram;
 
 namespace pcbuilder.Domain.Models.Cpus;

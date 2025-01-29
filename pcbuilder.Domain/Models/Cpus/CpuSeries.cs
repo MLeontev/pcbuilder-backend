@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using pcbuilder.Domain.Models.Common;
-
 namespace pcbuilder.Domain.Models.Cpus;
 
 public class CpuSeries

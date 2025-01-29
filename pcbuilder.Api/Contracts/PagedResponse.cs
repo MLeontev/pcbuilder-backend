@@ -1,6 +1,6 @@
-namespace pcbuilder.Api.Contracts.Components;
+namespace pcbuilder.Api.Contracts;
 
-public class GetComponentsResponse<T>
+public class PagedResponse<T>
 {
     public List<T> Items { get; set; } = [];
     

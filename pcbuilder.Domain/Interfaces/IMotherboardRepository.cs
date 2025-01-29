@@ -7,5 +7,5 @@ public interface IMotherboardRepository
 {
     public Task<PagedList<Motherboard>> Get(string? searchQuery, int page, int pageSize);
     
-    Task<Motherboard?> GetById(int id);
+    public Task<Motherboard?> GetById(int id);
 }
