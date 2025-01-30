@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using pcbuilder.Api.Contracts;
 using pcbuilder.Api.Contracts.Errors;
 using pcbuilder.Shared;
 

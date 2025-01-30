@@ -12,6 +12,6 @@ public class Cooler : PcComponent
 
     public int? WaterCoolingSizeId { get; set; }
     public WaterCoolingSize? WaterCoolingSize { get; set; }
-    
+
     public List<CoolerSocket> CoolerSockets { get; set; } = [];
 }

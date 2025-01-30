@@ -18,7 +18,7 @@ public class CpuService : ICpuService
     public async Task<Result<Cpu>> GetById(int id)
     {
         var cpu = await _cpuRepository.GetById(id);
-        
+
         return cpu == null
             ? Result.Failure<Cpu>(ComponentErrors.NotFound(id))
             : Result.Success(cpu);

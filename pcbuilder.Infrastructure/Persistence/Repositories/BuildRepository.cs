@@ -22,15 +22,15 @@ public class BuildRepository : IBuildRepository
             query = query.Where(b => b.Name.ToLower().Contains(searchQuery.ToLower())
                                      || (b.Description != null &&
                                          b.Description.ToLower().Contains(searchQuery.ToLower())));
-        
+
         var totalCount = await query.CountAsync();
-        
+
         var items = await query
             .OrderByDescending(b => b.UpdatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
-        
+
         return new PagedList<Build>(items, page, pageSize, totalCount);
     }
 

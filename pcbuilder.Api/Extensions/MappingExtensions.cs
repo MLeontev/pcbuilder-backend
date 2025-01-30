@@ -1,5 +1,6 @@
 using pcbuilder.Api.Contracts;
 using pcbuilder.Api.Contracts.Builds;
+using pcbuilder.Api.Contracts.Builds.Compatibility;
 using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Application.DTOs.Builds;
 using pcbuilder.Domain.DTOs;
@@ -36,7 +37,7 @@ public static class MappingExtensions
     }
 
     #endregion
-    
+
     #region Комплектующие с характеристиками
 
     public static ComponentDetailsResponse ToComponentDetailsResponse(this Cpu cpu)
@@ -45,7 +46,7 @@ public static class MappingExtensions
             .OrderBy(cm => cm.MemoryType.Name)
             .Select(cm => $"{cm.MemoryType.Name}-{cm.MaxMemorySpeed}")
             .ToList();
-        
+
         return new ComponentDetailsResponse
         {
             Id = cpu.Id,
@@ -67,7 +68,7 @@ public static class MappingExtensions
             }
         };
     }
-    
+
     public static ComponentDetailsResponse ToComponentDetailsResponse(this Motherboard motherboard)
     {
         // var pciSlots = motherboard.MotherboardPciSlots
@@ -92,7 +93,7 @@ public static class MappingExtensions
                 { "Форм-фактор", motherboard.FormFactor.Name },
                 { "Тип памяти", motherboard.MemoryType.Name },
                 { "Максимальный объем памяти", $"{motherboard.MaxMemoryCapacity} ГБ" },
-                { "Максимальная частота памяти", $"{motherboard.MaxMemorySpeed} МГц" },
+                { "Максимальная частота памяти", $"{motherboard.MaxMemorySpeed} МГц" }
                 // { "Слотов PCIe x16", $""},
                 // { "Слотов PCIe x8", $""},
                 // { "Слотов PCIe x4", $""},
@@ -129,7 +130,7 @@ public static class MappingExtensions
             HasNextPage = pagedList.HasNextPage
         };
     }
-    
+
     public static PagedResponse<ComponentResponse> ToPagedResponse(this PagedList<Motherboard> pagedList)
     {
         var motherboardDtos = pagedList.Items.Select(motherboard => new ComponentResponse

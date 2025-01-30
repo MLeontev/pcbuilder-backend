@@ -10,7 +10,7 @@ public class Motherboard : PcComponent
 {
     public int MotherboardChipsetId { get; set; }
     public MotherboardChipset MotherboardChipset { get; set; } = null!;
-    
+
     public int SocketId { get; set; }
     public Socket Socket { get; set; } = null!;
 
@@ -19,7 +19,7 @@ public class Motherboard : PcComponent
 
     public int MemoryTypeId { get; set; }
     public MemoryType MemoryType { get; set; } = null!;
-    
+
     public int MemorySlots { get; set; }
     public int MaxMemoryCapacity { get; set; }
     public int MaxMemorySpeed { get; set; }

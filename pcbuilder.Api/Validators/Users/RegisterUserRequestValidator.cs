@@ -14,9 +14,9 @@ public class RegisterUserRequestValidator : AbstractValidator<RegisterUserReques
 
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Password is required");
-        
+
         RuleFor(x => x.ConfirmPassword)
             .Equal(x => x.Password).WithMessage("Passwords don't match")
             .When(x => !string.IsNullOrEmpty(x.Password));
-    }    
+    }
 }

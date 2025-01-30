@@ -12,7 +12,7 @@ public class ErrorResponse
         return new ErrorResponse
         {
             Code = error.Code,
-            Message = error.Message,
+            Message = error.Message
         };
     }
 }

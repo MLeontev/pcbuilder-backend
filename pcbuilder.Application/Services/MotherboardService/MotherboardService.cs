@@ -18,7 +18,7 @@ public class MotherboardService : IMotherboardService
     public async Task<Result<Motherboard>> GetById(int id)
     {
         var motherboard = await _motherboardRepository.GetById(id);
-        
+
         return motherboard == null
             ? Result.Failure<Motherboard>(ComponentErrors.NotFound(id))
             : Result.Success(motherboard);

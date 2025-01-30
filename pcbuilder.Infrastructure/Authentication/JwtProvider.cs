@@ -5,7 +5,6 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using pcbuilder.Application.Interfaces;
-using pcbuilder.Domain.Models;
 using pcbuilder.Domain.Models.Common;
 
 namespace pcbuilder.Infrastructure.Authentication;
@@ -26,7 +25,7 @@ public class JwtProvider : IJwtProvider
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Name, user.UserName!)
         };
-        
+
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         var signingCredentials = new SigningCredentials(
@@ -40,7 +39,7 @@ public class JwtProvider : IJwtProvider
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-    
+
     public string GenerateRefreshToken()
     {
         var randomNumber = new byte[32];
@@ -61,14 +60,13 @@ public class JwtProvider : IJwtProvider
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
-            
-        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+
+        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
 
         if (securityToken is not JwtSecurityToken jwtSecurityToken
-            || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-        {
+            || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                StringComparison.InvariantCultureIgnoreCase))
             throw new SecurityTokenException("Invalid token");
-        }
 
         return principal;
     }

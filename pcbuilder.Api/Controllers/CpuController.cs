@@ -29,14 +29,14 @@ public class CpuController : ControllerBase
             var errorResponse = validationResult.ToValidationErrorResponse();
             return BadRequest(errorResponse);
         }
-        
+
         var result = await _cpuService.Get(request.SearchQuery, request.Page, request.PageSize);
-        
+
         return result.IsFailure
-            ? result.ToErrorResponse() 
+            ? result.ToErrorResponse()
             : Ok(result.Value.ToPagedResponse());
     }
-    
+
     [HttpGet("compatible")]
     public async Task<IActionResult> GetCompatible([FromQuery] GetComponentsRequest request)
     {
@@ -47,21 +47,21 @@ public class CpuController : ControllerBase
             var errorResponse = validationResult.ToValidationErrorResponse();
             return BadRequest(errorResponse);
         }
-        
+
         var result = await _cpuService.Get(request.SearchQuery, request.Page, request.PageSize);
-        
+
         return result.IsFailure
-            ? result.ToErrorResponse() 
+            ? result.ToErrorResponse()
             : Ok(result.Value.ToPagedResponse());
     }
-    
+
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
         var result = await _cpuService.GetById(id);
-        
+
         return result.IsFailure
-            ? result.ToErrorResponse() 
+            ? result.ToErrorResponse()
             : Ok(result.Value.ToComponentDetailsResponse());
     }
 }

@@ -11,7 +11,7 @@ public class Case : PcComponent
     public int MaxCoolerHeight { get; set; }
 
     public int MaxPsuLength { get; set; }
-    
+
     public List<CaseWaterCoolingSize> CaseWaterCoolingSizes { get; set; } = [];
     public List<CaseStorageFormFactor> CaseStorageFormFactors { get; set; } = [];
     public List<CaseMotherboardFormFactor> CaseMotherboardFormFactors { get; set; } = [];

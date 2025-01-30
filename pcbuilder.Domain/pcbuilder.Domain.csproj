@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\pcbuilder.Shared\pcbuilder.Shared.csproj" />
+        <ProjectReference Include="..\pcbuilder.Shared\pcbuilder.Shared.csproj"/>
     </ItemGroup>
 
 </Project>

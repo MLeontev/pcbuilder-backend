@@ -9,7 +9,7 @@ public class GetComponentsRequestValidator : AbstractValidator<GetComponentsRequ
     {
         RuleFor(x => x.PageSize)
             .GreaterThan(0).WithMessage("Размер страницы должен быть больше 0");
-        
+
         RuleFor(x => x.Page)
             .GreaterThan(0).WithMessage("Номер страницы должен быть больше 0");
     }

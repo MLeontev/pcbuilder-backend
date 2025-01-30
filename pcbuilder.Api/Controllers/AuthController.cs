@@ -1,6 +1,5 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using pcbuilder.Api.Contracts;
 using pcbuilder.Api.Contracts.Errors;
 using pcbuilder.Api.Contracts.Users;
 using pcbuilder.Api.Extensions;
@@ -13,13 +12,13 @@ namespace pcbuilder.Api.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IUserService _userService;
-    private readonly IValidator<RegisterUserRequest> _registerUserRequestValidator;
     private readonly IValidator<LoginUserRequest> _loginUserRequestValidator;
+    private readonly IValidator<RegisterUserRequest> _registerUserRequestValidator;
+    private readonly IUserService _userService;
 
     public AuthController(
-        IUserService userService, 
-        IValidator<RegisterUserRequest> registerUserRequestValidator, 
+        IUserService userService,
+        IValidator<RegisterUserRequest> registerUserRequestValidator,
         IValidator<LoginUserRequest> loginUserRequestValidator)
     {
         _userService = userService;
@@ -37,16 +36,13 @@ public class AuthController : ControllerBase
             var errorResponse = validationResult.ToValidationErrorResponse();
             return BadRequest(errorResponse);
         }
-        
+
         var result = await _userService.RegisterUser(request.Username, request.Password);
 
-        if (result.IsFailure)
-        {
-            return result.ToErrorResponse();
-        }
-        
+        if (result.IsFailure) return result.ToErrorResponse();
+
         var authResult = result.Value;
-        
+
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
@@ -56,7 +52,7 @@ public class AuthController : ControllerBase
         };
 
         Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
-        
+
         return Ok(AuthResponse.FromAuthResult(authResult));
     }
 
@@ -70,16 +66,13 @@ public class AuthController : ControllerBase
             var errorResponse = validationResult.ToValidationErrorResponse();
             return BadRequest(errorResponse);
         }
-        
+
         var result = await _userService.Login(request.Username, request.Password);
-        
-        if (result.IsFailure)
-        {
-            return result.ToErrorResponse();
-        }
-        
+
+        if (result.IsFailure) return result.ToErrorResponse();
+
         var authResult = result.Value;
-        
+
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
@@ -89,7 +82,7 @@ public class AuthController : ControllerBase
         };
 
         Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
-        
+
         return Ok(AuthResponse.FromAuthResult(authResult));
     }
 
@@ -97,21 +90,15 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Refresh()
     {
         var refreshToken = Request.Cookies["RefreshToken"];
-        
-        if (string.IsNullOrEmpty(refreshToken))
-        {
-            return Unauthorized(ErrorResponse.FromError(UserErrors.InvalidToken));
-        }
-        
+
+        if (string.IsNullOrEmpty(refreshToken)) return Unauthorized(ErrorResponse.FromError(UserErrors.InvalidToken));
+
         var result = await _userService.RefreshToken(refreshToken);
-        
-        if (result.IsFailure)
-        {
-            return result.ToErrorResponse();
-        }
-        
+
+        if (result.IsFailure) return result.ToErrorResponse();
+
         var authResult = result.Value;
-        
+
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
@@ -121,27 +108,21 @@ public class AuthController : ControllerBase
         };
 
         Response.Cookies.Append("RefreshToken", authResult.RefreshToken, cookieOptions);
-        
+
         return Ok(AuthResponse.FromAuthResult(authResult));
     }
-    
+
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
         var refreshToken = Request.Cookies["RefreshToken"];
-        
-        if (string.IsNullOrEmpty(refreshToken))
-        {
-            return Unauthorized(ErrorResponse.FromError(UserErrors.InvalidToken));
-        }
-        
+
+        if (string.IsNullOrEmpty(refreshToken)) return Unauthorized(ErrorResponse.FromError(UserErrors.InvalidToken));
+
         var result = await _userService.Logout(refreshToken);
-        
-        if (result.IsFailure)
-        {
-            return result.ToErrorResponse();
-        }
-        
+
+        if (result.IsFailure) return result.ToErrorResponse();
+
         Response.Cookies.Delete("RefreshToken");
         return Ok();
     }

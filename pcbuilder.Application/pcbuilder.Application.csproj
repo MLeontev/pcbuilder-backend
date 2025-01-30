@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\pcbuilder.Domain\pcbuilder.Domain.csproj" />
-      <ProjectReference Include="..\pcbuilder.Shared\pcbuilder.Shared.csproj" />
+        <ProjectReference Include="..\pcbuilder.Domain\pcbuilder.Domain.csproj"/>
+        <ProjectReference Include="..\pcbuilder.Shared\pcbuilder.Shared.csproj"/>
     </ItemGroup>
 
 </Project>

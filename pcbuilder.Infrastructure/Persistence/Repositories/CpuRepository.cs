@@ -38,7 +38,7 @@ public class CpuRepository : ICpuRepository
 
         return new PagedList<Cpu>(cpus, page, pageSize, totalCount);
     }
-    
+
     public async Task<Cpu?> GetById(int id)
     {
         return await _dbContext.Cpus

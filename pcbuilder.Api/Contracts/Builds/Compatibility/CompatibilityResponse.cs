@@ -1,4 +1,4 @@
-namespace pcbuilder.Api.Contracts.Builds;
+namespace pcbuilder.Api.Contracts.Builds.Compatibility;
 
 public class CompatibilityResponse
 {

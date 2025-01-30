@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using pcbuilder.Api.Contracts;
 using pcbuilder.Api.Contracts.Builds;
-using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Api.Extensions;
 using pcbuilder.Application.DTOs.Builds;
 using pcbuilder.Application.Services.BuildService;
@@ -26,12 +25,12 @@ public class BuildController : ControllerBase
     public async Task<IActionResult> Get([FromQuery] GetBuildsRequest request)
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-        
+
         var result = await _buildService.Get(userId, request.SearchQuery, request.Page, request.PageSize);
 
         var pagedList = result.Value;
-        
-        var buildList = pagedList.Items.Select(b => new BuildListResponse
+
+        var buildList = pagedList.Items.Select(b => new BuildListItemResponse
         {
             Id = b.Id,
             Name = b.Name,
@@ -39,10 +38,10 @@ public class BuildController : ControllerBase
             CreatedAt = b.CreatedAt,
             UpdatedAt = b.UpdatedAt
         }).ToList();
-        
+
         return result.IsFailure
-            ? result.ToErrorResponse() 
-            : Ok(new PagedResponse<BuildListResponse>
+            ? result.ToErrorResponse()
+            : Ok(new PagedResponse<BuildListItemResponse>
             {
                 Items = buildList,
                 Page = pagedList.Page,
@@ -53,15 +52,15 @@ public class BuildController : ControllerBase
                 HasNextPage = pagedList.HasNextPage
             });
     }
-    
+
     [HttpGet("{id:int}")]
     [Authorize]
     public async Task<IActionResult> GetBuildById(int id)
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-        
+
         var result = await _buildService.GetById(id, userId);
-        
+
         return result.IsFailure
             ? result.ToErrorResponse()
             : Ok(new GetBuildResponse
@@ -75,7 +74,7 @@ public class BuildController : ControllerBase
                 MotherboardId = result.Value.MotherboardId
             });
     }
-    
+
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> Save(SaveBuildRequest request)
@@ -90,9 +89,9 @@ public class BuildController : ControllerBase
             CpuId = request.CpuId,
             MotherboardId = request.MotherboardId
         });
-        
-        return result.IsFailure 
-            ? result.ToErrorResponse() 
+
+        return result.IsFailure
+            ? result.ToErrorResponse()
             : Ok(result.Value);
     }
 
@@ -101,21 +100,21 @@ public class BuildController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-        
+
         var result = await _buildService.DeleteBuild(id, userId);
-        
-        return result.IsFailure 
-            ? result.ToErrorResponse() 
+
+        return result.IsFailure
+            ? result.ToErrorResponse()
             : NoContent();
     }
-    
+
     [HttpPost("check")]
     public async Task<IActionResult> CheckBuildCompatibility(CheckBuildRequest request)
     {
         var result = await _buildService.CheckBuildCompatibility(request.ToBuildComponentsDto());
-        
-        return result.IsFailure 
-            ? result.ToErrorResponse() 
+
+        return result.IsFailure
+            ? result.ToErrorResponse()
             : Ok(result.Value.ToCompatibilityResponse());
     }
 }

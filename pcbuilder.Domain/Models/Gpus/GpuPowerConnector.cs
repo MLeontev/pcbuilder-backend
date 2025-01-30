@@ -6,7 +6,7 @@ public class GpuPowerConnector
 {
     public int GpuId { get; set; }
     public Gpu Gpu { get; set; } = null!;
-    
+
     public int PowerConnectorId { get; set; }
     public PowerConnector PowerConnector { get; set; } = null!;
 }

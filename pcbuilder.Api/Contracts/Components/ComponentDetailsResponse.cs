@@ -3,7 +3,7 @@ namespace pcbuilder.Api.Contracts.Components;
 public class ComponentDetailsResponse
 {
     public int Id { get; set; }
-    
+
     public string? ImagePath { get; set; }
 
     public string Name { get; set; } = string.Empty;

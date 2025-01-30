@@ -3,7 +3,6 @@ using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Api.Extensions;
 using pcbuilder.Api.Validators.Components;
 using pcbuilder.Application.Services.MotherboardService;
-using pcbuilder.Domain.Models.Motherboards;
 
 namespace pcbuilder.Api.Controllers;
 
@@ -11,15 +10,16 @@ namespace pcbuilder.Api.Controllers;
 [Route("api/[controller]")]
 public class MotherboardController : ControllerBase
 {
-    private readonly IMotherboardService _motherboardService;
     private readonly GetComponentsRequestValidator _getComponentsRequestValidator;
+    private readonly IMotherboardService _motherboardService;
 
-    public MotherboardController(GetComponentsRequestValidator getComponentsRequestValidator, IMotherboardService motherboardService)
+    public MotherboardController(GetComponentsRequestValidator getComponentsRequestValidator,
+        IMotherboardService motherboardService)
     {
         _getComponentsRequestValidator = getComponentsRequestValidator;
         _motherboardService = motherboardService;
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] GetComponentsRequest request)
     {
@@ -30,11 +30,11 @@ public class MotherboardController : ControllerBase
             var errorResponse = validationResult.ToValidationErrorResponse();
             return BadRequest(errorResponse);
         }
-        
+
         var result = await _motherboardService.Get(request.SearchQuery, request.Page, request.PageSize);
-        
+
         return result.IsFailure
-            ? result.ToErrorResponse() 
+            ? result.ToErrorResponse()
             : Ok(result.Value.ToPagedResponse());
     }
 
@@ -42,9 +42,9 @@ public class MotherboardController : ControllerBase
     public async Task<IActionResult> GetById(int id)
     {
         var result = await _motherboardService.GetById(id);
-        
-        return result.IsFailure 
-            ? result.ToErrorResponse() 
+
+        return result.IsFailure
+            ? result.ToErrorResponse()
             : Ok(result.Value.ToComponentDetailsResponse());
     }
 }
