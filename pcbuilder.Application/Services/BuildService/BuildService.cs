@@ -1,4 +1,5 @@
 using pcbuilder.Application.DTOs.Builds;
+using pcbuilder.Application.Extensions;
 using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Errors;
 using pcbuilder.Domain.Interfaces;
@@ -29,7 +30,7 @@ public class BuildService : IBuildService
         _buildRepository = buildRepository;
     }
 
-    public async Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentsDto buildDto)
+    public async Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentIdsDto buildDto)
     {
         var getComponentsResult = await GetAllComponents(buildDto);
 
@@ -46,16 +47,7 @@ public class BuildService : IBuildService
     {
         var builds = await _buildRepository.Get(userId, searchQuery, page, pageSize);
 
-        var buildDtos = builds.Items.Select(b => new BuildDto
-        {
-            Id = b.Id,
-            Name = b.Name,
-            Description = b.Description,
-            CreatedAt = b.CreatedAt,
-            UpdatedAt = b.UpdatedAt,
-            CpuId = b.BuildComponents.FirstOrDefault(bc => bc.PcComponent is Cpu)?.PcComponentId,
-            MotherboardId = b.BuildComponents.FirstOrDefault(bc => bc.PcComponent is Motherboard)?.PcComponentId
-        }).ToList();
+        var buildDtos = builds.Items.Select(build => build.ToDto()).ToList();
 
         var pagedBuildDtoList = new PagedList<BuildDto>(buildDtos, page, pageSize, builds.TotalCount);
 
@@ -65,37 +57,25 @@ public class BuildService : IBuildService
     public async Task<Result<BuildDto>> GetById(int buildId, int userId)
     {
         var build = await _buildRepository.GetById(buildId);
-
         if (build == null) return Result.Failure<BuildDto>(BuildErrors.NotFound(buildId));
 
-        if (build.UserId != userId) return Result.Failure<BuildDto>(BuildErrors.ForbiddenAccess);
-
-        var buildDto = new BuildDto
-        {
-            Id = build.Id,
-            Name = build.Name,
-            Description = build.Description,
-            CreatedAt = build.CreatedAt,
-            UpdatedAt = build.UpdatedAt,
-            CpuId = build.BuildComponents.FirstOrDefault(bc => bc.PcComponent is Cpu)?.PcComponentId,
-            MotherboardId = build.BuildComponents.FirstOrDefault(bc => bc.PcComponent is Motherboard)?.PcComponentId
-        };
-
-        return Result.Success(buildDto);
+        return build.UserId != userId 
+            ? Result.Failure<BuildDto>(BuildErrors.ForbiddenAccess) 
+            : Result.Success(build.ToDto());
     }
 
     public async Task<Result<int>> SaveBuild(SaveBuildDto saveBuildDto)
     {
-        var getComponentsResult = await GetAllComponents(new BuildComponentsDto
+        var getComponentsResult = await GetAllComponents(new BuildComponentIdsDto
         {
-            CpuId = saveBuildDto.CpuId,
-            MotherboardId = saveBuildDto.MotherboardId
+            CpuId = saveBuildDto.Components.CpuId,
+            MotherboardId = saveBuildDto.Components.MotherboardId
         });
 
         if (getComponentsResult.IsFailure) return Result.Failure<int>(getComponentsResult.Error);
 
         var components = getComponentsResult.Value;
-        var buildComponents = MapComponentsToBuild(components);
+        var buildComponents = components.ToBuildComponents();
 
         var build = new Build
         {
@@ -125,7 +105,7 @@ public class BuildService : IBuildService
         return Result.Success();
     }
 
-    private async Task<Result<BuildWithComponentsDto>> GetAllComponents(BuildComponentsDto buildDto)
+    private async Task<Result<BuildWithComponentsDto>> GetAllComponents(BuildComponentIdsDto buildDto)
     {
         Cpu? cpu = null;
         if (buildDto.CpuId.HasValue)
@@ -148,17 +128,5 @@ public class BuildService : IBuildService
             Cpu = cpu,
             Motherboard = motherboard
         });
-    }
-
-    private List<BuildComponent> MapComponentsToBuild(BuildWithComponentsDto components)
-    {
-        var buildComponents = new List<BuildComponent>();
-
-        if (components.Cpu != null) buildComponents.Add(new BuildComponent { PcComponentId = components.Cpu.Id });
-
-        if (components.Motherboard != null)
-            buildComponents.Add(new BuildComponent { PcComponentId = components.Motherboard.Id });
-
-        return buildComponents;
     }
 }

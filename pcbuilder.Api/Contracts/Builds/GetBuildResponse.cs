@@ -11,7 +11,5 @@ public class GetBuildResponse
     public string CreatedAt { get; set; } = string.Empty;
     public string? UpdatedAt { get; set; }
 
-    public int? CpuId { get; set; }
-
-    public int? MotherboardId { get; set; }
+    public BuildComponentIds Components { get; set; } = null!;
 }

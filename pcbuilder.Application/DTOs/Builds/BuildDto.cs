@@ -11,7 +11,5 @@ public class BuildDto
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    public int? CpuId { get; set; }
-
-    public int? MotherboardId { get; set; }
+    public BuildComponentIdsDto Components { get; set; } = null!;
 }

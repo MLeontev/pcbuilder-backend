@@ -4,6 +4,7 @@ using pcbuilder.Api.Contracts.Builds.Compatibility;
 using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Application.DTOs.Builds;
 using pcbuilder.Domain.DTOs;
+using pcbuilder.Domain.Models.Common;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Services;
@@ -14,12 +15,80 @@ public static class MappingExtensions
 {
     #region DTO
 
-    public static BuildComponentsDto ToBuildComponentsDto(this CheckBuildRequest request)
+    public static BuildComponentIdsDto ToDto(this BuildComponentIds components)
     {
-        return new BuildComponentsDto
+        return new BuildComponentIdsDto
         {
-            CpuId = request.CpuId,
-            MotherboardId = request.MotherboardId
+            CpuId = components.CpuId,
+            MotherboardId = components.MotherboardId
+        };
+    }
+
+    public static BuildComponentIds ToContract(this BuildComponentIdsDto componentsDto)
+    {
+        return new BuildComponentIds
+        {
+            CpuId = componentsDto.CpuId,
+            MotherboardId = componentsDto.MotherboardId
+        };
+    }
+    
+    public static BuildListItemResponse ToBuildListItemResponse(this BuildDto buildDto)
+    {
+        return new BuildListItemResponse
+        {
+            Id = buildDto.Id,
+            Name = buildDto.Name,
+            Description = buildDto.Description,
+            CreatedAt = buildDto.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss"),
+            UpdatedAt = buildDto.UpdatedAt.ToString("dd.MM.yyyy HH:mm:ss")
+        };
+    }
+    
+    public static PagedResponse<BuildListItemResponse> ToPagedResponse(this PagedList<BuildDto> pagedList)
+    {
+        return new PagedResponse<BuildListItemResponse>
+        {
+            Items = pagedList.Items.Select(b => b.ToBuildListItemResponse()).ToList(),
+            Page = pagedList.Page,
+            PageSize = pagedList.PageSize,
+            TotalCount = pagedList.TotalCount,
+            TotalPages = pagedList.TotalPages,
+            HasPreviousPage = pagedList.HasPreviousPage,
+            HasNextPage = pagedList.HasNextPage
+        };
+    }
+    
+    public static GetBuildResponse ToGetBuildResponse(this BuildDto buildDto)
+    {
+        return new GetBuildResponse
+        {
+            Id = buildDto.Id,
+            Name = buildDto.Name,
+            Description = buildDto.Description,
+            CreatedAt = buildDto.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss"),
+            UpdatedAt = buildDto.UpdatedAt.ToString("dd.MM.yyyy HH:mm:ss"),
+            Components = buildDto.Components.ToContract()
+        };
+    }
+    
+    public static SaveBuildDto ToSaveBuildDto(this SaveBuildRequest request, int userId)
+    {
+        return new SaveBuildDto
+        {
+            UserId = userId,
+            Name = request.Name,
+            Description = request.Description,
+            Components = request.Components.ToDto()
+        };
+    }
+    
+    public static BuildComponentIdsDto ToBuildComponentIdsDto(this CheckBuildRequest request)
+    {
+        return new BuildComponentIdsDto
+        {
+            CpuId = request.Components.CpuId,
+            MotherboardId = request.Components.MotherboardId
         };
     }
 
@@ -35,6 +104,8 @@ public static class MappingExtensions
             }).ToList()
         };
     }
+    
+    
 
     #endregion
 

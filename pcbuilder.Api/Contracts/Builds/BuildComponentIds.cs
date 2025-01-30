@@ -1,6 +1,6 @@
-namespace pcbuilder.Application.DTOs.Builds;
+namespace pcbuilder.Api.Contracts.Builds;
 
-public class BuildComponentsDto
+public class BuildComponentIds
 {
     public int? CpuId { get; set; }
 

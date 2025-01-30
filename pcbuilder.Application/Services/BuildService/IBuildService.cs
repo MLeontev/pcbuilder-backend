@@ -7,7 +7,7 @@ namespace pcbuilder.Application.Services.BuildService;
 
 public interface IBuildService
 {
-    public Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentsDto buildDto);
+    public Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentIdsDto buildDto);
 
     public Task<Result<PagedList<BuildDto>>> Get(int userId, string? searchQuery, int page, int pageSize);
 

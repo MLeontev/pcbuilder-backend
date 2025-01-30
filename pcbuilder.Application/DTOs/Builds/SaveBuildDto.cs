@@ -8,7 +8,5 @@ public class SaveBuildDto
 
     public string? Description { get; set; }
 
-    public int? CpuId { get; set; }
-
-    public int? MotherboardId { get; set; }
+    public BuildComponentIdsDto Components { get; set; } = null!;
 }

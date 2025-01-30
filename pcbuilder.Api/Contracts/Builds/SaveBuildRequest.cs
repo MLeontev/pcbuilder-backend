@@ -6,7 +6,5 @@ public class SaveBuildRequest
 
     public string? Description { get; set; }
 
-    public int? CpuId { get; set; }
-
-    public int? MotherboardId { get; set; }
+    public BuildComponentIds Components { get; set; } = null!;
 }
