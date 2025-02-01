@@ -50,19 +50,29 @@ public class CompatibilityChecker
 
         if (motherboard == null || rams == null || rams.Count == 0) return result;
 
-        foreach (var ram in rams)
-            if (ram.MemoryTypeId != motherboard.MemoryTypeId)
-                result.AddError(CompatibilityErrors.MotherboardRamTypeMismatch(motherboard, ram));
+        var compatibleRams = new List<Ram>();
 
-        var totalRamModules = rams.Sum(r => r.Modules);
+        foreach (var ram in rams)
+        {
+            if (ram.MemoryTypeId != motherboard.MemoryTypeId)
+            {
+                result.AddError(CompatibilityErrors.MotherboardRamTypeMismatch(motherboard, ram));
+            }
+            else
+            {
+                compatibleRams.Add(ram);
+            }
+        }
+
+        var totalRamModules = compatibleRams.Sum(r => r.Modules);
         if (totalRamModules > motherboard.MemorySlots)
             result.AddError(CompatibilityErrors.MotherboardRamSlotLimitExceeded(motherboard, totalRamModules));
 
-        var totalRamCapacity = rams.Sum(ram => ram.TotalCapacity);
+        var totalRamCapacity = compatibleRams.Sum(ram => ram.TotalCapacity);
         if (totalRamCapacity > motherboard.MaxMemoryCapacity)
             result.AddError(CompatibilityErrors.MotherboardRamCapacityExceeded(motherboard, totalRamCapacity));
 
-        foreach (var ram in rams)
+        foreach (var ram in compatibleRams)
             if (ram.Frequency > motherboard.MaxMemorySpeed)
                 result.AddError(CompatibilityErrors.MotherboardRamSpeedExceeded(motherboard, ram));
 

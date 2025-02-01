@@ -10,6 +10,7 @@ using pcbuilder.Application.Interfaces;
 using pcbuilder.Application.Services.BuildService;
 using pcbuilder.Application.Services.CpuService;
 using pcbuilder.Application.Services.MotherboardService;
+using pcbuilder.Application.Services.RamService;
 using pcbuilder.Application.Services.UserService;
 using pcbuilder.Domain.Interfaces;
 using pcbuilder.Domain.Models.Common;
@@ -75,6 +76,9 @@ builder.Services.AddScoped<ICpuRepository, CpuRepository>();
 
 builder.Services.AddScoped<IMotherboardService, MotherboardService>();
 builder.Services.AddScoped<IMotherboardRepository, MotherboardRepository>();
+
+builder.Services.AddScoped<IRamService, RamService>();
+builder.Services.AddScoped<IRamRepository, RamRepository>();
 
 builder.Services.AddScoped<IBuildService, BuildService>();
 builder.Services.AddScoped<IBuildRepository, BuildRepository>();

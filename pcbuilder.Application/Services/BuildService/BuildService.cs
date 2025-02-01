@@ -6,6 +6,7 @@ using pcbuilder.Domain.Interfaces;
 using pcbuilder.Domain.Models.Common;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Motherboards;
+using pcbuilder.Domain.Models.Ram;
 using pcbuilder.Domain.Services;
 using pcbuilder.Shared;
 
@@ -17,29 +18,33 @@ public class BuildService : IBuildService
     private readonly CompatibilityChecker _compatibilityChecker;
     private readonly ICpuRepository _cpuRepository;
     private readonly IMotherboardRepository _motherboardRepository;
+    private readonly IRamRepository _ramRepository;
 
     public BuildService(
         CompatibilityChecker compatibilityChecker,
         ICpuRepository cpuRepository,
         IMotherboardRepository motherboardRepository,
-        IBuildRepository buildRepository)
+        IBuildRepository buildRepository, 
+        IRamRepository ramRepository)
     {
         _compatibilityChecker = compatibilityChecker;
         _cpuRepository = cpuRepository;
         _motherboardRepository = motherboardRepository;
         _buildRepository = buildRepository;
+        _ramRepository = ramRepository;
     }
 
     public async Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentIdsDto buildDto)
     {
         var getComponentsResult = await GetAllComponents(buildDto);
-
-        if (getComponentsResult.IsFailure) return Result.Failure<CompatibilityResult>(getComponentsResult.Error);
+        if (getComponentsResult.IsFailure)
+        {
+            return Result.Failure<CompatibilityResult>(getComponentsResult.Error);
+        }
 
         var buildWithComponentsDto = getComponentsResult.Value;
-
         var compatibilityResult = _compatibilityChecker.CheckBuildCompatibility(buildWithComponentsDto);
-
+        
         return Result.Success(compatibilityResult);
     }
 
@@ -66,11 +71,7 @@ public class BuildService : IBuildService
 
     public async Task<Result<int>> SaveBuild(SaveBuildDto saveBuildDto)
     {
-        var getComponentsResult = await GetAllComponents(new BuildComponentIdsDto
-        {
-            CpuId = saveBuildDto.Components.CpuId,
-            MotherboardId = saveBuildDto.Components.MotherboardId
-        });
+        var getComponentsResult = await GetAllComponents(saveBuildDto.Components);
 
         if (getComponentsResult.IsFailure) return Result.Failure<int>(getComponentsResult.Error);
 
@@ -95,8 +96,10 @@ public class BuildService : IBuildService
     public async Task<Result> DeleteBuild(int buildId, int userId)
     {
         var build = await _buildRepository.GetById(buildId);
-
-        if (build == null) return Result.Failure(BuildErrors.NotFound(buildId));
+        if (build == null)
+        {
+            return Result.Failure(BuildErrors.NotFound(buildId));
+        }
 
         if (build.UserId != userId) return Result.Failure(BuildErrors.ForbiddenAccess);
 
@@ -122,11 +125,25 @@ public class BuildService : IBuildService
             if (motherboard == null)
                 return Result.Failure<BuildWithComponentsDto>(ComponentErrors.NotFound(buildDto.MotherboardId.Value));
         }
+        
+        List<Ram> rams = [];
+        if (buildDto.RamIds?.Any() == true)
+        {
+            foreach (var ramId in buildDto.RamIds)
+            {
+                var ram = await _ramRepository.GetById(ramId);
+                if (ram == null)
+                    return Result.Failure<BuildWithComponentsDto>(ComponentErrors.NotFound(ramId));
+
+                rams.Add(ram);
+            }
+        }
 
         return Result.Success(new BuildWithComponentsDto
         {
             Cpu = cpu,
-            Motherboard = motherboard
+            Motherboard = motherboard,
+            Rams = rams
         });
     }
 }

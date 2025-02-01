@@ -114,7 +114,6 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
 
         #endregion
 
-
         base.OnModelCreating(builder);
     }
 }

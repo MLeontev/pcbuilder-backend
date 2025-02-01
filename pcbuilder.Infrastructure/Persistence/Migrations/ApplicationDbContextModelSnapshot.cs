@@ -180,7 +180,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("MotherboardFormFactorId");
 
-                    b.ToTable("CaseMotherboardFormFactors");
+                    b.ToTable("CaseMotherboardFormFactors", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseStorageFormFactor", b =>
@@ -198,7 +198,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("StorageFormFactorId");
 
-                    b.ToTable("CaseStorageFormFactors");
+                    b.ToTable("CaseStorageFormFactors", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseWaterCoolingSize", b =>
@@ -213,7 +213,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("WaterCoolingSizeId");
 
-                    b.ToTable("CaseWaterCoolingSizes");
+                    b.ToTable("CaseWaterCoolingSizes", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.Brand", b =>
@@ -230,24 +230,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Intel"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "AMD"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "MSI"
-                        });
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.Build", b =>
@@ -278,7 +261,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Builds");
+                    b.ToTable("Builds", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.BuildComponent", b =>
@@ -293,7 +276,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("PcComponentId");
 
-                    b.ToTable("BuildComponents");
+                    b.ToTable("BuildComponents", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.PcComponent", b =>
@@ -318,7 +301,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("PcComponents");
+                    b.ToTable("PcComponents", (string)null);
 
                     b.UseTptMappingStrategy();
                 });
@@ -409,7 +392,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("SocketId");
 
-                    b.ToTable("CoolerSockets");
+                    b.ToTable("CoolerSockets", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Coolers.WaterCoolingSize", b =>
@@ -425,7 +408,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WaterCoolingSizes");
+                    b.ToTable("WaterCoolingSizes", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.CpuMemory", b =>
@@ -443,33 +426,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("MemoryTypeId");
 
-                    b.ToTable("CpuMemories");
-
-                    b.HasData(
-                        new
-                        {
-                            CpuId = 2,
-                            MemoryTypeId = 2,
-                            MaxMemorySpeed = 3200
-                        },
-                        new
-                        {
-                            CpuId = 3,
-                            MemoryTypeId = 3,
-                            MaxMemorySpeed = 5200
-                        },
-                        new
-                        {
-                            CpuId = 4,
-                            MemoryTypeId = 2,
-                            MaxMemorySpeed = 3200
-                        },
-                        new
-                        {
-                            CpuId = 4,
-                            MemoryTypeId = 3,
-                            MaxMemorySpeed = 4800
-                        });
+                    b.ToTable("CpuMemories", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.CpuSeries", b =>
@@ -486,19 +443,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CpuSeries");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Intel Core i5"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "AMD Ryzen 5"
-                        });
+                    b.ToTable("CpuSeries", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.Socket", b =>
@@ -515,24 +460,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sockets");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "LGA1700"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "AM4"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "AM5"
-                        });
+                    b.ToTable("Sockets", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.GpuChipset", b =>
@@ -549,7 +477,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GpuChipsets");
+                    b.ToTable("GpuChipsets", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.GpuPowerConnector", b =>
@@ -564,7 +492,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("GpuId");
 
-                    b.ToTable("GpuPowerConnectors");
+                    b.ToTable("GpuPowerConnectors", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardChipset", b =>
@@ -581,19 +509,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MotherboardChipsets");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Intel H610"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "AMD B650"
-                        });
+                    b.ToTable("MotherboardChipsets", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardFormFactor", b =>
@@ -610,19 +526,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MotherboardFormFactors");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Micro-ATX"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "ATX"
-                        });
+                    b.ToTable("MotherboardFormFactors", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPciSlot", b =>
@@ -640,7 +544,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("PciSlotId");
 
-                    b.ToTable("MotherboardPciSlots");
+                    b.ToTable("MotherboardPciSlots", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPowerConnector", b =>
@@ -658,7 +562,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("PowerConnectorId");
 
-                    b.ToTable("MotherboardPowerConnectors");
+                    b.ToTable("MotherboardPowerConnectors", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardStorage", b =>
@@ -681,7 +585,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("StorageInterfaceId");
 
-                    b.ToTable("MotherboardStorages");
+                    b.ToTable("MotherboardStorages", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.PciSlot", b =>
@@ -701,15 +605,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PciSlots");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Bandwidth = 16,
-                            Version = "4.0"
-                        });
+                    b.ToTable("PciSlots", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerConnector", b =>
@@ -729,7 +625,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PowerConnectors");
+                    b.ToTable("PowerConnectors", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PsuEfficiency", b =>
@@ -746,7 +642,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PsuEfficiencies");
+                    b.ToTable("PsuEfficiencies", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PsuPowerConnector", b =>
@@ -769,7 +665,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("PowerSupplyId");
 
-                    b.ToTable("PsuPowerConnectors");
+                    b.ToTable("PsuPowerConnectors", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Ram.MemoryType", b =>
@@ -786,24 +682,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MemoryTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "DDR3"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "DDR4"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "DDR5"
-                        });
+                    b.ToTable("MemoryTypes", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Storage.StorageFormFactor", b =>
@@ -820,7 +699,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StorageFormFactors");
+                    b.ToTable("StorageFormFactors", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Storage.StorageInterface", b =>
@@ -837,7 +716,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StorageInterfaces");
+                    b.ToTable("StorageInterfaces", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Storage.StorageType", b =>
@@ -854,7 +733,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StorageTypes");
+                    b.ToTable("StorageTypes", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.Case", b =>
@@ -870,7 +749,7 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Property<int>("MaxPsuLength")
                         .HasColumnType("integer");
 
-                    b.ToTable("Cases");
+                    b.ToTable("Cases", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Coolers.Cooler", b =>
@@ -888,7 +767,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("WaterCoolingSizeId");
 
-                    b.ToTable("Coolers");
+                    b.ToTable("Coolers", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.Cpu", b =>
@@ -926,54 +805,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("SocketId");
 
-                    b.ToTable("Cpus");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 2,
-                            BrandId = 2,
-                            Name = "Ryzen 5 5600X 3.7 GHz 6-Core Processor",
-                            BaseClock = 3.7m,
-                            BoostClock = 4.6m,
-                            Cores = 6,
-                            IntegratedGpu = false,
-                            MaxMemoryCapacity = 128,
-                            SeriesId = 2,
-                            SocketId = 2,
-                            Tdp = 65,
-                            Threads = 12
-                        },
-                        new
-                        {
-                            Id = 3,
-                            BrandId = 2,
-                            Name = "Ryzen 5 7500F 3.7 GHz 6-Core Processor",
-                            BaseClock = 3.7m,
-                            BoostClock = 5m,
-                            Cores = 6,
-                            IntegratedGpu = false,
-                            MaxMemoryCapacity = 128,
-                            SeriesId = 2,
-                            SocketId = 3,
-                            Tdp = 65,
-                            Threads = 12
-                        },
-                        new
-                        {
-                            Id = 4,
-                            BrandId = 1,
-                            Name = "Core i5-12400F 2.5 GHz 6-Core Processor",
-                            BaseClock = 2.5m,
-                            BoostClock = 4.4m,
-                            Cores = 6,
-                            IntegratedGpu = false,
-                            MaxMemoryCapacity = 128,
-                            SeriesId = 1,
-                            SocketId = 1,
-                            Tdp = 65,
-                            Threads = 12
-                        });
+                    b.ToTable("Cpus", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.Gpu", b =>
@@ -1011,7 +843,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("PciSlotId");
 
-                    b.ToTable("Gpus");
+                    b.ToTable("Gpus", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.Motherboard", b =>
@@ -1047,35 +879,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("SocketId");
 
-                    b.ToTable("Motherboards");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 5,
-                            BrandId = 3,
-                            Name = "PRO H610M-E DDR4",
-                            FormFactorId = 1,
-                            MaxMemoryCapacity = 64,
-                            MaxMemorySpeed = 3200,
-                            MemorySlots = 2,
-                            MemoryTypeId = 2,
-                            MotherboardChipsetId = 1,
-                            SocketId = 1
-                        },
-                        new
-                        {
-                            Id = 6,
-                            BrandId = 3,
-                            Name = "PRO B650-S WIFI",
-                            FormFactorId = 2,
-                            MaxMemoryCapacity = 256,
-                            MaxMemorySpeed = 4800,
-                            MemorySlots = 4,
-                            MemoryTypeId = 3,
-                            MotherboardChipsetId = 2,
-                            SocketId = 3
-                        });
+                    b.ToTable("Motherboards", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerSupply", b =>
@@ -1090,7 +894,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("PsuEfficiencyId");
 
-                    b.ToTable("PowerSupplies");
+                    b.ToTable("PowerSupplies", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Ram.Ram", b =>
@@ -1109,13 +913,9 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Property<int>("Modules")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Timing")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasIndex("MemoryTypeId");
 
-                    b.ToTable("Rams");
+                    b.ToTable("Rams", (string)null);
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Storage.Storage", b =>
@@ -1146,7 +946,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("StorageTypeId");
 
-                    b.ToTable("Storage");
+                    b.ToTable("Storage", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

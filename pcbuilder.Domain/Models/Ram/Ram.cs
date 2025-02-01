@@ -14,9 +14,7 @@ public class Ram : PcComponent
     public int Capacity { get; set; }
 
     public int Frequency { get; set; }
-
-    public string Timing { get; set; } = string.Empty;
-
+    
     public int TotalCapacity => Modules * Capacity;
 
     public override string Description => $"{MemoryType.Name}, {Capacity} ГБx{Modules} шт, {Frequency} МГц";

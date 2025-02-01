@@ -7,6 +7,7 @@ using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Models.Common;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Motherboards;
+using pcbuilder.Domain.Models.Ram;
 using pcbuilder.Domain.Services;
 
 namespace pcbuilder.Api.Extensions;
@@ -20,7 +21,8 @@ public static class MappingExtensions
         return new BuildComponentIdsDto
         {
             CpuId = components.CpuId,
-            MotherboardId = components.MotherboardId
+            MotherboardId = components.MotherboardId,
+            RamIds = components.RamIds
         };
     }
 
@@ -29,8 +31,14 @@ public static class MappingExtensions
         return new BuildComponentIds
         {
             CpuId = componentsDto.CpuId,
-            MotherboardId = componentsDto.MotherboardId
+            MotherboardId = componentsDto.MotherboardId,
+            RamIds = componentsDto.RamIds
         };
+    }
+    
+    public static BuildComponentIdsDto ToBuildComponentIdsDto(this CheckBuildRequest request)
+    {
+        return request.Components.ToDto();
     }
     
     public static BuildListItemResponse ToBuildListItemResponse(this BuildDto buildDto)
@@ -82,15 +90,6 @@ public static class MappingExtensions
             Components = request.Components.ToDto()
         };
     }
-    
-    public static BuildComponentIdsDto ToBuildComponentIdsDto(this CheckBuildRequest request)
-    {
-        return new BuildComponentIdsDto
-        {
-            CpuId = request.Components.CpuId,
-            MotherboardId = request.Components.MotherboardId
-        };
-    }
 
     public static CompatibilityResponse ToCompatibilityResponse(this CompatibilityResult result)
     {
@@ -105,8 +104,6 @@ public static class MappingExtensions
         };
     }
     
-    
-
     #endregion
 
     #region Комплектующие с характеристиками
@@ -175,6 +172,25 @@ public static class MappingExtensions
             }
         };
     }
+    
+    public static ComponentDetailsResponse ToComponentDetailsResponse(this Ram ram)
+    {
+        return new ComponentDetailsResponse
+        {
+            Id = ram.Id,
+            ImagePath = ram.ImagePath,
+            Name = ram.FullName,
+            Description = ram.Description,
+            Specifications = new Dictionary<string, string>
+            {
+                { "Тип памяти", ram.MemoryType.Name },
+                { "Объем одного модуля", $"{ram.Capacity} ГБ" },
+                { "Количество модулей", $"{ram.Modules}" },
+                { "Общий объем памяти", $"{ram.TotalCapacity} ГБ" },
+                { "Частота", $"{ram.Frequency} МГц" }
+            }
+        };
+    }
 
     #endregion
 
@@ -215,6 +231,28 @@ public static class MappingExtensions
         return new PagedResponse<ComponentResponse>
         {
             Items = motherboardDtos,
+            Page = pagedList.Page,
+            PageSize = pagedList.PageSize,
+            TotalCount = pagedList.TotalCount,
+            TotalPages = pagedList.TotalPages,
+            HasPreviousPage = pagedList.HasPreviousPage,
+            HasNextPage = pagedList.HasNextPage
+        };
+    }
+    
+    public static PagedResponse<ComponentResponse> ToPagedResponse(this PagedList<Ram> pagedList)
+    {
+        var ramDtos = pagedList.Items.Select(ram => new ComponentResponse
+        {
+            Id = ram.Id,
+            ImagePath = ram.ImagePath,
+            FullName = ram.FullName,
+            Description = ram.Description
+        }).ToList();
+
+        return new PagedResponse<ComponentResponse>
+        {
+            Items = ramDtos,
             Page = pagedList.Page,
             PageSize = pagedList.PageSize,
             TotalCount = pagedList.TotalCount,
