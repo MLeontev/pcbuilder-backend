@@ -13,7 +13,9 @@ public class CpuController : ControllerBase
     private readonly ICpuService _cpuService;
     private readonly GetComponentsRequestValidator _getComponentsRequestValidator;
 
-    public CpuController(ICpuService cpuService, GetComponentsRequestValidator getComponentsRequestValidator)
+    public CpuController(
+        ICpuService cpuService, 
+        GetComponentsRequestValidator getComponentsRequestValidator)
     {
         _cpuService = cpuService;
         _getComponentsRequestValidator = getComponentsRequestValidator;
@@ -21,24 +23,6 @@ public class CpuController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] GetComponentsRequest request)
-    {
-        var validationResult = await _getComponentsRequestValidator.ValidateAsync(request);
-
-        if (!validationResult.IsValid)
-        {
-            var errorResponse = validationResult.ToValidationErrorResponse();
-            return BadRequest(errorResponse);
-        }
-
-        var result = await _cpuService.Get(request.SearchQuery, request.Page, request.PageSize);
-
-        return result.IsFailure
-            ? result.ToErrorResponse()
-            : Ok(result.Value.ToPagedResponse());
-    }
-
-    [HttpGet("compatible")]
-    public async Task<IActionResult> GetCompatible([FromQuery] GetComponentsRequest request)
     {
         var validationResult = await _getComponentsRequestValidator.ValidateAsync(request);
 

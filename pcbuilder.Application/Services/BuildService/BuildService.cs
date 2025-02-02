@@ -4,6 +4,7 @@ using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Errors;
 using pcbuilder.Domain.Interfaces;
 using pcbuilder.Domain.Models.Common;
+using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
@@ -19,24 +20,27 @@ public class BuildService : IBuildService
     private readonly ICpuRepository _cpuRepository;
     private readonly IMotherboardRepository _motherboardRepository;
     private readonly IRamRepository _ramRepository;
+    private readonly ICoolerRepository _coolerRepository;
 
     public BuildService(
         CompatibilityChecker compatibilityChecker,
         ICpuRepository cpuRepository,
         IMotherboardRepository motherboardRepository,
         IBuildRepository buildRepository, 
-        IRamRepository ramRepository)
+        IRamRepository ramRepository, 
+        ICoolerRepository coolerRepository)
     {
         _compatibilityChecker = compatibilityChecker;
         _cpuRepository = cpuRepository;
         _motherboardRepository = motherboardRepository;
         _buildRepository = buildRepository;
         _ramRepository = ramRepository;
+        _coolerRepository = coolerRepository;
     }
 
-    public async Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentIdsDto buildDto)
+    public async Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentIds build)
     {
-        var getComponentsResult = await GetAllComponents(buildDto);
+        var getComponentsResult = await GetAllComponents(build);
         if (getComponentsResult.IsFailure)
         {
             return Result.Failure<CompatibilityResult>(getComponentsResult.Error);
@@ -108,41 +112,50 @@ public class BuildService : IBuildService
         return Result.Success();
     }
 
-    private async Task<Result<BuildWithComponentsDto>> GetAllComponents(BuildComponentIdsDto buildDto)
+    public async Task<Result<BuildWithComponents>> GetAllComponents(BuildComponentIds build)
     {
         Cpu? cpu = null;
-        if (buildDto.CpuId.HasValue)
+        if (build.CpuId.HasValue)
         {
-            cpu = await _cpuRepository.GetById(buildDto.CpuId.Value);
+            cpu = await _cpuRepository.GetById(build.CpuId.Value);
             if (cpu == null)
-                return Result.Failure<BuildWithComponentsDto>(ComponentErrors.NotFound(buildDto.CpuId.Value));
+                return Result.Failure<BuildWithComponents>(ComponentErrors.NotFound(build.CpuId.Value));
         }
 
         Motherboard? motherboard = null;
-        if (buildDto.MotherboardId.HasValue)
+        if (build.MotherboardId.HasValue)
         {
-            motherboard = await _motherboardRepository.GetById(buildDto.MotherboardId.Value);
+            motherboard = await _motherboardRepository.GetById(build.MotherboardId.Value);
             if (motherboard == null)
-                return Result.Failure<BuildWithComponentsDto>(ComponentErrors.NotFound(buildDto.MotherboardId.Value));
+                return Result.Failure<BuildWithComponents>(ComponentErrors.NotFound(build.MotherboardId.Value));
+        }
+        
+        Cooler? cooler = null;
+        if (build.CoolerId.HasValue)
+        {
+            cooler = await _coolerRepository.GetById(build.CoolerId.Value);
+            if (cooler == null)
+                return Result.Failure<BuildWithComponents>(ComponentErrors.NotFound(build.CoolerId.Value));
         }
         
         List<Ram> rams = [];
-        if (buildDto.RamIds?.Any() == true)
+        if (build.RamIds?.Any() == true)
         {
-            foreach (var ramId in buildDto.RamIds)
+            foreach (var ramId in build.RamIds)
             {
                 var ram = await _ramRepository.GetById(ramId);
                 if (ram == null)
-                    return Result.Failure<BuildWithComponentsDto>(ComponentErrors.NotFound(ramId));
+                    return Result.Failure<BuildWithComponents>(ComponentErrors.NotFound(ramId));
 
                 rams.Add(ram);
             }
         }
 
-        return Result.Success(new BuildWithComponentsDto
+        return Result.Success(new BuildWithComponents
         {
             Cpu = cpu,
             Motherboard = motherboard,
+            Cooler = cooler,
             Rams = rams
         });
     }

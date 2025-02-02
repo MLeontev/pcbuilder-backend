@@ -11,5 +11,5 @@ public class BuildDto
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    public BuildComponentIdsDto Components { get; set; } = null!;
+    public BuildComponentIds Components { get; set; } = null!;
 }

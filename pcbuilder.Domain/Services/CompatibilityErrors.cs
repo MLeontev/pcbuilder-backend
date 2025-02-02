@@ -1,3 +1,4 @@
+using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
@@ -17,14 +18,14 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Problem(
             "Cpu.Ram.RamTypeMismatch",
-            $"Тип ОЗУ {ram.MemoryType.Name} ({ram.FullName}) не поддерживатеся процессором");
+            $"Тип ОЗУ {ram.MemoryType.Name} ({ram.FullName}) не поддерживается процессором");
     }
 
     public static CompatibilityError CpuRamSpeedExceeded(Cpu cpu, Ram ram)
     {
         return CompatibilityError.Warning(
             "Cpu.Ram.SpeedExceeded",
-            $"Частота ОЗУ {ram.Frequency} МГц ({ram.FullName}) превышает максимальную поддерживаемую процессором." +
+            $"Частота ОЗУ {ram.Frequency} МГц ({ram.FullName}) превышает максимальную поддерживаемую процессором. " +
             "Память может работать на пониженной частоте");
     }
 
@@ -39,7 +40,7 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Problem(
             "Motherboard.Ram.RamTypeMismatch",
-            $"Тип ОЗУ {ram.MemoryType.Name} ({ram.FullName}) не поддерживатеся материнской платой");
+            $"Тип ОЗУ {ram.MemoryType.Name} ({ram.FullName}) не поддерживается материнской платой");
     }
 
     public static CompatibilityError MotherboardRamSlotLimitExceeded(Motherboard motherboard, int totalRamModules)
@@ -59,7 +60,21 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Warning(
             "Motherboard.Ram.SpeedExceeded",
-            $"Частота ОЗУ {ram.Frequency} МГц ({ram.FullName}) превышает максимальную поддерживаемую материнской платой." +
+            $"Частота ОЗУ {ram.Frequency} МГц ({ram.FullName}) превышает максимальную поддерживаемую материнской платой. " +
             "Память может работать на пониженной частоте");
+    }
+
+    public static CompatibilityError CpuCoolerSocketMismatch(Cpu cpu, Cooler cooler)
+    {
+        return CompatibilityError.Problem(
+            "Cpu.Cooler.SocketMismatch",
+            $"Сокет процессора ({cpu.Socket.Name}) не поддерживается системой охлаждения");
+    }
+
+    public static CompatibilityError CpuCoolerTdpMismatch(Cpu cpu, Cooler cooler)
+    {
+        return CompatibilityError.Problem(
+            "Cpu.Cooler.TdpMismatch",
+            $"TDP кулера ({cooler.Tdp}W) меньше TDP процессора ({cpu.Tdp}W. Возможен перегрев процессора");
     }
 }

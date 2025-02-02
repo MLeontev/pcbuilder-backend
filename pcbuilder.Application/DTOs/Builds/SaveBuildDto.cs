@@ -8,5 +8,5 @@ public class SaveBuildDto
 
     public string? Description { get; set; }
 
-    public BuildComponentIdsDto Components { get; set; } = null!;
+    public BuildComponentIds Components { get; set; } = null!;
 }

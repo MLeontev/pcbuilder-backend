@@ -1,4 +1,5 @@
 using pcbuilder.Domain.DTOs;
+using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
@@ -79,22 +80,58 @@ public class CompatibilityChecker
         return result;
     }
 
-    public CompatibilityResult CheckBuildCompatibility(BuildWithComponentsDto buildWithComponentsDto)
+    public CompatibilityResult CheckCpuAndCoolerCompatibility(Cpu? cpu, Cooler? cooler)
+    {
+        var result = new CompatibilityResult();
+
+        if (cpu == null || cooler == null) return result;
+
+        if (cooler.CoolerSockets.All(cs => cs.SocketId != cpu.SocketId))
+        {
+            result.AddError(CompatibilityErrors.CpuCoolerSocketMismatch(cpu, cooler));
+        }
+
+        if (cooler.Tdp < cpu.Tdp)
+        {
+            result.AddError(CompatibilityErrors.CpuCoolerTdpMismatch(cpu, cooler));
+        }
+
+        return result;
+    }
+
+    public CompatibilityResult CheckBuildCompatibility(BuildWithComponents buildWithComponents)
     {
         var result = new CompatibilityResult();
 
         result.AddErrors(CheckCpuAndMotherboardCompatibility(
-            buildWithComponentsDto.Cpu,
-            buildWithComponentsDto.Motherboard).Errors);
+            buildWithComponents.Cpu,
+            buildWithComponents.Motherboard).Errors);
 
         result.AddErrors(CheckCpuAndRamCompatibility(
-            buildWithComponentsDto.Cpu,
-            buildWithComponentsDto.Rams).Errors);
+            buildWithComponents.Cpu,
+            buildWithComponents.Rams).Errors);
 
         result.AddErrors(CheckMotherboardAndRamCompatibility(
-            buildWithComponentsDto.Motherboard,
-            buildWithComponentsDto.Rams).Errors);
+            buildWithComponents.Motherboard,
+            buildWithComponents.Rams).Errors);
+        
+        result.AddErrors(CheckCpuAndCoolerCompatibility(
+            buildWithComponents.Cpu,
+            buildWithComponents.Cooler).Errors);
 
         return result;
+    }
+    
+    public bool IsRamCompatible(BuildWithComponents buildWithComponents)
+    {
+        var cpuRamResult = CheckCpuAndRamCompatibility(buildWithComponents.Cpu, buildWithComponents.Rams);
+        if (cpuRamResult.Status == CompatibilityStatus.Incompatible)
+            return false;
+    
+        var motherboardRamResult = CheckMotherboardAndRamCompatibility(buildWithComponents.Motherboard, buildWithComponents.Rams);
+        if (motherboardRamResult.Status == CompatibilityStatus.Incompatible)
+            return false;
+
+        return true;
     }
 }

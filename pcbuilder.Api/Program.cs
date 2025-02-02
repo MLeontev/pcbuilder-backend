@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using pcbuilder.Api.Validators.Users;
 using pcbuilder.Application.Interfaces;
 using pcbuilder.Application.Services.BuildService;
+using pcbuilder.Application.Services.CoolerService;
 using pcbuilder.Application.Services.CpuService;
 using pcbuilder.Application.Services.MotherboardService;
 using pcbuilder.Application.Services.RamService;
@@ -79,6 +80,9 @@ builder.Services.AddScoped<IMotherboardRepository, MotherboardRepository>();
 
 builder.Services.AddScoped<IRamService, RamService>();
 builder.Services.AddScoped<IRamRepository, RamRepository>();
+
+builder.Services.AddScoped<ICoolerService, CoolerService>();
+builder.Services.AddScoped<ICoolerRepository, CoolerRepository>();
 
 builder.Services.AddScoped<IBuildService, BuildService>();
 builder.Services.AddScoped<IBuildRepository, BuildRepository>();

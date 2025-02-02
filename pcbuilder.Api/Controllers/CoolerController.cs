@@ -2,23 +2,23 @@ using Microsoft.AspNetCore.Mvc;
 using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Api.Extensions;
 using pcbuilder.Api.Validators.Components;
-using pcbuilder.Application.Services.MotherboardService;
+using pcbuilder.Application.Services.CoolerService;
 
 namespace pcbuilder.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class MotherboardController : ControllerBase
+public class CoolerController : ControllerBase
 {
+    private readonly ICoolerService _coolerService;
     private readonly GetComponentsRequestValidator _getComponentsRequestValidator;
-    private readonly IMotherboardService _motherboardService;
 
-    public MotherboardController(
-        GetComponentsRequestValidator getComponentsRequestValidator,
-        IMotherboardService motherboardService)
+    public CoolerController(
+        ICoolerService coolerService, 
+        GetComponentsRequestValidator getComponentsRequestValidator)
     {
+        _coolerService = coolerService;
         _getComponentsRequestValidator = getComponentsRequestValidator;
-        _motherboardService = motherboardService;
     }
 
     [HttpGet]
@@ -32,7 +32,7 @@ public class MotherboardController : ControllerBase
             return BadRequest(errorResponse);
         }
 
-        var result = await _motherboardService.Get(request.SearchQuery, request.Page, request.PageSize);
+        var result = await _coolerService.Get(request.SearchQuery, request.Page, request.PageSize);
 
         return result.IsFailure
             ? result.ToErrorResponse()
@@ -42,10 +42,10 @@ public class MotherboardController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var result = await _motherboardService.GetById(id);
-
+        var result = await _coolerService.GetById(id);
+        
         return result.IsFailure
             ? result.ToErrorResponse()
-            : Ok(result.Value.ToComponentDetailsResponse());
+            : Ok(result.Value.ToComponentDetailsResponse()); 
     }
 }

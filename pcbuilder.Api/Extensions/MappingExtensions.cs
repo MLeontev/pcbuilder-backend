@@ -5,6 +5,7 @@ using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Application.DTOs.Builds;
 using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Models.Common;
+using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
@@ -15,31 +16,6 @@ namespace pcbuilder.Api.Extensions;
 public static class MappingExtensions
 {
     #region DTO
-
-    public static BuildComponentIdsDto ToDto(this BuildComponentIds components)
-    {
-        return new BuildComponentIdsDto
-        {
-            CpuId = components.CpuId,
-            MotherboardId = components.MotherboardId,
-            RamIds = components.RamIds
-        };
-    }
-
-    public static BuildComponentIds ToContract(this BuildComponentIdsDto componentsDto)
-    {
-        return new BuildComponentIds
-        {
-            CpuId = componentsDto.CpuId,
-            MotherboardId = componentsDto.MotherboardId,
-            RamIds = componentsDto.RamIds
-        };
-    }
-    
-    public static BuildComponentIdsDto ToBuildComponentIdsDto(this CheckBuildRequest request)
-    {
-        return request.Components.ToDto();
-    }
     
     public static BuildListItemResponse ToBuildListItemResponse(this BuildDto buildDto)
     {
@@ -67,16 +43,16 @@ public static class MappingExtensions
         };
     }
     
-    public static GetBuildResponse ToGetBuildResponse(this BuildDto buildDto)
+    public static BuildResponse ToBuildResponse(this BuildDto buildDto)
     {
-        return new GetBuildResponse
+        return new BuildResponse
         {
             Id = buildDto.Id,
             Name = buildDto.Name,
             Description = buildDto.Description,
             CreatedAt = buildDto.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss"),
             UpdatedAt = buildDto.UpdatedAt.ToString("dd.MM.yyyy HH:mm:ss"),
-            Components = buildDto.Components.ToContract()
+            Components = buildDto.Components
         };
     }
     
@@ -87,7 +63,7 @@ public static class MappingExtensions
             UserId = userId,
             Name = request.Name,
             Description = request.Description,
-            Components = request.Components.ToDto()
+            Components = request.Components
         };
     }
 
@@ -192,67 +168,53 @@ public static class MappingExtensions
         };
     }
 
+    public static ComponentDetailsResponse ToComponentDetailsResponse(this Cooler cooler)
+    {
+        var specifications = new Dictionary<string, string>
+        {
+            {"TDP", $"{cooler.Tdp} Вт"}
+        };
+
+        if (cooler.WaterCoolingSize != null)
+        {
+            specifications.Add("Размер радиатора", $"{cooler.WaterCoolingSize.Size} мм");
+        }
+        else
+        {
+            if (cooler.Height.HasValue)
+            {
+                specifications.Add("Высота", $"{cooler.Height} мм");
+            }
+        }
+        
+        var sockets = string.Join(", ", cooler.CoolerSockets.Select(cs => $"{cs.Socket.Name}"));
+        specifications.Add("Совместимые сокеты", sockets);
+        
+        return new ComponentDetailsResponse
+        {
+            Id = cooler.Id,
+            ImagePath = cooler.ImagePath,
+            Name = cooler.FullName,
+            Description = cooler.Description,
+            Specifications = specifications
+        };
+    }
+
     #endregion
-
-    #region Списки комплектующих
-
-    public static PagedResponse<ComponentResponse> ToPagedResponse(this PagedList<Cpu> pagedList)
-    {
-        var cpuDtos = pagedList.Items.Select(cpu => new ComponentResponse
-        {
-            Id = cpu.Id,
-            ImagePath = cpu.ImagePath,
-            FullName = cpu.FullName,
-            Description = cpu.Description
-        }).ToList();
-
-        return new PagedResponse<ComponentResponse>
-        {
-            Items = cpuDtos,
-            Page = pagedList.Page,
-            PageSize = pagedList.PageSize,
-            TotalCount = pagedList.TotalCount,
-            TotalPages = pagedList.TotalPages,
-            HasPreviousPage = pagedList.HasPreviousPage,
-            HasNextPage = pagedList.HasNextPage
-        };
-    }
-
-    public static PagedResponse<ComponentResponse> ToPagedResponse(this PagedList<Motherboard> pagedList)
-    {
-        var motherboardDtos = pagedList.Items.Select(motherboard => new ComponentResponse
-        {
-            Id = motherboard.Id,
-            ImagePath = motherboard.ImagePath,
-            FullName = motherboard.FullName,
-            Description = motherboard.Description
-        }).ToList();
-
-        return new PagedResponse<ComponentResponse>
-        {
-            Items = motherboardDtos,
-            Page = pagedList.Page,
-            PageSize = pagedList.PageSize,
-            TotalCount = pagedList.TotalCount,
-            TotalPages = pagedList.TotalPages,
-            HasPreviousPage = pagedList.HasPreviousPage,
-            HasNextPage = pagedList.HasNextPage
-        };
-    }
     
-    public static PagedResponse<ComponentResponse> ToPagedResponse(this PagedList<Ram> pagedList)
+    public static PagedResponse<ComponentResponse> ToPagedResponse<T>(this PagedList<T> pagedList) where T : PcComponent
     {
-        var ramDtos = pagedList.Items.Select(ram => new ComponentResponse
+        var componentDtos = pagedList.Items.Select(component => new ComponentResponse
         {
-            Id = ram.Id,
-            ImagePath = ram.ImagePath,
-            FullName = ram.FullName,
-            Description = ram.Description
+            Id = component.Id,
+            ImagePath = component.ImagePath,
+            FullName = component.FullName,
+            Description = component.Description
         }).ToList();
 
         return new PagedResponse<ComponentResponse>
         {
-            Items = ramDtos,
+            Items = componentDtos,
             Page = pagedList.Page,
             PageSize = pagedList.PageSize,
             TotalCount = pagedList.TotalCount,
@@ -261,6 +223,4 @@ public static class MappingExtensions
             HasNextPage = pagedList.HasNextPage
         };
     }
-
-    #endregion
 }

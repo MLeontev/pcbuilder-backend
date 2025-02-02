@@ -1,6 +1,8 @@
+using pcbuilder.Application.DTOs.Builds;
+
 namespace pcbuilder.Api.Contracts.Builds;
 
-public class GetBuildResponse
+public class BuildResponse
 {
     public int Id { get; set; }
 
