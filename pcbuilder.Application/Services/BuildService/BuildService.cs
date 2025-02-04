@@ -8,6 +8,7 @@ using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
+using pcbuilder.Domain.Models.Storage;
 using pcbuilder.Domain.Services;
 using pcbuilder.Shared;
 
@@ -21,6 +22,7 @@ public class BuildService : IBuildService
     private readonly IMotherboardRepository _motherboardRepository;
     private readonly IRamRepository _ramRepository;
     private readonly ICoolerRepository _coolerRepository;
+    private readonly IStorageRepository _storageRepository;
 
     public BuildService(
         CompatibilityChecker compatibilityChecker,
@@ -28,7 +30,8 @@ public class BuildService : IBuildService
         IMotherboardRepository motherboardRepository,
         IBuildRepository buildRepository, 
         IRamRepository ramRepository, 
-        ICoolerRepository coolerRepository)
+        ICoolerRepository coolerRepository, 
+        IStorageRepository storageRepository)
     {
         _compatibilityChecker = compatibilityChecker;
         _cpuRepository = cpuRepository;
@@ -36,6 +39,7 @@ public class BuildService : IBuildService
         _buildRepository = buildRepository;
         _ramRepository = ramRepository;
         _coolerRepository = coolerRepository;
+        _storageRepository = storageRepository;
     }
 
     public async Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentIds build)
@@ -150,13 +154,27 @@ public class BuildService : IBuildService
                 rams.Add(ram);
             }
         }
+        
+        List<Storage> storages = [];
+        if (build.StorageIds?.Any() == true)
+        {
+            foreach (var storageId in build.StorageIds)
+            {
+                var storage = await _storageRepository.GetById(storageId);
+                if (storage == null)
+                    return Result.Failure<BuildWithComponents>(ComponentErrors.NotFound(storageId));
+
+                storages.Add(storage);
+            }
+        }
 
         return Result.Success(new BuildWithComponents
         {
             Cpu = cpu,
             Motherboard = motherboard,
             Cooler = cooler,
-            Rams = rams
+            Rams = rams,
+            Storages = storages
         });
     }
 }

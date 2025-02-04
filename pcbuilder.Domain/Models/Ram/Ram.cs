@@ -17,5 +17,5 @@ public class Ram : PcComponent
     
     public int TotalCapacity => Modules * Capacity;
 
-    public override string Description => $"{MemoryType.Name}, {Capacity} ГБx{Modules} шт, {Frequency} МГц";
+    public override string Description => $"{MemoryType.Name} {Capacity} ГБx{Modules} шт, {Frequency} МГц";
 }

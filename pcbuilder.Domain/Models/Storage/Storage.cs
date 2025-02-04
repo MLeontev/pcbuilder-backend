@@ -20,4 +20,7 @@ public class Storage : PcComponent
 
     public int StorageFormFactorId { get; set; }
     public StorageFormFactor StorageFormFactor { get; set; } = null!;
+
+    public override string Description =>
+        $"{StorageType.Name} {StorageFormFactor.Name}, {Capacity} ГБ, чтение - {ReadSpeed} Мбайт/сек, запись - {WriteSpeed} Мбайт/сек";
 }

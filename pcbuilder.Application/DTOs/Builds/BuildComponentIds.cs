@@ -9,4 +9,6 @@ public class BuildComponentIds
     public int? CoolerId { get; set; }
     
     public List<int>? RamIds { get; set; }
+    
+    public List<int>? StorageIds { get; set; }
 }

@@ -9,6 +9,7 @@ using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
+using pcbuilder.Domain.Models.Storage;
 using pcbuilder.Domain.Services;
 
 namespace pcbuilder.Api.Extensions;
@@ -196,13 +197,13 @@ public static class MappingExtensions
 
     public static ComponentDetailsResponse ToComponentDetailsResponse(this Ram ram)
     {
-        var response = ram.ToBaseComponentDetailsResponse(); // Вызов базового метода
+        var response = ram.ToBaseComponentDetailsResponse();
 
         response.Specifications = new Dictionary<string, string>
         {
             { "Тип памяти", ram.MemoryType.Name },
-            { "Объем одного модуля", $"{ram.Capacity} ГБ" },
             { "Количество модулей", $"{ram.Modules}" },
+            { "Объем одного модуля", $"{ram.Capacity} ГБ" },
             { "Общий объем памяти", $"{ram.TotalCapacity} ГБ" },
             { "Частота", $"{ram.Frequency} МГц" }
         };
@@ -233,9 +234,24 @@ public static class MappingExtensions
         
         specifications.Add("Совместимые сокеты", sockets);
 
-        var response = cooler.ToBaseComponentDetailsResponse(); // Вызов базового метода
-
+        var response = cooler.ToBaseComponentDetailsResponse();
         response.Specifications = specifications;
+        return response;
+    }
+    
+    public static ComponentDetailsResponse ToComponentDetailsResponse(this Storage storage)
+    {
+        var response = storage.ToBaseComponentDetailsResponse();
+
+        response.Specifications = new Dictionary<string, string>
+        {
+            { "Тип накопителя", storage.StorageType.Name },
+            { "Интерфейс", storage.StorageInterface.Name },
+            { "Форм-фактор", storage.StorageFormFactor.Name },
+            { "Объем", $"{storage.Capacity} ГБ" },
+            { "Скорость чтения", $"{storage.ReadSpeed} MB/s" },
+            { "Скорость записи", $"{storage.WriteSpeed} MB/s" }
+        };
 
         return response;
     }

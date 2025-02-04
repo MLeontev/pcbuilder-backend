@@ -5,6 +5,7 @@ using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
+using pcbuilder.Domain.Models.Storage;
 
 namespace pcbuilder.Application.Extensions;
 
@@ -33,6 +34,10 @@ public static class MappingExtensions
             RamIds = buildComponents
                 .Where(bc => bc.PcComponent is Ram)
                 .Select(bc => bc.PcComponentId)
+                .ToList(),
+            StorageIds = buildComponents
+                .Where(bc => bc.PcComponent is Storage)
+                .Select(bc => bc.PcComponentId)
                 .ToList()
         };
     }
@@ -52,6 +57,9 @@ public static class MappingExtensions
         
         if (components.Rams != null)
             buildComponents.AddRange(components.Rams.Select(ram => new BuildComponent { PcComponentId = ram.Id }));
+        
+        if (components.Storages != null)
+            buildComponents.AddRange(components.Storages.Select(storage => new BuildComponent { PcComponentId = storage.Id }));
 
         return buildComponents;
     }

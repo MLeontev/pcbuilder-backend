@@ -179,25 +179,15 @@ public class CompatibilityChecker
         return result;
     }
 
-    public CompatibilityResult CheckBuildCompatibility(BuildWithComponents buildWithComponents)
+    public CompatibilityResult CheckBuildCompatibility(BuildWithComponents build)
     {
         var result = new CompatibilityResult();
 
-        result.AddErrors(CheckCpuAndMotherboardCompatibility(
-            buildWithComponents.Cpu,
-            buildWithComponents.Motherboard).Errors);
-
-        result.AddErrors(CheckCpuAndRamCompatibility(
-            buildWithComponents.Cpu,
-            buildWithComponents.Rams).Errors);
-
-        result.AddErrors(CheckMotherboardAndRamCompatibility(
-            buildWithComponents.Motherboard,
-            buildWithComponents.Rams).Errors);
-        
-        result.AddErrors(CheckCpuAndCoolerCompatibility(
-            buildWithComponents.Cpu,
-            buildWithComponents.Cooler).Errors);
+        result.AddErrors(CheckCpuAndMotherboardCompatibility(build.Cpu, build.Motherboard).Errors);
+        result.AddErrors(CheckCpuAndRamCompatibility(build.Cpu, build.Rams).Errors);
+        result.AddErrors(CheckMotherboardAndRamCompatibility(build.Motherboard, build.Rams).Errors);
+        result.AddErrors(CheckCpuAndCoolerCompatibility(build.Cpu, build.Cooler).Errors);
+        result.AddErrors(CheckMotherboardAndStorageCompatibility(build.Motherboard, build.Storages).Errors);
 
         return result;
     }

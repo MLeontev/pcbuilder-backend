@@ -12,6 +12,7 @@ using pcbuilder.Application.Services.CoolerService;
 using pcbuilder.Application.Services.CpuService;
 using pcbuilder.Application.Services.MotherboardService;
 using pcbuilder.Application.Services.RamService;
+using pcbuilder.Application.Services.StorageService;
 using pcbuilder.Application.Services.UserService;
 using pcbuilder.Domain.Interfaces;
 using pcbuilder.Domain.Models.Common;
@@ -83,6 +84,9 @@ builder.Services.AddScoped<IRamRepository, RamRepository>();
 
 builder.Services.AddScoped<ICoolerService, CoolerService>();
 builder.Services.AddScoped<ICoolerRepository, CoolerRepository>();
+
+builder.Services.AddScoped<IStorageService, StorageService>();
+builder.Services.AddScoped<IStorageRepository, StorageRepository>();
 
 builder.Services.AddScoped<IBuildService, BuildService>();
 builder.Services.AddScoped<IBuildRepository, BuildRepository>();
