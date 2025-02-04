@@ -54,6 +54,8 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
     public DbSet<MotherboardStorage> MotherboardStorages { get; set; }
     public DbSet<MotherboardPowerConnector> MotherboardPowerConnectors { get; set; }
     public DbSet<MotherboardChipset> MotherboardChipsets { get; set; }
+    public DbSet<MotherboardStorageInterface> MotherboardStorageInterfaces { get; set; }
+    public DbSet<MotherboardStorageFormFactor> MotherboardStorageFormFactors { get; set; }
 
     // Блоки питания
     public DbSet<PowerConnector> PowerConnectors { get; set; }
@@ -105,9 +107,12 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
 
         builder.Entity<MotherboardPciSlot>()
             .HasKey(mps => new { mps.MotherboardId, mps.PciSlotId });
-
-        builder.Entity<MotherboardStorage>()
-            .HasKey(ms => new { ms.MotherboardId, ms.StorageInterfaceId });
+        
+        builder.Entity<MotherboardStorageInterface>()
+            .HasKey(msi => new { msi.MotherboardStorageId, msi.StorageInterfaceId });
+        
+        builder.Entity<MotherboardStorageFormFactor>()
+            .HasKey(msf => new { msf.MotherboardStorageId, msf.StorageFormFactorId });
 
         builder.Entity<MotherboardPowerConnector>()
             .HasKey(mpc => new { mpc.MotherboardId, mpc.PowerConnectorId });

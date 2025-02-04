@@ -22,12 +22,18 @@ public class MotherboardRepository : IMotherboardRepository
             .Include(m => m.Socket)
             .Include(m => m.FormFactor)
             .Include(m => m.MemoryType)
+            
             .Include(m => m.MotherboardPciSlots)
             .ThenInclude(mps => mps.PciSlot)
+            
             .Include(m => m.MotherboardStorages)
-            .ThenInclude(ms => ms.StorageInterface)
+            .ThenInclude(ms => ms.SupportedInterfaces)
+            .ThenInclude(si => si.StorageInterface)
+            
             .Include(m => m.MotherboardStorages)
-            .ThenInclude(ms => ms.StorageFormFactor)
+            .ThenInclude(ms => ms.SupportedFormFactors)
+            .ThenInclude(sf => sf.StorageFormFactor)
+            
             .Include(m => m.MotherboardPowerConnectors)
             .ThenInclude(mpc => mpc.PowerConnector);
 
@@ -55,12 +61,18 @@ public class MotherboardRepository : IMotherboardRepository
             .Include(m => m.Socket)
             .Include(m => m.FormFactor)
             .Include(m => m.MemoryType)
+            
             .Include(m => m.MotherboardPciSlots)
             .ThenInclude(mps => mps.PciSlot)
+            
             .Include(m => m.MotherboardStorages)
-            .ThenInclude(ms => ms.StorageInterface)
+            .ThenInclude(ms => ms.SupportedInterfaces)
+            .ThenInclude(si => si.StorageInterface)
+            
             .Include(m => m.MotherboardStorages)
-            .ThenInclude(ms => ms.StorageFormFactor)
+            .ThenInclude(ms => ms.SupportedFormFactors)
+            .ThenInclude(sf => sf.StorageFormFactor)
+            
             .Include(m => m.MotherboardPowerConnectors)
             .ThenInclude(mpc => mpc.PowerConnector)
             .FirstOrDefaultAsync(m => m.Id == id);

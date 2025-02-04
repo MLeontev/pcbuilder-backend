@@ -15,8 +15,30 @@ namespace pcbuilder.Api.Extensions;
 
 public static class MappingExtensions
 {
+    public static PagedResponse<ComponentResponse> ToPagedResponse<T>(this PagedList<T> pagedList) where T : PcComponent
+    {
+        var componentDtos = pagedList.Items.Select(component => new ComponentResponse
+        {
+            Id = component.Id,
+            ImagePath = component.ImagePath,
+            FullName = component.FullName,
+            Description = component.Description
+        }).ToList();
+
+        return new PagedResponse<ComponentResponse>
+        {
+            Items = componentDtos,
+            Page = pagedList.Page,
+            PageSize = pagedList.PageSize,
+            TotalCount = pagedList.TotalCount,
+            TotalPages = pagedList.TotalPages,
+            HasPreviousPage = pagedList.HasPreviousPage,
+            HasNextPage = pagedList.HasNextPage
+        };
+    }
+
     #region DTO
-    
+
     public static BuildListItemResponse ToBuildListItemResponse(this BuildDto buildDto)
     {
         return new BuildListItemResponse
@@ -28,7 +50,7 @@ public static class MappingExtensions
             UpdatedAt = buildDto.UpdatedAt.ToString("dd.MM.yyyy HH:mm:ss")
         };
     }
-    
+
     public static PagedResponse<BuildListItemResponse> ToPagedResponse(this PagedList<BuildDto> pagedList)
     {
         return new PagedResponse<BuildListItemResponse>
@@ -42,7 +64,7 @@ public static class MappingExtensions
             HasNextPage = pagedList.HasNextPage
         };
     }
-    
+
     public static BuildResponse ToBuildResponse(this BuildDto buildDto)
     {
         return new BuildResponse
@@ -55,7 +77,7 @@ public static class MappingExtensions
             Components = buildDto.Components
         };
     }
-    
+
     public static SaveBuildDto ToSaveBuildDto(this SaveBuildRequest request, int userId)
     {
         return new SaveBuildDto
@@ -79,10 +101,21 @@ public static class MappingExtensions
             }).ToList()
         };
     }
-    
+
     #endregion
 
     #region Комплектующие с характеристиками
+
+    private static ComponentDetailsResponse ToBaseComponentDetailsResponse(this PcComponent component)
+    {
+        return new ComponentDetailsResponse
+        {
+            Id = component.Id,
+            ImagePath = component.ImagePath,
+            Name = component.FullName,
+            Description = component.Description
+        };
+    }
 
     public static ComponentDetailsResponse ToComponentDetailsResponse(this Cpu cpu)
     {
@@ -91,88 +124,97 @@ public static class MappingExtensions
             .Select(cm => $"{cm.MemoryType.Name}-{cm.MaxMemorySpeed}")
             .ToList();
 
-        return new ComponentDetailsResponse
+        var response = cpu.ToBaseComponentDetailsResponse();
+
+        response.Specifications = new Dictionary<string, string>
         {
-            Id = cpu.Id,
-            ImagePath = cpu.ImagePath,
-            Name = cpu.FullName,
-            Description = cpu.Description,
-            Specifications = new Dictionary<string, string>
-            {
-                { "Серия", cpu.Series.Name },
-                { "Разъём", cpu.Socket.Name },
-                { "Количество ядер", cpu.Cores.ToString() },
-                { "Количество потоков", cpu.Threads.ToString() },
-                { "Базовая частота", $"{cpu.BaseClock} ГГц" },
-                { "Частота в турбо режиме", $"{cpu.BoostClock} ГГц" },
-                { "Тепловыделение", $"{cpu.Tdp} Вт" },
-                { "Интегрированная графика", cpu.IntegratedGpu ? "Есть" : "Нет" },
-                { "Максимально поддерживаемый объем памяти", $"{cpu.MaxMemoryCapacity} ГБ" },
-                { "Поддерживаемая память", string.Join(", ", cpuMemories) }
-            }
+            { "Серия", cpu.Series.Name },
+            { "Разъём", cpu.Socket.Name },
+            { "Количество ядер", cpu.Cores.ToString() },
+            { "Количество потоков", cpu.Threads.ToString() },
+            { "Базовая частота", $"{cpu.BaseClock} ГГц" },
+            { "Частота в турбо режиме", $"{cpu.BoostClock} ГГц" },
+            { "Тепловыделение", $"{cpu.Tdp} Вт" },
+            { "Интегрированная графика", cpu.IntegratedGpu ? "Есть" : "Нет" },
+            { "Максимально поддерживаемый объем памяти", $"{cpu.MaxMemoryCapacity} ГБ" },
+            { "Поддерживаемая память", string.Join(", ", cpuMemories) }
         };
+
+        return response;
     }
 
     public static ComponentDetailsResponse ToComponentDetailsResponse(this Motherboard motherboard)
     {
-        // var pciSlots = motherboard.MotherboardPciSlots
-        //     .OrderBy(mps => mps.PciSlot.Version)
-        //     .Select(mps => $"{mps.PciSlot.Version} - {mps.PciSlot.Bandwidth} Гбит/с")
-        //     .ToList();
-        //
-        // var storages = motherboard.MotherboardStorages
-        //     .Select(ms => $"{ms.StorageInterface.Name} - {ms.StorageFormFactor.Name}")
-        //     .ToList();
-
-        return new ComponentDetailsResponse
+        var sataPortsCount = motherboard.MotherboardStorages
+            .Where(ms => ms.SupportedInterfaces.Any(si => si.StorageInterface.Name == "SATA"))
+            .Sum(ms => ms.Quantity);
+        
+        var m2Slots = motherboard.MotherboardStorages
+            .Where(ms => ms.SupportedInterfaces.Any(si => si.StorageInterface.Name.StartsWith("M.2")))
+            .ToList();
+        
+        var m2SlotDescriptions = new List<string>();
+        foreach (var slot in m2Slots)
         {
-            Id = motherboard.Id,
-            ImagePath = motherboard.ImagePath,
-            Name = motherboard.FullName,
-            Description = motherboard.Description,
-            Specifications = new Dictionary<string, string>
-            {
-                { "Чипсет", motherboard.MotherboardChipset.Name },
-                { "Сокет", motherboard.Socket.Name },
-                { "Форм-фактор", motherboard.FormFactor.Name },
-                { "Тип памяти", motherboard.MemoryType.Name },
-                { "Максимальный объем памяти", $"{motherboard.MaxMemoryCapacity} ГБ" },
-                { "Максимальная частота памяти", $"{motherboard.MaxMemorySpeed} МГц" }
-                // { "Слотов PCIe x16", $""},
-                // { "Слотов PCIe x8", $""},
-                // { "Слотов PCIe x4", $""},
-                // { "Слотов PCIe x1", $""},
-                // { "Количество разъемов M.2", $""},
-                // { "Разъемы M.2", $""},
-                // { "Количество портов SATA", $""},
-            }
+            var formFactorNames = slot.SupportedFormFactors
+                .Select(sf => sf.StorageFormFactor.Name.Replace("M.2-", ""))
+                .OrderBy(int.Parse)
+                .ToList();
+            
+            var interfaces = slot.SupportedInterfaces
+                .Select(si => si.StorageInterface.Name.Replace("M.2 ", ""))
+                .OrderBy(si => si)
+                .ToList();
+            
+            var formFactorDescription = string.Join("/", formFactorNames);
+            var interfaceDescription = string.Join("/", interfaces);
+            
+            m2SlotDescriptions.Add($"{slot.Quantity} x {formFactorDescription} ({interfaceDescription})");
+        }
+        
+        var response = motherboard.ToBaseComponentDetailsResponse();
+
+        response.Specifications = new Dictionary<string, string>
+        {
+            { "Чипсет", motherboard.MotherboardChipset.Name },
+            { "Сокет", motherboard.Socket.Name },
+            { "Форм-фактор", motherboard.FormFactor.Name },
+            { "Тип памяти", motherboard.MemoryType.Name },
+            { "Максимальный объем памяти", $"{motherboard.MaxMemoryCapacity} ГБ" },
+            { "Максимальная частота памяти", $"{motherboard.MaxMemorySpeed} МГц" },
+            { "Количество портов SATA", sataPortsCount.ToString() },
+            { "Количество разъемов M.2", m2Slots.Count.ToString() },
+            { "Разъемы M.2", string.Join(", ", m2SlotDescriptions)}
+            // { "Слотов PCIe x16", $""},
+            // { "Слотов PCIe x8", $""},
+            // { "Слотов PCIe x4", $""},
+            // { "Слотов PCIe x1", $""},
         };
+
+        return response;
     }
-    
+
     public static ComponentDetailsResponse ToComponentDetailsResponse(this Ram ram)
     {
-        return new ComponentDetailsResponse
+        var response = ram.ToBaseComponentDetailsResponse(); // Вызов базового метода
+
+        response.Specifications = new Dictionary<string, string>
         {
-            Id = ram.Id,
-            ImagePath = ram.ImagePath,
-            Name = ram.FullName,
-            Description = ram.Description,
-            Specifications = new Dictionary<string, string>
-            {
-                { "Тип памяти", ram.MemoryType.Name },
-                { "Объем одного модуля", $"{ram.Capacity} ГБ" },
-                { "Количество модулей", $"{ram.Modules}" },
-                { "Общий объем памяти", $"{ram.TotalCapacity} ГБ" },
-                { "Частота", $"{ram.Frequency} МГц" }
-            }
+            { "Тип памяти", ram.MemoryType.Name },
+            { "Объем одного модуля", $"{ram.Capacity} ГБ" },
+            { "Количество модулей", $"{ram.Modules}" },
+            { "Общий объем памяти", $"{ram.TotalCapacity} ГБ" },
+            { "Частота", $"{ram.Frequency} МГц" }
         };
+
+        return response;
     }
 
     public static ComponentDetailsResponse ToComponentDetailsResponse(this Cooler cooler)
     {
         var specifications = new Dictionary<string, string>
         {
-            {"TDP", $"{cooler.Tdp} Вт"}
+            { "TDP", $"{cooler.Tdp} Вт" }
         };
 
         if (cooler.WaterCoolingSize != null)
@@ -181,46 +223,22 @@ public static class MappingExtensions
         }
         else
         {
-            if (cooler.Height.HasValue)
-            {
-                specifications.Add("Высота", $"{cooler.Height} мм");
-            }
+            if (cooler.Height.HasValue) specifications.Add("Высота", $"{cooler.Height} мм");
         }
+
+        var sockets = string.Join(", ",
+            cooler.CoolerSockets
+                .OrderBy(cs => cs.Socket.Name)
+                .Select(cs => $"{cs.Socket.Name}"));
         
-        var sockets = string.Join(", ", cooler.CoolerSockets.Select(cs => $"{cs.Socket.Name}"));
         specifications.Add("Совместимые сокеты", sockets);
-        
-        return new ComponentDetailsResponse
-        {
-            Id = cooler.Id,
-            ImagePath = cooler.ImagePath,
-            Name = cooler.FullName,
-            Description = cooler.Description,
-            Specifications = specifications
-        };
+
+        var response = cooler.ToBaseComponentDetailsResponse(); // Вызов базового метода
+
+        response.Specifications = specifications;
+
+        return response;
     }
 
     #endregion
-    
-    public static PagedResponse<ComponentResponse> ToPagedResponse<T>(this PagedList<T> pagedList) where T : PcComponent
-    {
-        var componentDtos = pagedList.Items.Select(component => new ComponentResponse
-        {
-            Id = component.Id,
-            ImagePath = component.ImagePath,
-            FullName = component.FullName,
-            Description = component.Description
-        }).ToList();
-
-        return new PagedResponse<ComponentResponse>
-        {
-            Items = componentDtos,
-            Page = pagedList.Page,
-            PageSize = pagedList.PageSize,
-            TotalCount = pagedList.TotalCount,
-            TotalPages = pagedList.TotalPages,
-            HasPreviousPage = pagedList.HasPreviousPage,
-            HasNextPage = pagedList.HasNextPage
-        };
-    }
 }

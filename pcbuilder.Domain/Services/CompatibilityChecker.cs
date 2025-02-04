@@ -3,6 +3,7 @@ using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
+using pcbuilder.Domain.Models.Storage;
 
 namespace pcbuilder.Domain.Services;
 
@@ -96,6 +97,85 @@ public class CompatibilityChecker
             result.AddError(CompatibilityErrors.CpuCoolerTdpMismatch(cpu, cooler));
         }
 
+        return result;
+    }
+
+    public CompatibilityResult CheckMotherboardAndStorageCompatibility(Motherboard? motherboard, List<Storage>? storages)
+    {
+        var result = new CompatibilityResult();
+        
+        if (motherboard == null || storages == null || storages.Count == 0)
+        {
+            return result;
+        }
+        
+        var sataStorages = storages.Where(s => s.StorageInterface.Name == "SATA").ToList();
+        var availableSataSlots = motherboard.MotherboardStorages
+            .Where(ms => ms.SupportedInterfaces.Any(si => si.StorageInterface.Name == "SATA"))
+            .Sum(ms => ms.Quantity);
+        if (sataStorages.Count > availableSataSlots)
+            result.AddError(CompatibilityErrors.NotEnoughSataPorts(availableSataSlots, sataStorages.Count));
+        
+        var m2Storages = storages.Where(s => s.StorageInterface.Name.StartsWith("M.2")).ToList();
+        var availableM2Slots = new List<(List<int> InterfaceIds, List<int> FormFactorIds, bool IsTaken)>();
+        foreach (var motherboardStorage in motherboard.MotherboardStorages)
+        {
+            if (motherboardStorage.SupportedInterfaces.Any(ms => ms.StorageInterface.Name.StartsWith("M.2")))
+            {
+                for (var i = 0; i < motherboardStorage.Quantity; i++)
+                {
+                    var interfaceIds = motherboardStorage.SupportedInterfaces.Select(si => si.StorageInterfaceId).ToList();
+                    var formFactorIds = motherboardStorage.SupportedFormFactors.Select(sf => sf.StorageFormFactorId).ToList();
+                    availableM2Slots.Add((interfaceIds, formFactorIds, false));
+                }
+            }
+        }
+        
+        var storageCompatibleSlots = new Dictionary<int, List<int>>();
+        for (int i = 0; i < m2Storages.Count; i++)
+        {
+            var storage = m2Storages[i];
+            var compatibleSlots = new List<int>();
+            for (int j = 0; j < availableM2Slots.Count; j++)
+            {
+                var slot = availableM2Slots[j];
+                if (slot.InterfaceIds.Contains(storage.StorageInterfaceId) && 
+                    slot.FormFactorIds.Contains(storage.StorageFormFactorId))
+                {
+                    compatibleSlots.Add(j);
+                }
+            }
+            storageCompatibleSlots[i] = compatibleSlots;
+        }
+    
+        var storageIndicesSorted = storageCompatibleSlots
+            .OrderBy(kvp => kvp.Value.Count)
+            .Select(kvp => kvp.Key)
+            .ToList();
+
+        foreach (var storageIdx in storageIndicesSorted)
+        {
+            var storage = m2Storages[storageIdx];
+            var compatibleSlots = storageCompatibleSlots[storageIdx];
+            bool assigned = false;
+        
+            foreach (var slotIdx in compatibleSlots)
+            {
+                if (!availableM2Slots[slotIdx].IsTaken)
+                {
+                    var slot = availableM2Slots[slotIdx];
+                    availableM2Slots[slotIdx] = (slot.InterfaceIds, slot.FormFactorIds, true);
+                    assigned = true;
+                    break;
+                }
+            }
+        
+            if (!assigned)
+            {
+                result.AddError(CompatibilityErrors.NoCompatibleM2Slot(storage));
+            }
+        }
+    
         return result;
     }
 

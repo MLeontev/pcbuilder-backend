@@ -180,7 +180,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("MotherboardFormFactorId");
 
-                    b.ToTable("CaseMotherboardFormFactors", (string)null);
+                    b.ToTable("CaseMotherboardFormFactors");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseStorageFormFactor", b =>
@@ -198,7 +198,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("StorageFormFactorId");
 
-                    b.ToTable("CaseStorageFormFactors", (string)null);
+                    b.ToTable("CaseStorageFormFactors");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseWaterCoolingSize", b =>
@@ -213,7 +213,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("WaterCoolingSizeId");
 
-                    b.ToTable("CaseWaterCoolingSizes", (string)null);
+                    b.ToTable("CaseWaterCoolingSizes");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.Brand", b =>
@@ -230,7 +230,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.Build", b =>
@@ -261,7 +261,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Builds", (string)null);
+                    b.ToTable("Builds");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.BuildComponent", b =>
@@ -276,7 +276,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("PcComponentId");
 
-                    b.ToTable("BuildComponents", (string)null);
+                    b.ToTable("BuildComponents");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.PcComponent", b =>
@@ -301,7 +301,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("PcComponents", (string)null);
+                    b.ToTable("PcComponents");
 
                     b.UseTptMappingStrategy();
                 });
@@ -392,7 +392,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("SocketId");
 
-                    b.ToTable("CoolerSockets", (string)null);
+                    b.ToTable("CoolerSockets");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Coolers.WaterCoolingSize", b =>
@@ -408,7 +408,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WaterCoolingSizes", (string)null);
+                    b.ToTable("WaterCoolingSizes");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.CpuMemory", b =>
@@ -426,7 +426,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("MemoryTypeId");
 
-                    b.ToTable("CpuMemories", (string)null);
+                    b.ToTable("CpuMemories");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.CpuSeries", b =>
@@ -443,7 +443,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CpuSeries", (string)null);
+                    b.ToTable("CpuSeries");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.Socket", b =>
@@ -460,7 +460,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sockets", (string)null);
+                    b.ToTable("Sockets");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.GpuChipset", b =>
@@ -477,7 +477,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GpuChipsets", (string)null);
+                    b.ToTable("GpuChipsets");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.GpuPowerConnector", b =>
@@ -492,7 +492,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("GpuId");
 
-                    b.ToTable("GpuPowerConnectors", (string)null);
+                    b.ToTable("GpuPowerConnectors");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardChipset", b =>
@@ -509,7 +509,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MotherboardChipsets", (string)null);
+                    b.ToTable("MotherboardChipsets");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardFormFactor", b =>
@@ -526,7 +526,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MotherboardFormFactors", (string)null);
+                    b.ToTable("MotherboardFormFactors");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPciSlot", b =>
@@ -544,7 +544,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("PciSlotId");
 
-                    b.ToTable("MotherboardPciSlots", (string)null);
+                    b.ToTable("MotherboardPciSlots");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPowerConnector", b =>
@@ -562,30 +562,58 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("PowerConnectorId");
 
-                    b.ToTable("MotherboardPowerConnectors", (string)null);
+                    b.ToTable("MotherboardPowerConnectors");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardStorage", b =>
                 {
-                    b.Property<int>("MotherboardId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<int>("StorageInterfaceId")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MotherboardId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
+                    b.HasKey("Id");
+
+                    b.HasIndex("MotherboardId");
+
+                    b.ToTable("MotherboardStorages");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardStorageFormFactor", b =>
+                {
+                    b.Property<int>("MotherboardStorageId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("StorageFormFactorId")
                         .HasColumnType("integer");
 
-                    b.HasKey("MotherboardId", "StorageInterfaceId");
+                    b.HasKey("MotherboardStorageId", "StorageFormFactorId");
 
                     b.HasIndex("StorageFormFactorId");
 
+                    b.ToTable("MotherboardStorageFormFactors");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardStorageInterface", b =>
+                {
+                    b.Property<int>("MotherboardStorageId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StorageInterfaceId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MotherboardStorageId", "StorageInterfaceId");
+
                     b.HasIndex("StorageInterfaceId");
 
-                    b.ToTable("MotherboardStorages", (string)null);
+                    b.ToTable("MotherboardStorageInterfaces");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.PciSlot", b =>
@@ -605,7 +633,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PciSlots", (string)null);
+                    b.ToTable("PciSlots");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerConnector", b =>
@@ -625,7 +653,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PowerConnectors", (string)null);
+                    b.ToTable("PowerConnectors");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PsuEfficiency", b =>
@@ -642,7 +670,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PsuEfficiencies", (string)null);
+                    b.ToTable("PsuEfficiencies");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PsuPowerConnector", b =>
@@ -665,7 +693,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("PowerSupplyId");
 
-                    b.ToTable("PsuPowerConnectors", (string)null);
+                    b.ToTable("PsuPowerConnectors");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Ram.MemoryType", b =>
@@ -682,7 +710,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MemoryTypes", (string)null);
+                    b.ToTable("MemoryTypes");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Storage.StorageFormFactor", b =>
@@ -699,7 +727,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StorageFormFactors", (string)null);
+                    b.ToTable("StorageFormFactors");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Storage.StorageInterface", b =>
@@ -716,7 +744,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StorageInterfaces", (string)null);
+                    b.ToTable("StorageInterfaces");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Storage.StorageType", b =>
@@ -733,7 +761,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StorageTypes", (string)null);
+                    b.ToTable("StorageTypes");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.Case", b =>
@@ -749,7 +777,7 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Property<int>("MaxPsuLength")
                         .HasColumnType("integer");
 
-                    b.ToTable("Cases", (string)null);
+                    b.ToTable("Cases");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Coolers.Cooler", b =>
@@ -767,7 +795,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("WaterCoolingSizeId");
 
-                    b.ToTable("Coolers", (string)null);
+                    b.ToTable("Coolers");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cpus.Cpu", b =>
@@ -805,7 +833,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("SocketId");
 
-                    b.ToTable("Cpus", (string)null);
+                    b.ToTable("Cpus");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Gpus.Gpu", b =>
@@ -843,7 +871,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("PciSlotId");
 
-                    b.ToTable("Gpus", (string)null);
+                    b.ToTable("Gpus");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.Motherboard", b =>
@@ -879,7 +907,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("SocketId");
 
-                    b.ToTable("Motherboards", (string)null);
+                    b.ToTable("Motherboards");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerSupply", b =>
@@ -894,7 +922,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("PsuEfficiencyId");
 
-                    b.ToTable("PowerSupplies", (string)null);
+                    b.ToTable("PowerSupplies");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Ram.Ram", b =>
@@ -915,7 +943,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("MemoryTypeId");
 
-                    b.ToTable("Rams", (string)null);
+                    b.ToTable("Rams");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Storage.Storage", b =>
@@ -946,7 +974,7 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.HasIndex("StorageTypeId");
 
-                    b.ToTable("Storage", (string)null);
+                    b.ToTable("Storage");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -1201,9 +1229,33 @@ namespace pcbuilder.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Motherboard");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardStorageFormFactor", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Motherboards.MotherboardStorage", "MotherboardStorageSlot")
+                        .WithMany("SupportedFormFactors")
+                        .HasForeignKey("MotherboardStorageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("pcbuilder.Domain.Models.Storage.StorageFormFactor", "StorageFormFactor")
                         .WithMany()
                         .HasForeignKey("StorageFormFactorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MotherboardStorageSlot");
+
+                    b.Navigation("StorageFormFactor");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardStorageInterface", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.Motherboards.MotherboardStorage", "MotherboardStorageSlot")
+                        .WithMany("SupportedInterfaces")
+                        .HasForeignKey("MotherboardStorageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1213,9 +1265,7 @@ namespace pcbuilder.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Motherboard");
-
-                    b.Navigation("StorageFormFactor");
+                    b.Navigation("MotherboardStorageSlot");
 
                     b.Navigation("StorageInterface");
                 });
@@ -1429,6 +1479,13 @@ namespace pcbuilder.Infrastructure.Migrations
             modelBuilder.Entity("pcbuilder.Domain.Models.Common.User", b =>
                 {
                     b.Navigation("Builds");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardStorage", b =>
+                {
+                    b.Navigation("SupportedFormFactors");
+
+                    b.Navigation("SupportedInterfaces");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.Case", b =>
