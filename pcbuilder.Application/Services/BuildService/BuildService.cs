@@ -6,6 +6,7 @@ using pcbuilder.Domain.Interfaces;
 using pcbuilder.Domain.Models.Common;
 using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
+using pcbuilder.Domain.Models.Gpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
 using pcbuilder.Domain.Models.Storage;
@@ -23,6 +24,7 @@ public class BuildService : IBuildService
     private readonly IRamRepository _ramRepository;
     private readonly ICoolerRepository _coolerRepository;
     private readonly IStorageRepository _storageRepository;
+    private readonly IGpuRepository _gpuRepository;
 
     public BuildService(
         CompatibilityChecker compatibilityChecker,
@@ -31,7 +33,8 @@ public class BuildService : IBuildService
         IBuildRepository buildRepository, 
         IRamRepository ramRepository, 
         ICoolerRepository coolerRepository, 
-        IStorageRepository storageRepository)
+        IStorageRepository storageRepository, 
+        IGpuRepository gpuRepository)
     {
         _compatibilityChecker = compatibilityChecker;
         _cpuRepository = cpuRepository;
@@ -40,6 +43,7 @@ public class BuildService : IBuildService
         _ramRepository = ramRepository;
         _coolerRepository = coolerRepository;
         _storageRepository = storageRepository;
+        _gpuRepository = gpuRepository;
     }
 
     public async Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentIds build)
@@ -134,6 +138,14 @@ public class BuildService : IBuildService
                 return Result.Failure<BuildWithComponents>(ComponentErrors.NotFound(build.MotherboardId.Value));
         }
         
+        Gpu? gpu = null;
+        if (build.MotherboardId.HasValue)
+        {
+            gpu = await _gpuRepository.GetById(build.GpuId.Value);
+            if (gpu == null)
+                return Result.Failure<BuildWithComponents>(ComponentErrors.NotFound(build.GpuId.Value));
+        }
+        
         Cooler? cooler = null;
         if (build.CoolerId.HasValue)
         {
@@ -172,6 +184,7 @@ public class BuildService : IBuildService
         {
             Cpu = cpu,
             Motherboard = motherboard,
+            Gpu = gpu,
             Cooler = cooler,
             Rams = rams,
             Storages = storages

@@ -4,7 +4,7 @@ public class CompatibilityResult
 {
     public CompatibilityStatus Status { get; private set; } = CompatibilityStatus.Compatible;
 
-    public List<CompatibilityError> Errors { get; } = [];
+    public List<CompatibilityError> Errors { get; private set; } = [];
 
     public void AddError(CompatibilityError error)
     {

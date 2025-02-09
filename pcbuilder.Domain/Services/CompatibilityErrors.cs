@@ -1,5 +1,6 @@
 using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
+using pcbuilder.Domain.Models.Gpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
 using pcbuilder.Domain.Models.Storage;
@@ -78,19 +79,33 @@ public static class CompatibilityErrors
             "Cpu.Cooler.TdpMismatch",
             $"TDP кулера ({cooler.Tdp}W) меньше TDP процессора ({cpu.Tdp}W. Возможен перегрев процессора");
     }
-    
+
     public static CompatibilityError NotEnoughSataPorts(int availableSlots, int requiredSlots)
     {
         return CompatibilityError.Problem(
             "Motherboard.Storage.NotEnoughSataPorts",
             $"Недостаточно SATA портов. Доступно: {availableSlots}, требуется: {requiredSlots}");
     }
-    
+
     public static CompatibilityError NoCompatibleM2Slot(Storage storage)
     {
         return CompatibilityError.Problem(
             "Motherboard.Storage.NoCompatibleM2Slot",
             $"Для накопителя {storage.FullName} не найден совместимый слот M.2."
         );
+    }
+
+    public static CompatibilityError GpuMotherboardPcieVersionMismatch(Motherboard motherboard, Gpu gpu)
+    {
+        return CompatibilityError.Warning(
+            "Gpu.Motherboard.PcieVersionMismatch",
+            $"Версия PCI-Express видеокарты ({gpu.PcieVersion}) выше версии материнсккой платы ({motherboard.PcieVersion}). Возможно снижение производительности");
+    }
+    
+    public static CompatibilityError NoAvailablePcieSlots(Motherboard motherboard)
+    {
+        return CompatibilityError.Problem(
+            "Motherboard.NoAvailablePcieSlots",
+            $"У материнской платы нет слотов для подключения видеокарты");
     }
 }

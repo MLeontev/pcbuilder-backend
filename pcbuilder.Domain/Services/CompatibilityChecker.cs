@@ -1,6 +1,8 @@
+using System.Globalization;
 using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
+using pcbuilder.Domain.Models.Gpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
 using pcbuilder.Domain.Models.Storage;
@@ -179,6 +181,31 @@ public class CompatibilityChecker
         return result;
     }
 
+    public CompatibilityResult CheckMotherboardAndGpuCompatibility(Motherboard? motherboard, Gpu? gpu)
+    {
+        var result = new CompatibilityResult();
+        
+        if (motherboard == null || gpu == null) return result;
+
+        if (!string.IsNullOrEmpty(motherboard.PcieVersion) && !string.IsNullOrEmpty(gpu.PcieVersion))
+        {
+            var motherboardPcieVersion = float.Parse(motherboard.PcieVersion, CultureInfo.InvariantCulture);
+            var gpuPcieVersion = float.Parse(gpu.PcieVersion, CultureInfo.InvariantCulture);
+
+            if (gpuPcieVersion > motherboardPcieVersion)
+            {
+                result.AddError(CompatibilityErrors.GpuMotherboardPcieVersionMismatch(motherboard, gpu));
+            }
+        }
+
+        if (motherboard.PcieSlotsCount <= 0)
+        {
+            result.AddError(CompatibilityErrors.NoAvailablePcieSlots(motherboard));
+        }
+        
+        return result;
+    }
+    
     public CompatibilityResult CheckBuildCompatibility(BuildWithComponents build)
     {
         var result = new CompatibilityResult();
@@ -188,6 +215,7 @@ public class CompatibilityChecker
         result.AddErrors(CheckMotherboardAndRamCompatibility(build.Motherboard, build.Rams).Errors);
         result.AddErrors(CheckCpuAndCoolerCompatibility(build.Cpu, build.Cooler).Errors);
         result.AddErrors(CheckMotherboardAndStorageCompatibility(build.Motherboard, build.Storages).Errors);
+        result.AddErrors(CheckMotherboardAndGpuCompatibility(build.Motherboard, build.Gpu).Errors);
 
         return result;
     }

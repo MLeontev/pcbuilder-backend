@@ -3,6 +3,7 @@ using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Models.Common;
 using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
+using pcbuilder.Domain.Models.Gpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
 using pcbuilder.Domain.Models.Storage;
@@ -30,6 +31,7 @@ public static class MappingExtensions
         {
             CpuId = buildComponents.FirstOrDefault(bc => bc.PcComponent is Cpu)?.PcComponentId,
             MotherboardId = buildComponents.FirstOrDefault(bc => bc.PcComponent is Motherboard)?.PcComponentId,
+            GpuId = buildComponents.FirstOrDefault(bc => bc.PcComponent is Gpu)?.PcComponentId,
             CoolerId = buildComponents.FirstOrDefault(bc => bc.PcComponent is Cooler)?.PcComponentId,
             RamIds = buildComponents
                 .Where(bc => bc.PcComponent is Ram)
@@ -51,6 +53,9 @@ public static class MappingExtensions
 
         if (components.Motherboard != null)
             buildComponents.Add(new BuildComponent { PcComponentId = components.Motherboard.Id });
+        
+        if (components.Gpu != null)
+            buildComponents.Add(new BuildComponent { PcComponentId = components.Gpu.Id });
         
         if (components.Cooler != null)
             buildComponents.Add(new BuildComponent { PcComponentId = components.Cooler.Id });

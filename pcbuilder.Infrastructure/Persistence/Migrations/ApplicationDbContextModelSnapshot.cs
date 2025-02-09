@@ -488,6 +488,9 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Property<int>("GpuId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
                     b.HasKey("PowerConnectorId", "GpuId");
 
                     b.HasIndex("GpuId");
@@ -527,24 +530,6 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MotherboardFormFactors");
-                });
-
-            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPciSlot", b =>
-                {
-                    b.Property<int>("MotherboardId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PciSlotId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.HasKey("MotherboardId", "PciSlotId");
-
-                    b.HasIndex("PciSlotId");
-
-                    b.ToTable("MotherboardPciSlots");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPowerConnector", b =>
@@ -614,26 +599,6 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.HasIndex("StorageInterfaceId");
 
                     b.ToTable("MotherboardStorageInterfaces");
-                });
-
-            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.PciSlot", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Bandwidth")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Version")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PciSlots");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerConnector", b =>
@@ -858,8 +823,12 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Property<int>("MemoryCapacity")
                         .HasColumnType("integer");
 
-                    b.Property<int>("PciSlotId")
+                    b.Property<int>("PcieLanes")
                         .HasColumnType("integer");
+
+                    b.Property<string>("PcieVersion")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("RecommendedPsuPower")
                         .HasColumnType("integer");
@@ -868,8 +837,6 @@ namespace pcbuilder.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasIndex("ChipsetId");
-
-                    b.HasIndex("PciSlotId");
 
                     b.ToTable("Gpus");
                 });
@@ -895,6 +862,13 @@ namespace pcbuilder.Infrastructure.Migrations
 
                     b.Property<int>("MotherboardChipsetId")
                         .HasColumnType("integer");
+
+                    b.Property<int>("PcieSlotsCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PcieVersion")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("SocketId")
                         .HasColumnType("integer");
@@ -1183,25 +1157,6 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Navigation("PowerConnector");
                 });
 
-            modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPciSlot", b =>
-                {
-                    b.HasOne("pcbuilder.Domain.Models.Motherboards.Motherboard", "Motherboard")
-                        .WithMany("MotherboardPciSlots")
-                        .HasForeignKey("MotherboardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("pcbuilder.Domain.Models.Motherboards.PciSlot", "PciSlot")
-                        .WithMany()
-                        .HasForeignKey("PciSlotId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Motherboard");
-
-                    b.Navigation("PciSlot");
-                });
-
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.MotherboardPowerConnector", b =>
                 {
                     b.HasOne("pcbuilder.Domain.Models.Motherboards.Motherboard", "Motherboard")
@@ -1352,15 +1307,7 @@ namespace pcbuilder.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("pcbuilder.Domain.Models.Motherboards.PciSlot", "PciSlot")
-                        .WithMany()
-                        .HasForeignKey("PciSlotId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Chipset");
-
-                    b.Navigation("PciSlot");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.Motherboard", b =>
@@ -1514,8 +1461,6 @@ namespace pcbuilder.Infrastructure.Migrations
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Motherboards.Motherboard", b =>
                 {
-                    b.Navigation("MotherboardPciSlots");
-
                     b.Navigation("MotherboardPowerConnectors");
 
                     b.Navigation("MotherboardStorages");

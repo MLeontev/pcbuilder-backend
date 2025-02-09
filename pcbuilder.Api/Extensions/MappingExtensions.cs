@@ -7,6 +7,7 @@ using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Models.Common;
 using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
+using pcbuilder.Domain.Models.Gpus;
 using pcbuilder.Domain.Models.Motherboards;
 using pcbuilder.Domain.Models.Ram;
 using pcbuilder.Domain.Models.Storage;
@@ -251,6 +252,32 @@ public static class MappingExtensions
             { "Объем", $"{storage.Capacity} ГБ" },
             { "Скорость чтения", $"{storage.ReadSpeed} MB/s" },
             { "Скорость записи", $"{storage.WriteSpeed} MB/s" }
+        };
+
+        return response;
+    }
+
+    public static ComponentDetailsResponse ToComponentDetailsResponse(this Gpu gpu)
+    {
+        var response = gpu.ToBaseComponentDetailsResponse();
+
+        var powerConnectors = gpu.GpuPowerConnectors
+            .OrderBy(pc => pc.PowerConnector.Pins)
+            .Select(pc => $"{pc.Quantity}x {pc.PowerConnector.Pins}-pin")
+            .ToList();
+        
+        response.Specifications = new Dictionary<string, string>
+        {
+            { "Графический процессор", gpu.Chipset.Name },
+            { "Объем видеопамяти", $"{gpu.MemoryCapacity} ГБ" },
+            { "Штатная частота работы видеочипа", $"{gpu.CoreClock} МГц" },
+            { "Турбочастота", $"{gpu.BoostClock} МГц" },
+            { "Разрядность шины памяти", $"{gpu.BusWidth} бит" },
+            { "Интерфейс", $"PCIe {gpu.PcieVersion} x{gpu.PcieLanes}" },
+            {"Разъемы дополнительного питания", string.Join(", ", powerConnectors)},
+            { "TDP", $"{gpu.Tdp} Вт" },
+            { "Длина", $"{gpu.Length} мм" },
+            { "Рекомендуемая мощность БП", $"{gpu.RecommendedPsuPower} Вт" }
         };
 
         return response;

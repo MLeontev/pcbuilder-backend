@@ -6,6 +6,8 @@ public class BuildComponentIds
 
     public int? MotherboardId { get; set; }
     
+    public int? GpuId { get; set; }
+    
     public int? CoolerId { get; set; }
     
     public List<int>? RamIds { get; set; }

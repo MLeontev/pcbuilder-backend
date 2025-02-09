@@ -24,7 +24,9 @@ public class Motherboard : PcComponent
     public int MaxMemoryCapacity { get; set; }
     public int MaxMemorySpeed { get; set; }
 
-    public List<MotherboardPciSlot> MotherboardPciSlots { get; set; } = [];
+    public int PcieSlotsCount { get; set; }
+    public string PcieVersion { get; set; } = string.Empty;
+    
     public List<MotherboardStorage> MotherboardStorages { get; set; } = [];
     public List<MotherboardPowerConnector> MotherboardPowerConnectors { get; set; } = [];
 }

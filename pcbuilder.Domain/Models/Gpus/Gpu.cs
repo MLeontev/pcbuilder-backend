@@ -15,8 +15,8 @@ public class Gpu : PcComponent
 
     public int BoostClock { get; set; }
 
-    public int PciSlotId { get; set; }
-    public PciSlot PciSlot { get; set; } = null!;
+    public string PcieVersion { get; set; } = string.Empty;
+    public int PcieLanes { get; set; }
 
     public int Tdp { get; set; }
 
@@ -28,4 +28,6 @@ public class Gpu : PcComponent
     public int RecommendedPsuPower { get; set; }
 
     public List<GpuPowerConnector> GpuPowerConnectors { get; set; } = [];
+
+    public override string Description => $"PCIe {PcieVersion}, {MemoryCapacity} Гб, {BusWidth} бит, {CoreClock} МГц";
 }

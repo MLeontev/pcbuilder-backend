@@ -23,9 +23,6 @@ public class MotherboardRepository : IMotherboardRepository
             .Include(m => m.FormFactor)
             .Include(m => m.MemoryType)
             
-            .Include(m => m.MotherboardPciSlots)
-            .ThenInclude(mps => mps.PciSlot)
-            
             .Include(m => m.MotherboardStorages)
             .ThenInclude(ms => ms.SupportedInterfaces)
             .ThenInclude(si => si.StorageInterface)
@@ -61,9 +58,6 @@ public class MotherboardRepository : IMotherboardRepository
             .Include(m => m.Socket)
             .Include(m => m.FormFactor)
             .Include(m => m.MemoryType)
-            
-            .Include(m => m.MotherboardPciSlots)
-            .ThenInclude(mps => mps.PciSlot)
             
             .Include(m => m.MotherboardStorages)
             .ThenInclude(ms => ms.SupportedInterfaces)
