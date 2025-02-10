@@ -1,5 +1,6 @@
 using System.Globalization;
 using pcbuilder.Domain.DTOs;
+using pcbuilder.Domain.Models.Cases;
 using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Gpus;
@@ -203,6 +204,43 @@ public class CompatibilityChecker
             result.AddError(CompatibilityErrors.NoAvailablePcieSlots(motherboard));
         }
         
+        return result;
+    }
+
+    public CompatibilityResult CheckCaseAndMotherboardCompatibility(Case? pcCase, Motherboard? motherboard)
+    {
+        var result = new CompatibilityResult();
+        
+        if (pcCase == null || motherboard == null) return result;
+
+        if (motherboard.FormFactor.Rank > pcCase.MaxMotherboardFormFactor.Rank)
+        {
+            result.AddError(CompatibilityErrors.CaseMotherboardFormFactorMismatch(pcCase, motherboard));
+        }
+        
+        return result;
+    }
+    
+    public CompatibilityResult CheckCaseAndGpuCompatibility(Case? pcCase, Gpu? gpu)
+    {
+        var result = new CompatibilityResult();
+        
+        if (pcCase == null || gpu == null) return result;
+
+        if (gpu.Length > pcCase.MaxGpuLength)
+        {
+            result.AddError(CompatibilityErrors.GpuTooLongForCase(gpu, pcCase));
+        }
+        
+        return result;
+    }
+
+    public CompatibilityResult CheckCaseAndStorageCompatibility(Case? pcCase, List<Storage>? storages)
+    {
+        var result = new CompatibilityResult();
+
+        if (pcCase == null || storages == null || storages.Count == 0) return result;
+
         return result;
     }
     

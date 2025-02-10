@@ -1,3 +1,4 @@
+using pcbuilder.Domain.Models.Cases;
 using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Gpus;
@@ -107,5 +108,19 @@ public static class CompatibilityErrors
         return CompatibilityError.Problem(
             "Motherboard.NoAvailablePcieSlots",
             $"У материнской платы нет слотов для подключения видеокарты");
+    }
+
+    public static CompatibilityError CaseMotherboardFormFactorMismatch(Case pcCase, Motherboard motherboard)
+    {
+        return CompatibilityError.Problem(
+            "Case.Motherboard.FormFactorMismatch", 
+            $"Форм-фактор материнской платы {motherboard.FormFactor.Name} превышает максимально поддерживаемый размер для корпуса {pcCase.MaxMotherboardFormFactor.Name}");
+    }
+
+    public static CompatibilityError GpuTooLongForCase(Gpu gpu, Case pcCase)
+    {
+        return CompatibilityError.Problem(
+            "Gpu.Case.LengthMismatch", 
+            $"Длина видеокарты {gpu.Length}мм превышает максимальную допустимую длину для корпуса {pcCase.MaxGpuLength}мм");
     }
 }

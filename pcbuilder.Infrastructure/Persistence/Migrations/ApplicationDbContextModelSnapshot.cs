@@ -168,21 +168,6 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseMotherboardFormFactor", b =>
-                {
-                    b.Property<int>("CaseId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MotherboardFormFactorId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("CaseId", "MotherboardFormFactorId");
-
-                    b.HasIndex("MotherboardFormFactorId");
-
-                    b.ToTable("CaseMotherboardFormFactors");
-                });
-
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseStorageFormFactor", b =>
                 {
                     b.Property<int>("CaseId")
@@ -527,6 +512,9 @@ namespace pcbuilder.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Rank")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.ToTable("MotherboardFormFactors");
@@ -739,8 +727,13 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Property<int>("MaxGpuLength")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MaxMotherboardFormFactorId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("MaxPsuLength")
                         .HasColumnType("integer");
+
+                    b.HasIndex("MaxMotherboardFormFactorId");
 
                     b.ToTable("Cases");
                 });
@@ -1002,25 +995,6 @@ namespace pcbuilder.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseMotherboardFormFactor", b =>
-                {
-                    b.HasOne("pcbuilder.Domain.Models.Cases.Case", "Case")
-                        .WithMany("CaseMotherboardFormFactors")
-                        .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("pcbuilder.Domain.Models.Motherboards.MotherboardFormFactor", "MotherboardFormFactor")
-                        .WithMany()
-                        .HasForeignKey("MotherboardFormFactorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Case");
-
-                    b.Navigation("MotherboardFormFactor");
-                });
-
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseStorageFormFactor", b =>
                 {
                     b.HasOne("pcbuilder.Domain.Models.Cases.Case", "Case")
@@ -1251,6 +1225,14 @@ namespace pcbuilder.Infrastructure.Migrations
                         .HasForeignKey("pcbuilder.Domain.Models.Cases.Case", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.Motherboards.MotherboardFormFactor", "MaxMotherboardFormFactor")
+                        .WithMany()
+                        .HasForeignKey("MaxMotherboardFormFactorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MaxMotherboardFormFactor");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Coolers.Cooler", b =>
@@ -1437,8 +1419,6 @@ namespace pcbuilder.Infrastructure.Migrations
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.Case", b =>
                 {
-                    b.Navigation("CaseMotherboardFormFactors");
-
                     b.Navigation("CaseStorageFormFactors");
 
                     b.Navigation("CaseWaterCoolingSizes");
