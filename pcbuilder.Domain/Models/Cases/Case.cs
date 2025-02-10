@@ -14,8 +14,10 @@ public class Case : PcComponent
     public int MaxPsuLength { get; set; }
     
     public int MaxMotherboardFormFactorId { get; set; }
-    public MotherboardFormFactor MaxMotherboardFormFactor { get; set; }
+    public MotherboardFormFactor MaxMotherboardFormFactor { get; set; } = null!;
+    
+    public int Slots25 { get; set; } 
+    public int Slots35 { get; set; }
 
     public List<CaseWaterCoolingSize> CaseWaterCoolingSizes { get; set; } = [];
-    public List<CaseStorageFormFactor> CaseStorageFormFactors { get; set; } = [];
 }

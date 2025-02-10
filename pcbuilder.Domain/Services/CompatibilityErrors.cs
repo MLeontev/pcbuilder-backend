@@ -85,7 +85,7 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Problem(
             "Motherboard.Storage.NotEnoughSataPorts",
-            $"Недостаточно SATA портов. Доступно: {availableSlots}, требуется: {requiredSlots}");
+            $"Недостаточно SATA портов на материнской плате. Требуется: {requiredSlots}, доступно: {availableSlots}");
     }
 
     public static CompatibilityError NoCompatibleM2Slot(Storage storage)
@@ -121,6 +121,27 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Problem(
             "Gpu.Case.LengthMismatch", 
-            $"Длина видеокарты {gpu.Length}мм превышает максимальную допустимую длину для корпуса {pcCase.MaxGpuLength}мм");
+            $"Длина видеокарты {gpu.Length} мм превышает максимальную допустимую длину для корпуса {pcCase.MaxGpuLength} мм");
+    }
+    
+    public static CompatibilityError NotEnoughStorageSlotsForCase(string storageType, int required, int available, Case pcCase)
+    {
+        return CompatibilityError.Problem(
+            "Case.Storage.SlotsMismatch",
+            $"В корпусе недостаточно отсеков для {storageType}. Требуется: {required}, доступно: {available}");
+    }
+
+    public static CompatibilityError CoolerTooTall(Case pcCase, Cooler cooler)
+    {
+        return CompatibilityError.Problem(
+            "Cooler.Case.CoolerTooTall",
+            $"Высота кулера {cooler.Height}мм превышает максимальную допустимую высоту для корпуса: {pcCase.MaxCoolerHeight}мм.");
+    }
+
+    public static CompatibilityError WaterCoolingSizeNotSupported(Case pcCase, Cooler cooler)
+    {
+        return CompatibilityError.Problem(
+            "Cooler.Case.WaterCoolingSizeNotSupported",
+            $"Размер водяного охлаждения {cooler.WaterCoolingSize?.Size}мм не поддерживается корпусом");
     }
 }

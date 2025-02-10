@@ -241,6 +241,56 @@ public class CompatibilityChecker
 
         if (pcCase == null || storages == null || storages.Count == 0) return result;
 
+        var requiredSlots25 = storages.Count(s => s.StorageFormFactor.Id == 1);
+        var requiredSlots35 = storages.Count(s => s.StorageFormFactor.Id == 2);
+        
+        if (requiredSlots25 > pcCase.Slots25)
+        {
+            result.AddError(CompatibilityErrors.NotEnoughStorageSlotsForCase(
+                "2.5\"", requiredSlots25, pcCase.Slots25, pcCase));
+        }
+
+        if (requiredSlots35 > pcCase.Slots35)
+        {
+            result.AddError(CompatibilityErrors.NotEnoughStorageSlotsForCase(
+                "3.5\"", requiredSlots35, pcCase.Slots35, pcCase));
+        }
+        
+        return result;
+    }
+    
+    public CompatibilityResult CheckCaseAndAirCoolerCompatibility(Case? pcCase, Cooler? cooler)
+    {
+        var result = new CompatibilityResult();
+
+        if (cooler == null || pcCase == null) return result;
+        
+        if (cooler.Height.HasValue && cooler.Height.Value > pcCase.MaxCoolerHeight)
+        {
+            result.AddError(CompatibilityErrors.CoolerTooTall(pcCase, cooler));
+        }
+
+        
+        return result;
+    }
+
+    public CompatibilityResult CheckCaseAndWaterCoolerCompatibility(Case? pcCase, Cooler? cooler)
+    {
+        var result = new CompatibilityResult();
+        
+        if (cooler == null || pcCase == null) return result;
+
+        if (cooler.WaterCoolingSizeId.HasValue)
+        {
+            var caseWaterCoolingSize = pcCase.CaseWaterCoolingSizes
+                .FirstOrDefault(x => x.WaterCoolingSizeId == cooler.WaterCoolingSizeId.Value);
+
+            if (caseWaterCoolingSize == null)
+            {
+                result.AddError(CompatibilityErrors.WaterCoolingSizeNotSupported(pcCase, cooler));
+            }
+        }
+
         return result;
     }
     

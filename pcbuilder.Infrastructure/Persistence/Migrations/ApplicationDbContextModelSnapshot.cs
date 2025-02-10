@@ -168,24 +168,6 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseStorageFormFactor", b =>
-                {
-                    b.Property<int>("CaseId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StorageFormFactorId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.HasKey("CaseId", "StorageFormFactorId");
-
-                    b.HasIndex("StorageFormFactorId");
-
-                    b.ToTable("CaseStorageFormFactors");
-                });
-
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseWaterCoolingSize", b =>
                 {
                     b.Property<int>("CaseId")
@@ -733,6 +715,12 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Property<int>("MaxPsuLength")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Slots25")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Slots35")
+                        .HasColumnType("integer");
+
                     b.HasIndex("MaxMotherboardFormFactorId");
 
                     b.ToTable("Cases");
@@ -993,25 +981,6 @@ namespace pcbuilder.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseStorageFormFactor", b =>
-                {
-                    b.HasOne("pcbuilder.Domain.Models.Cases.Case", "Case")
-                        .WithMany("CaseStorageFormFactors")
-                        .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("pcbuilder.Domain.Models.Storage.StorageFormFactor", "StorageFormFactor")
-                        .WithMany()
-                        .HasForeignKey("StorageFormFactorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Case");
-
-                    b.Navigation("StorageFormFactor");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.CaseWaterCoolingSize", b =>
@@ -1419,8 +1388,6 @@ namespace pcbuilder.Infrastructure.Migrations
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.Case", b =>
                 {
-                    b.Navigation("CaseStorageFormFactors");
-
                     b.Navigation("CaseWaterCoolingSizes");
                 });
 

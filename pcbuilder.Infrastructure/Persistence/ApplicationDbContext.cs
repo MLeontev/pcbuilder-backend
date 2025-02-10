@@ -70,7 +70,6 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
     // Корпуса
     public DbSet<Case> Cases { get; set; }
     public DbSet<CaseWaterCoolingSize> CaseWaterCoolingSizes { get; set; }
-    public DbSet<CaseStorageFormFactor> CaseStorageFormFactors { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -92,9 +91,6 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
 
         builder.Entity<CaseWaterCoolingSize>()
             .HasKey(cw => new { cw.CaseId, cw.WaterCoolingSizeId });
-
-        builder.Entity<CaseStorageFormFactor>()
-            .HasKey(cs => new { cs.CaseId, cs.StorageFormFactorId });
 
         builder.Entity<PsuPowerConnector>()
             .HasKey(ppc => new { ppc.PsuId, ppc.PowerConnectorId });
