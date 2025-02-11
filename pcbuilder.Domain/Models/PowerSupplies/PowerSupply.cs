@@ -10,6 +10,8 @@ public class PowerSupply : PcComponent
     public PsuEfficiency PsuEfficiency { get; set; } = null!;
 
     public int Power { get; set; }
+    
+    public int Length { get; set; }
 
     public List<PsuPowerConnector> PsuPowerConnectors { get; set; } = [];
 }

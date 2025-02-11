@@ -1,7 +1,9 @@
+using pcbuilder.Domain.Models.Cases;
 using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Gpus;
 using pcbuilder.Domain.Models.Motherboards;
+using pcbuilder.Domain.Models.PowerSupplies;
 using pcbuilder.Domain.Models.Ram;
 using pcbuilder.Domain.Models.Storage;
 
@@ -20,4 +22,8 @@ public class BuildWithComponents
     public List<Ram>? Rams { get; set; }
     
     public List<Storage>? Storages { get; set; }
+    
+    public Case? Case { get; set; }
+    
+    public PowerSupply? Psu { get; set; }
 }

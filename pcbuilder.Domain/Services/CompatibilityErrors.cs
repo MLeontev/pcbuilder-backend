@@ -3,6 +3,7 @@ using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Gpus;
 using pcbuilder.Domain.Models.Motherboards;
+using pcbuilder.Domain.Models.PowerSupplies;
 using pcbuilder.Domain.Models.Ram;
 using pcbuilder.Domain.Models.Storage;
 
@@ -102,36 +103,37 @@ public static class CompatibilityErrors
             "Gpu.Motherboard.PcieVersionMismatch",
             $"Версия PCI-Express видеокарты ({gpu.PcieVersion}) выше версии материнсккой платы ({motherboard.PcieVersion}). Возможно снижение производительности");
     }
-    
+
     public static CompatibilityError NoAvailablePcieSlots(Motherboard motherboard)
     {
         return CompatibilityError.Problem(
             "Motherboard.NoAvailablePcieSlots",
-            $"У материнской платы нет слотов для подключения видеокарты");
+            "У материнской платы нет слотов для подключения видеокарты");
     }
 
     public static CompatibilityError CaseMotherboardFormFactorMismatch(Case pcCase, Motherboard motherboard)
     {
         return CompatibilityError.Problem(
-            "Case.Motherboard.FormFactorMismatch", 
+            "Case.Motherboard.FormFactorMismatch",
             $"Форм-фактор материнской платы {motherboard.FormFactor.Name} превышает максимально поддерживаемый размер для корпуса {pcCase.MaxMotherboardFormFactor.Name}");
     }
 
     public static CompatibilityError GpuTooLongForCase(Gpu gpu, Case pcCase)
     {
         return CompatibilityError.Problem(
-            "Gpu.Case.LengthMismatch", 
+            "Gpu.Case.LengthMismatch",
             $"Длина видеокарты {gpu.Length} мм превышает максимальную допустимую длину для корпуса {pcCase.MaxGpuLength} мм");
     }
-    
-    public static CompatibilityError NotEnoughStorageSlotsForCase(string storageType, int required, int available, Case pcCase)
+
+    public static CompatibilityError NotEnoughStorageSlotsForCase(string storageType, int required, int available,
+        Case pcCase)
     {
         return CompatibilityError.Problem(
             "Case.Storage.SlotsMismatch",
             $"В корпусе недостаточно отсеков для {storageType}. Требуется: {required}, доступно: {available}");
     }
 
-    public static CompatibilityError CoolerTooTall(Case pcCase, Cooler cooler)
+    public static CompatibilityError CoolerTooTallForCase(Case pcCase, Cooler cooler)
     {
         return CompatibilityError.Problem(
             "Cooler.Case.CoolerTooTall",
@@ -142,6 +144,57 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Problem(
             "Cooler.Case.WaterCoolingSizeNotSupported",
-            $"Размер водяного охлаждения {cooler.WaterCoolingSize?.Size}мм не поддерживается корпусом");
+            $"Размер водяного охлаждения {cooler.WaterCoolingSize?.Size} мм не поддерживается корпусом");
+    }
+
+    public static CompatibilityError PsuTooLongForCase(Case pcCase, PowerSupply psu)
+    {
+        return CompatibilityError.Problem(
+            "Psu.Case.LengthMismatch",
+            $"Длина блока питания {psu.Length} мм превышает максимальную допустимую длину для корпуса: {pcCase.MaxPsuLength} мм.");
+    }
+
+    public static CompatibilityError NotEnoughSataConnectors(PowerSupply psu, int required, int available)
+    {
+        return CompatibilityError.Problem(
+            "Psu.Storage.NotEnoughSataConnectors",
+            $"Недостаточно SATA-разъемов на блоке питания. Требуется: {required}, доступно: {available}");
+    }
+
+    public static CompatibilityError MissingPowerConnectorMotherboard(PowerSupply psu, Motherboard motherboard,
+        string connectorName, int connectorValue, int availableQuantity)
+    {
+        return CompatibilityError.Problem(
+            "Psu.Motherboard.MissingPowerConnector",
+            $"Материнская плата требует {connectorValue} разъем(а/ов) {connectorName}, но блок питания предоставляет только {availableQuantity}");
+    }
+
+    public static CompatibilityError MissingPowerConnectorGpu(PowerSupply psu, Gpu gpu, 
+        string connectorName, int connectorValue, int availableQuantity)
+    {
+        return CompatibilityError.Problem(
+            "Psu.Motherboard.MissingPowerConnector",
+            $"Видеокарта требует {connectorValue} разъем(а/ов) {connectorName}, но блок питания предоставляет только {availableQuantity}");
+    }
+
+    public static CompatibilityError PsuPowerLowForSystem(PowerSupply psu, int recommendedPower)
+    {
+        return CompatibilityError.Problem(
+            "Psu.System.PowerTooLow",
+            $"Мощность блока питания {psu.Power} Вт недостаточна для системы. Рекомендуемая мощность: {recommendedPower} Вт");
+    }
+
+    public static CompatibilityError PsuPowerLowForGpu(PowerSupply psu, Gpu gpu, int recommendedGpuPower)
+    {
+        return CompatibilityError.Warning(
+            "Psu.Gpu.PowerTooLow", 
+            $"Мощность блока питания {psu.Power} Вт недостаточна для видеокарты. Рекомендуемая мощность: {recommendedGpuPower} Вт");
+    }
+    
+    public static CompatibilityError MissingRequiredComponentsError(List<string> missingComponents)
+    {
+        return CompatibilityError.Warning(
+            "Build.RequiredComponentsMissing", 
+            $"Отсутствуют обязательные компоненты: {string.Join(", ", missingComponents)}");
     }
 }

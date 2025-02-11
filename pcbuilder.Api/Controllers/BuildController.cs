@@ -91,7 +91,7 @@ public class BuildController : ControllerBase
     }
 
     [HttpPost("check")]
-    public async Task<IActionResult> CheckBuildCompatibility(CheckBuildRequest request)
+    public async Task<IActionResult> CheckCompatibility(CheckBuildRequest request)
     {
         var result = await _buildService.CheckBuildCompatibility(request.Components);
 
