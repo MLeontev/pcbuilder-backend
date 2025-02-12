@@ -35,7 +35,7 @@ public class CaseRepository : ICaseRepository
             .Take(pageSize)
             .ToListAsync();
         
-        return new PagedList<Case>(cases, totalCount, page, pageSize);
+        return new PagedList<Case>(cases, page, pageSize, totalCount);
     }
 
     public async Task<Case?> GetById(int id)

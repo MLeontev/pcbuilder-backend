@@ -1,10 +1,12 @@
 using pcbuilder.Application.DTOs.Builds;
 using pcbuilder.Domain.DTOs;
+using pcbuilder.Domain.Models.Cases;
 using pcbuilder.Domain.Models.Common;
 using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Gpus;
 using pcbuilder.Domain.Models.Motherboards;
+using pcbuilder.Domain.Models.PowerSupplies;
 using pcbuilder.Domain.Models.Ram;
 using pcbuilder.Domain.Models.Storage;
 
@@ -40,7 +42,9 @@ public static class MappingExtensions
             StorageIds = buildComponents
                 .Where(bc => bc.PcComponent is Storage)
                 .Select(bc => bc.PcComponentId)
-                .ToList()
+                .ToList(),
+            PsuId = buildComponents.FirstOrDefault(bc => bc.PcComponent is PowerSupply)?.PcComponentId,
+            CaseId = buildComponents.FirstOrDefault(bc => bc.PcComponent is Case)?.PcComponentId
         };
     }
     
@@ -65,6 +69,12 @@ public static class MappingExtensions
         
         if (components.Storages != null)
             buildComponents.AddRange(components.Storages.Select(storage => new BuildComponent { PcComponentId = storage.Id }));
+        
+        if (components.Psu != null)
+            buildComponents.Add(new BuildComponent { PcComponentId = components.Psu.Id });
+        
+        if (components.Case != null)
+            buildComponents.Add(new BuildComponent { PcComponentId = components.Case.Id });
 
         return buildComponents;
     }

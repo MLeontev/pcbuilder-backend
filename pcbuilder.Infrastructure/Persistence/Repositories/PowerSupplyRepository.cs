@@ -36,7 +36,7 @@ public class PowerSupplyRepository : IPowerSupplyRepository
             .Take(pageSize)
             .ToListAsync();
         
-        return new PagedList<PowerSupply>(powerSupplies, totalCount, page, pageSize);
+        return new PagedList<PowerSupply>(powerSupplies, page, pageSize, totalCount);
     }
 
     public async Task<PowerSupply?> GetById(int id)

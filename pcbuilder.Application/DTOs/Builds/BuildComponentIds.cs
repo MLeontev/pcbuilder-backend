@@ -13,4 +13,8 @@ public class BuildComponentIds
     public List<int>? RamIds { get; set; }
     
     public List<int>? StorageIds { get; set; }
+    
+    public int? CaseId { get; set; }
+    
+    public int? PsuId { get; set; }
 }

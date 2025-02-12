@@ -1,13 +1,16 @@
 using pcbuilder.Application.DTOs.Builds;
 using pcbuilder.Application.Extensions;
+using pcbuilder.Application.Services.PowerSupplyService;
 using pcbuilder.Domain.DTOs;
 using pcbuilder.Domain.Errors;
 using pcbuilder.Domain.Interfaces;
+using pcbuilder.Domain.Models.Cases;
 using pcbuilder.Domain.Models.Common;
 using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Gpus;
 using pcbuilder.Domain.Models.Motherboards;
+using pcbuilder.Domain.Models.PowerSupplies;
 using pcbuilder.Domain.Models.Ram;
 using pcbuilder.Domain.Models.Storage;
 using pcbuilder.Domain.Services;
@@ -25,6 +28,8 @@ public class BuildService : IBuildService
     private readonly ICoolerRepository _coolerRepository;
     private readonly IStorageRepository _storageRepository;
     private readonly IGpuRepository _gpuRepository;
+    private readonly ICaseRepository _caseRepository;
+    private readonly IPowerSupplyRepository _powerSupplyRepository;
 
     public BuildService(
         CompatibilityChecker compatibilityChecker,
@@ -34,7 +39,9 @@ public class BuildService : IBuildService
         IRamRepository ramRepository, 
         ICoolerRepository coolerRepository, 
         IStorageRepository storageRepository, 
-        IGpuRepository gpuRepository)
+        IGpuRepository gpuRepository, 
+        ICaseRepository caseRepository, 
+        IPowerSupplyRepository powerSupplyRepository)
     {
         _compatibilityChecker = compatibilityChecker;
         _cpuRepository = cpuRepository;
@@ -44,6 +51,8 @@ public class BuildService : IBuildService
         _coolerRepository = coolerRepository;
         _storageRepository = storageRepository;
         _gpuRepository = gpuRepository;
+        _caseRepository = caseRepository;
+        _powerSupplyRepository = powerSupplyRepository;
     }
 
     public async Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentIds build)
@@ -179,6 +188,23 @@ public class BuildService : IBuildService
                 storages.Add(storage);
             }
         }
+        
+        Case? pcCase = null;
+        if (build.CaseId.HasValue)
+        {
+            pcCase = await _caseRepository.GetById(build.CaseId.Value);
+            if (pcCase == null)
+                return Result.Failure<BuildWithComponents>(ComponentErrors.NotFound(build.CaseId.Value));
+        }
+        
+        PowerSupply? psu = null;
+        if (build.PsuId.HasValue)
+        {
+            psu = await _powerSupplyRepository.GetById(build.PsuId.Value);
+            if (psu == null)
+                return Result.Failure<BuildWithComponents>(ComponentErrors.NotFound(build.PsuId.Value));
+        }
+
 
         return Result.Success(new BuildWithComponents
         {
@@ -187,7 +213,9 @@ public class BuildService : IBuildService
             Gpu = gpu,
             Cooler = cooler,
             Rams = rams,
-            Storages = storages
+            Storages = storages,
+            Case = pcCase,
+            Psu = psu
         });
     }
 }

@@ -304,8 +304,8 @@ public static class MappingExtensions
             { "Максимальная высота кулера", $"{pcCase.MaxCoolerHeight} мм" },
             { "Максимальная длина блока питания", $"{pcCase.MaxPsuLength} мм" },
             { "Форм-фактор материнской платы", pcCase.MaxMotherboardFormFactor.Name },
-            { "Количество слотов 2.5\"", $"{pcCase.Slots25}" },
-            { "Количество слотов 3.5\"", $"{pcCase.Slots35}" },
+            { "Количество слотов 2.5", $"{pcCase.Slots25}" },
+            { "Количество слотов 3.5", $"{pcCase.Slots35}" },
             { "Поддерживаемые размеры водяного охлаждения", string.Join(", ", caseWaterCoolingSizes) }
         };
 
