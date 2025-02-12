@@ -60,6 +60,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
     public DbSet<PowerSupply> PowerSupplies { get; set; }
     public DbSet<PsuPowerConnector> PsuPowerConnectors { get; set; }
     public DbSet<PsuEfficiency> PsuEfficiencies { get; set; }
+    public DbSet<PowerConnectorCompatibility> PowerConnectorCompatibilities { get; set; }
 
     // Накопители
     public DbSet<Storage> Storage { get; set; }
@@ -93,7 +94,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
             .HasKey(cw => new { cw.CaseId, cw.WaterCoolingSizeId });
 
         builder.Entity<PsuPowerConnector>()
-            .HasKey(ppc => new { ppc.PsuId, ppc.PowerConnectorId });
+            .HasKey(ppc => new { ppc.PowerSupplyId, ppc.PowerConnectorId });
         
         builder.Entity<MotherboardStorageInterface>()
             .HasKey(msi => new { msi.MotherboardStorageId, msi.StorageInterfaceId });
@@ -103,9 +104,17 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
 
         builder.Entity<MotherboardPowerConnector>()
             .HasKey(mpc => new { mpc.MotherboardId, mpc.PowerConnectorId });
+        
+        builder.Entity<PowerConnectorCompatibility>()
+            .HasKey(pcc => new { pcc.SourceConnectorId, pcc.CompatibleConnectorId });
 
         #endregion
 
+        builder.Entity<PowerConnectorCompatibility>()
+            .HasOne(pc => pc.SourceConnector)
+            .WithMany(c => c.CompatibleConnectors)
+            .HasForeignKey(pc => pc.SourceConnectorId);
+        
         base.OnModelCreating(builder);
     }
 }

@@ -8,10 +8,12 @@ using Microsoft.IdentityModel.Tokens;
 using pcbuilder.Api.Validators.Users;
 using pcbuilder.Application.Interfaces;
 using pcbuilder.Application.Services.BuildService;
+using pcbuilder.Application.Services.CaseService;
 using pcbuilder.Application.Services.CoolerService;
 using pcbuilder.Application.Services.CpuService;
 using pcbuilder.Application.Services.GpuService;
 using pcbuilder.Application.Services.MotherboardService;
+using pcbuilder.Application.Services.PowerSupplyService;
 using pcbuilder.Application.Services.RamService;
 using pcbuilder.Application.Services.StorageService;
 using pcbuilder.Application.Services.UserService;
@@ -91,6 +93,12 @@ builder.Services.AddScoped<IStorageRepository, StorageRepository>();
 
 builder.Services.AddScoped<IGpuService, GpuService>();
 builder.Services.AddScoped<IGpuRepository, GpuRepository>();
+
+builder.Services.AddScoped<ICaseService, CaseService>();
+builder.Services.AddScoped<ICaseRepository, CaseRepository>();
+
+builder.Services.AddScoped<IPowerSupplyService, PowerSupplyService>();
+builder.Services.AddScoped<IPowerSupplyRepository, PowerSupplyRepository>();
 
 builder.Services.AddScoped<IBuildService, BuildService>();
 builder.Services.AddScoped<IBuildRepository, BuildRepository>();

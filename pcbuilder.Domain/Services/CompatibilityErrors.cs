@@ -174,7 +174,7 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Problem(
             "Psu.Motherboard.MissingPowerConnector",
-            $"Видеокарта требует {connectorValue} разъем(а/ов) {connectorName}, но блок питания предоставляет только {availableQuantity}");
+            $"Недостаточно разъемов доп. питания ({connectorName}) для видеокарты. Требуется: {connectorValue}, доступно: {availableQuantity}");
     }
 
     public static CompatibilityError PsuPowerLowForSystem(PowerSupply psu, int recommendedPower)

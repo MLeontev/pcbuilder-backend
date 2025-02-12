@@ -7,4 +7,6 @@ public class PowerConnector
     public string Name { get; set; } = string.Empty;
 
     public int Pins { get; set; }
+
+    public List<PowerConnectorCompatibility> CompatibleConnectors { get; set; } = [];
 }

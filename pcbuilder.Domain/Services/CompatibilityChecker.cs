@@ -265,7 +265,6 @@ public class CompatibilityChecker
         if (cooler.Height.HasValue && cooler.Height.Value > pcCase.MaxCoolerHeight)
             result.AddError(CompatibilityErrors.CoolerTooTallForCase(pcCase, cooler));
 
-
         return result;
     }
 
@@ -321,23 +320,39 @@ public class CompatibilityChecker
 
         if (psu == null || motherboard == null) return result;
 
-        var requiredPowerConnectors = motherboard.MotherboardPowerConnectors
-                .ToDictionary(pc => pc.PowerConnector.Name, pc => pc.Quantity);
-        
-        var availablePowerConnectors = psu.PsuPowerConnectors
-            .ToDictionary(pc => pc.PowerConnector.Name, pc => pc.Quantity);
-
-        foreach (var requiredConnector in requiredPowerConnectors)
+        foreach (var requiredConnector in motherboard.MotherboardPowerConnectors)
         {
-            if (!availablePowerConnectors.ContainsKey(requiredConnector.Key)
-                || availablePowerConnectors[requiredConnector.Key] < requiredConnector.Value)
+            var requiredId = requiredConnector.PowerConnector.Id;
+            var requiredQuantity = requiredConnector.Quantity;
+            
+            var availableQuantity = 0;
+            
+            var psuConnector = psu.PsuPowerConnectors
+                .FirstOrDefault(pc => pc.PowerConnector.Id == requiredId);
+            
+            if (psuConnector != null)
+                availableQuantity += psuConnector.Quantity;
+            
+            var compatibleConnectors = psu.PsuPowerConnectors
+                .Where(pc => pc.PowerConnector.CompatibleConnectors
+                    .Any(pcc => pcc.CompatibleConnectorId == requiredId)).ToList();
+
+            foreach (var compatiblePsuConnector in compatibleConnectors)
+            {
+                var requiredPerUnit = compatiblePsuConnector.PowerConnector.CompatibleConnectors
+                    .First(c => c.CompatibleConnectorId == requiredId).RequiredQuantity;
+
+                availableQuantity += compatiblePsuConnector.Quantity / requiredPerUnit;
+            }
+
+            if (availableQuantity < requiredQuantity)
             {
                 result.AddError(CompatibilityErrors.MissingPowerConnectorMotherboard(
                     psu, 
                     motherboard, 
-                    requiredConnector.Key, 
-                    requiredConnector.Value, 
-                    availablePowerConnectors.GetValueOrDefault(requiredConnector.Key, 0)));
+                    requiredConnector.PowerConnector.Name, 
+                    requiredQuantity, 
+                    availableQuantity));
             }
         }
         
@@ -350,23 +365,39 @@ public class CompatibilityChecker
 
         if (psu == null || gpu == null) return result;
 
-        var requiredPowerConnectors = gpu.GpuPowerConnectors
-            .ToDictionary(pc => pc.PowerConnector.Name, pc => pc.Quantity);
-        
-        var availablePowerConnectors = psu.PsuPowerConnectors
-            .ToDictionary(pc => pc.PowerConnector.Name, pc => pc.Quantity);
-
-        foreach (var requiredConnector in requiredPowerConnectors)
+        foreach (var requiredConnector in gpu.GpuPowerConnectors)
         {
-            if (!availablePowerConnectors.ContainsKey(requiredConnector.Key)
-                || availablePowerConnectors[requiredConnector.Key] < requiredConnector.Value)
+            var requiredId = requiredConnector.PowerConnector.Id;
+            var requiredQuantity = requiredConnector.Quantity;
+            
+            var availableQuantity = 0;
+            
+            var psuConnector = psu.PsuPowerConnectors
+                .FirstOrDefault(pc => pc.PowerConnector.Id == requiredId);
+            
+            if (psuConnector != null)
+                availableQuantity += psuConnector.Quantity;
+            
+            var compatibleConnectors = psu.PsuPowerConnectors
+                .Where(pc => pc.PowerConnector.CompatibleConnectors
+                    .Any(pcc => pcc.CompatibleConnectorId == requiredId)).ToList();
+
+            foreach (var compatiblePsuConnector in compatibleConnectors)
+            {
+                var requiredPerUnit = compatiblePsuConnector.PowerConnector.CompatibleConnectors
+                    .First(c => c.CompatibleConnectorId == requiredId).RequiredQuantity;
+
+                availableQuantity += compatiblePsuConnector.Quantity / requiredPerUnit;
+            }
+
+            if (availableQuantity < requiredQuantity)
             {
                 result.AddError(CompatibilityErrors.MissingPowerConnectorGpu(
                     psu, 
                     gpu, 
-                    requiredConnector.Key, 
-                    requiredConnector.Value, 
-                    availablePowerConnectors.GetValueOrDefault(requiredConnector.Key, 0)));
+                    requiredConnector.PowerConnector.Name, 
+                    requiredQuantity, 
+                    availableQuantity));
             }
         }
         

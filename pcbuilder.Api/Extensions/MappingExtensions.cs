@@ -4,11 +4,13 @@ using pcbuilder.Api.Contracts.Builds.Compatibility;
 using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Application.DTOs.Builds;
 using pcbuilder.Domain.DTOs;
+using pcbuilder.Domain.Models.Cases;
 using pcbuilder.Domain.Models.Common;
 using pcbuilder.Domain.Models.Coolers;
 using pcbuilder.Domain.Models.Cpus;
 using pcbuilder.Domain.Models.Gpus;
 using pcbuilder.Domain.Models.Motherboards;
+using pcbuilder.Domain.Models.PowerSupplies;
 using pcbuilder.Domain.Models.Ram;
 using pcbuilder.Domain.Models.Storage;
 using pcbuilder.Domain.Services;
@@ -174,6 +176,11 @@ public static class MappingExtensions
             m2SlotDescriptions.Add($"{slot.Quantity} x {formFactorDescription} ({interfaceDescription})");
         }
         
+        var powerConnectors = motherboard.MotherboardPowerConnectors
+            .OrderBy(pc => pc.PowerConnector.Pins)
+            .Select(pc => $"{pc.Quantity} x {pc.PowerConnector.Name}")
+            .ToList();
+        
         var response = motherboard.ToBaseComponentDetailsResponse();
 
         response.Specifications = new Dictionary<string, string>
@@ -186,11 +193,10 @@ public static class MappingExtensions
             { "Максимальная частота памяти", $"{motherboard.MaxMemorySpeed} МГц" },
             { "Количество портов SATA", sataPortsCount.ToString() },
             { "Количество разъемов M.2", m2Slots.Count.ToString() },
-            { "Разъемы M.2", string.Join(", ", m2SlotDescriptions)}
-            // { "Слотов PCIe x16", $""},
-            // { "Слотов PCIe x8", $""},
-            // { "Слотов PCIe x4", $""},
-            // { "Слотов PCIe x1", $""},
+            { "Разъемы M.2", string.Join(", ", m2SlotDescriptions)},
+            { "Количество слотов PCIe", motherboard.PcieSlotsCount.ToString() },
+            { "Версия PCIe", motherboard.PcieVersion },
+            { "Разъемы питания", string.Join(", ", powerConnectors) }
         };
 
         return response;
@@ -250,8 +256,8 @@ public static class MappingExtensions
             { "Интерфейс", storage.StorageInterface.Name },
             { "Форм-фактор", storage.StorageFormFactor.Name },
             { "Объем", $"{storage.Capacity} ГБ" },
-            { "Скорость чтения", $"{storage.ReadSpeed} MB/s" },
-            { "Скорость записи", $"{storage.WriteSpeed} MB/s" }
+            { "Скорость чтения", $"{storage.ReadSpeed} Мбайт/сек" },
+            { "Скорость записи", $"{storage.WriteSpeed} Мбайт/сек" }
         };
 
         return response;
@@ -263,7 +269,7 @@ public static class MappingExtensions
 
         var powerConnectors = gpu.GpuPowerConnectors
             .OrderBy(pc => pc.PowerConnector.Pins)
-            .Select(pc => $"{pc.Quantity}x {pc.PowerConnector.Pins}-pin")
+            .Select(pc => $"{pc.Quantity} x {pc.PowerConnector.Pins}-pin")
             .ToList();
         
         response.Specifications = new Dictionary<string, string>
@@ -274,10 +280,53 @@ public static class MappingExtensions
             { "Турбочастота", $"{gpu.BoostClock} МГц" },
             { "Разрядность шины памяти", $"{gpu.BusWidth} бит" },
             { "Интерфейс", $"PCIe {gpu.PcieVersion} x{gpu.PcieLanes}" },
-            {"Разъемы дополнительного питания", string.Join(", ", powerConnectors)},
+            { "Разъемы дополнительного питания", string.Join(", ", powerConnectors)},
             { "TDP", $"{gpu.Tdp} Вт" },
             { "Длина", $"{gpu.Length} мм" },
             { "Рекомендуемая мощность БП", $"{gpu.RecommendedPsuPower} Вт" }
+        };
+
+        return response;
+    }
+    
+    public static ComponentDetailsResponse ToComponentDetailsResponse(this Case pcCase)
+    {
+        var response = pcCase.ToBaseComponentDetailsResponse();
+
+        var caseWaterCoolingSizes = pcCase.CaseWaterCoolingSizes
+            .OrderBy(cws => cws.WaterCoolingSize.Size)
+            .Select(cws => $"{cws.WaterCoolingSize.Size} мм")
+            .ToList();
+
+        response.Specifications = new Dictionary<string, string>
+        {
+            { "Максимальная длина видеокарты", $"{pcCase.MaxGpuLength} мм" },
+            { "Максимальная высота кулера", $"{pcCase.MaxCoolerHeight} мм" },
+            { "Максимальная длина блока питания", $"{pcCase.MaxPsuLength} мм" },
+            { "Форм-фактор материнской платы", pcCase.MaxMotherboardFormFactor.Name },
+            { "Количество слотов 2.5\"", $"{pcCase.Slots25}" },
+            { "Количество слотов 3.5\"", $"{pcCase.Slots35}" },
+            { "Поддерживаемые размеры водяного охлаждения", string.Join(", ", caseWaterCoolingSizes) }
+        };
+
+        return response;
+    }
+    
+    public static ComponentDetailsResponse ToComponentDetailsResponse(this PowerSupply psu)
+    {
+        var response = psu.ToBaseComponentDetailsResponse();
+
+        var powerConnectors = psu.PsuPowerConnectors
+            .OrderBy(pc => pc.PowerConnector.Name)
+            .Select(pc => $"{pc.Quantity} x {pc.PowerConnector.Name}")
+            .ToList();
+
+        response.Specifications = new Dictionary<string, string>
+        {
+            { "Сертификат 80 PLUS", psu.PsuEfficiency.Name },
+            { "Мощность", $"{psu.Power} Вт" },
+            { "Длина", $"{psu.Length} мм" },
+            { "Разъемы питания", string.Join(", ", powerConnectors) }
         };
 
         return response;

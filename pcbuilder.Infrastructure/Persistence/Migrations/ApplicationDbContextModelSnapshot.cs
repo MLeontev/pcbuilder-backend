@@ -591,6 +591,24 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.ToTable("PowerConnectors");
                 });
 
+            modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerConnectorCompatibility", b =>
+                {
+                    b.Property<int>("SourceConnectorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CompatibleConnectorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RequiredQuantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("SourceConnectorId", "CompatibleConnectorId");
+
+                    b.HasIndex("CompatibleConnectorId");
+
+                    b.ToTable("PowerConnectorCompatibilities");
+                });
+
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PsuEfficiency", b =>
                 {
                     b.Property<int>("Id")
@@ -610,23 +628,18 @@ namespace pcbuilder.Infrastructure.Migrations
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PsuPowerConnector", b =>
                 {
-                    b.Property<int>("PsuId")
+                    b.Property<int>("PowerSupplyId")
                         .HasColumnType("integer");
 
                     b.Property<int>("PowerConnectorId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("PowerSupplyId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.HasKey("PsuId", "PowerConnectorId");
+                    b.HasKey("PowerSupplyId", "PowerConnectorId");
 
                     b.HasIndex("PowerConnectorId");
-
-                    b.HasIndex("PowerSupplyId");
 
                     b.ToTable("PsuPowerConnectors");
                 });
@@ -868,6 +881,9 @@ namespace pcbuilder.Infrastructure.Migrations
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerSupply", b =>
                 {
                     b.HasBaseType("pcbuilder.Domain.Models.Common.PcComponent");
+
+                    b.Property<int>("Length")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Power")
                         .HasColumnType("integer");
@@ -1166,6 +1182,25 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Navigation("MotherboardStorageSlot");
 
                     b.Navigation("StorageInterface");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerConnectorCompatibility", b =>
+                {
+                    b.HasOne("pcbuilder.Domain.Models.PowerSupplies.PowerConnector", "CompatibleConnector")
+                        .WithMany()
+                        .HasForeignKey("CompatibleConnectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pcbuilder.Domain.Models.PowerSupplies.PowerConnector", "SourceConnector")
+                        .WithMany()
+                        .HasForeignKey("SourceConnectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompatibleConnector");
+
+                    b.Navigation("SourceConnector");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PsuPowerConnector", b =>
