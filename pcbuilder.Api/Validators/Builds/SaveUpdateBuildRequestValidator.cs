@@ -3,9 +3,9 @@ using pcbuilder.Api.Contracts.Builds;
 
 namespace pcbuilder.Api.Validators.Builds;
 
-public class SaveBuildRequestValidator : AbstractValidator<SaveBuildRequest>
+public class SaveUpdateBuildRequestValidator : AbstractValidator<SaveUpdateBuildRequest>
 {
-    public SaveBuildRequestValidator()
+    public SaveUpdateBuildRequestValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Название обязательно")

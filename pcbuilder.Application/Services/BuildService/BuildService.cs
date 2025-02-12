@@ -90,11 +90,13 @@ public class BuildService : IBuildService
             : Result.Success(build.ToDto());
     }
 
-    public async Task<Result<int>> SaveBuild(SaveBuildDto saveBuildDto)
+    public async Task<Result<int>> SaveBuild(SaveUpdateBuildDto saveBuildDto)
     {
         var getComponentsResult = await GetAllComponents(saveBuildDto.Components);
-
-        if (getComponentsResult.IsFailure) return Result.Failure<int>(getComponentsResult.Error);
+        if (getComponentsResult.IsFailure)
+        {
+            return Result.Failure<int>(getComponentsResult.Error);
+        }
 
         var components = getComponentsResult.Value;
         var buildComponents = components.ToBuildComponents();
@@ -114,6 +116,38 @@ public class BuildService : IBuildService
         return Result.Success(saveResult);
     }
 
+    public async Task<Result> UpdateBuild(int buildId, int userId, SaveUpdateBuildDto updateBuildDto)
+    {
+        var build = await _buildRepository.GetById(buildId);
+        if (build == null)
+        {
+            return Result.Failure(BuildErrors.NotFound(buildId));
+        }
+        
+        if (build.UserId != userId)
+        {
+            return Result.Failure(BuildErrors.ForbiddenAccess);
+        }
+        
+        var getComponentsResult = await GetAllComponents(updateBuildDto.Components);
+        if (getComponentsResult.IsFailure)
+        {
+            return Result.Failure(getComponentsResult.Error);
+        }
+        
+        var components = getComponentsResult.Value;
+        var buildComponents = components.ToBuildComponents();
+        
+        build.Name = updateBuildDto.Name;
+        build.Description = updateBuildDto.Description;
+        build.UpdatedAt = DateTime.UtcNow;
+        build.BuildComponents = buildComponents;
+
+        await _buildRepository.Update(build);
+
+        return Result.Success();
+    }
+    
     public async Task<Result> DeleteBuild(int buildId, int userId)
     {
         var build = await _buildRepository.GetById(buildId);
@@ -148,7 +182,7 @@ public class BuildService : IBuildService
         }
         
         Gpu? gpu = null;
-        if (build.MotherboardId.HasValue)
+        if (build.GpuId.HasValue)
         {
             gpu = await _gpuRepository.GetById(build.GpuId.Value);
             if (gpu == null)

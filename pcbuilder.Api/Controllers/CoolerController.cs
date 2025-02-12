@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using pcbuilder.Api.Contracts.Components;
 using pcbuilder.Api.Extensions;
 using pcbuilder.Api.Validators.Components;
+using pcbuilder.Application.DTOs.Builds;
 using pcbuilder.Application.Services.CoolerService;
 
 namespace pcbuilder.Api.Controllers;
@@ -47,5 +48,23 @@ public class CoolerController : ControllerBase
         return result.IsFailure
             ? result.ToErrorResponse()
             : Ok(result.Value.ToComponentDetailsResponse()); 
+    }
+    
+    [HttpGet("compatible")]
+    public async Task<IActionResult> GetCompatible([FromQuery] GetComponentsRequest request, [FromQuery] BuildComponentIds buildComponentIds)
+    {
+        var validationResult = await _getComponentsRequestValidator.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var errorResponse = validationResult.ToValidationErrorResponse();
+            return BadRequest(errorResponse);
+        }
+
+        var result = await _coolerService.GetCompatible(request.SearchQuery, request.Page, request.PageSize, buildComponentIds);
+
+        return result.IsFailure
+            ? result.ToErrorResponse()
+            : Ok(result.Value.ToPagedResponse());
     }
 }

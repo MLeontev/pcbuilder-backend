@@ -2,7 +2,7 @@ using pcbuilder.Application.DTOs.Builds;
 
 namespace pcbuilder.Api.Contracts.Builds;
 
-public class SaveBuildRequest
+public class SaveUpdateBuildRequest
 {
     public string Name { get; set; } = string.Empty;
 

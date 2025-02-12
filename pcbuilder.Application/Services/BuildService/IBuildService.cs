@@ -13,7 +13,9 @@ public interface IBuildService
 
     public Task<Result<BuildDto>> GetById(int buildId, int userId);
 
-    public Task<Result<int>> SaveBuild(SaveBuildDto saveBuildDto);
+    public Task<Result<int>> SaveBuild(SaveUpdateBuildDto saveBuildDto);
+    
+    public Task<Result> UpdateBuild(int buildId, int userId, SaveUpdateBuildDto updateBuildDto);
 
     public Task<Result> DeleteBuild(int buildId, int userId);
 

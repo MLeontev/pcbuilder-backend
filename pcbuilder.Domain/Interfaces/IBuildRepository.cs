@@ -10,6 +10,8 @@ public interface IBuildRepository
     public Task<Build?> GetById(int id);
 
     public Task<int> Add(Build build);
+    
+    public Task Update(Build build);
 
     public Task Delete(Build build);
 }

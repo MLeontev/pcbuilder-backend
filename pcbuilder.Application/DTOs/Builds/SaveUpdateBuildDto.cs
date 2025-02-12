@@ -1,6 +1,6 @@
 namespace pcbuilder.Application.DTOs.Builds;
 
-public class SaveBuildDto
+public class SaveUpdateBuildDto
 {
     public int UserId { get; set; }
 

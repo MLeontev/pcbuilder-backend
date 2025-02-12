@@ -19,9 +19,9 @@ public class BuildRepository : IBuildRepository
         var query = _dbContext.Builds.Where(b => b.UserId == userId);
 
         if (!string.IsNullOrEmpty(searchQuery))
-            query = query.Where(b => b.Name.ToLower().Contains(searchQuery.ToLower())
-                                     || (b.Description != null &&
-                                         b.Description.ToLower().Contains(searchQuery.ToLower())));
+            query = query.Where(b => b.Name.ToLower().Contains(searchQuery.ToLower()) || 
+                                     (b.Description != null &&
+                                      b.Description.ToLower().Contains(searchQuery.ToLower())));
 
         var totalCount = await query.CountAsync();
 
@@ -47,6 +47,12 @@ public class BuildRepository : IBuildRepository
         _dbContext.Builds.Add(build);
         await _dbContext.SaveChangesAsync();
         return build.Id;
+    }
+
+    public async Task Update(Build build)
+    {
+        _dbContext.Builds.Update(build);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task Delete(Build build)

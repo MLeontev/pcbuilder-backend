@@ -468,11 +468,102 @@ public class CompatibilityChecker
     public bool IsRamCompatible(BuildWithComponents buildWithComponents)
     {
         var cpuRamResult = CheckCpuAndRamCompatibility(buildWithComponents.Cpu, buildWithComponents.Rams);
-        if (cpuRamResult.Status == CompatibilityStatus.Incompatible) return false;
-
         var motherboardRamResult = CheckMotherboardAndRamCompatibility(buildWithComponents.Motherboard, buildWithComponents.Rams);
-        if (motherboardRamResult.Status == CompatibilityStatus.Incompatible) return false;
+    
+        return cpuRamResult.Status != CompatibilityStatus.Incompatible && 
+               motherboardRamResult.Status != CompatibilityStatus.Incompatible;
+    }
 
-        return true;
+    public bool IsCpuCompatible(BuildWithComponents buildWithComponents)
+    {
+        var cpuMotherboardResult = CheckCpuAndMotherboardCompatibility(buildWithComponents.Cpu, buildWithComponents.Motherboard);
+        var cpuCoolerResult = CheckCpuAndCoolerCompatibility(buildWithComponents.Cpu, buildWithComponents.Cooler);
+        var cpuRamResult = CheckCpuAndRamCompatibility(buildWithComponents.Cpu, buildWithComponents.Rams);
+    
+        return cpuMotherboardResult.Status != CompatibilityStatus.Incompatible && 
+               cpuCoolerResult.Status != CompatibilityStatus.Incompatible && 
+               cpuRamResult.Status != CompatibilityStatus.Incompatible;
+    }
+    
+    public bool IsMotherboardCompatible(BuildWithComponents buildWithComponents)
+    {
+        var cpuMotherboardResult = CheckCpuAndMotherboardCompatibility(buildWithComponents.Cpu, buildWithComponents.Motherboard);
+        var ramMotherboardResult = CheckMotherboardAndRamCompatibility(buildWithComponents.Motherboard, buildWithComponents.Rams);
+        var gpuMotherboardResult = CheckMotherboardAndGpuCompatibility(buildWithComponents.Motherboard, buildWithComponents.Gpu);
+        var storageMotherboardResult = CheckMotherboardAndStorageCompatibility(buildWithComponents.Motherboard, buildWithComponents.Storages);
+        var psuMotherboardResult = CheckPsuAndMotherboardCompatibility(buildWithComponents.Psu, buildWithComponents.Motherboard);
+        var caseMotherboardResult = CheckCaseAndMotherboardCompatibility(buildWithComponents.Case, buildWithComponents.Motherboard);
+    
+        return cpuMotherboardResult.Status != CompatibilityStatus.Incompatible && 
+               ramMotherboardResult.Status != CompatibilityStatus.Incompatible && 
+               gpuMotherboardResult.Status != CompatibilityStatus.Incompatible && 
+               storageMotherboardResult.Status != CompatibilityStatus.Incompatible &&
+               psuMotherboardResult.Status != CompatibilityStatus.Incompatible &&
+               caseMotherboardResult.Status != CompatibilityStatus.Incompatible;
+    }
+    
+    public bool IsGpuCompatible(BuildWithComponents buildWithComponents)
+    {
+        var motherboardGpuResult = CheckMotherboardAndGpuCompatibility(buildWithComponents.Motherboard, buildWithComponents.Gpu);
+        var caseGpuResult = CheckCaseAndGpuCompatibility(buildWithComponents.Case, buildWithComponents.Gpu);
+        var psuGpuResult = CheckPsuAndGpuCompatibility(buildWithComponents.Psu, buildWithComponents.Gpu);
+
+        return motherboardGpuResult.Status != CompatibilityStatus.Incompatible && 
+               caseGpuResult.Status != CompatibilityStatus.Incompatible && 
+               psuGpuResult.Status != CompatibilityStatus.Incompatible;
+    }
+    
+    public bool IsCoolerCompatible(BuildWithComponents buildWithComponents)
+    {
+        var cpuCoolerResult = CheckCpuAndCoolerCompatibility(buildWithComponents.Cpu, buildWithComponents.Cooler);
+        var caseCoolerResult = CheckCaseAndAirCoolerCompatibility(buildWithComponents.Case, buildWithComponents.Cooler);
+        var caseWaterCoolerResult = CheckCaseAndWaterCoolerCompatibility(buildWithComponents.Case, buildWithComponents.Cooler);
+
+        return cpuCoolerResult.Status != CompatibilityStatus.Incompatible && 
+               caseCoolerResult.Status != CompatibilityStatus.Incompatible && 
+               caseWaterCoolerResult.Status != CompatibilityStatus.Incompatible;
+    }
+    
+    public bool IsPsuCompatible(BuildWithComponents buildWithComponents)
+    {
+        var psuMotherboardResult = CheckPsuAndMotherboardCompatibility(buildWithComponents.Psu, buildWithComponents.Motherboard);
+        var psuGpuResult = CheckPsuAndGpuCompatibility(buildWithComponents.Psu, buildWithComponents.Gpu);
+        var psuStorageResult = CheckPsuAndStoragesCompatibility(buildWithComponents.Psu, buildWithComponents.Storages);
+        var psuPowerResult = CheckPsuPower(buildWithComponents.Psu, buildWithComponents.Cpu, buildWithComponents.Gpu, buildWithComponents.Rams, buildWithComponents.Storages);
+        var psuCaseResult = CheckCaseAndPowerSupplyCompatibility(buildWithComponents.Case, buildWithComponents.Psu);
+
+        return psuMotherboardResult.Status != CompatibilityStatus.Incompatible && 
+               psuGpuResult.Status != CompatibilityStatus.Incompatible && 
+               psuStorageResult.Status != CompatibilityStatus.Incompatible && 
+               psuPowerResult.Status != CompatibilityStatus.Incompatible && 
+               psuCaseResult.Status != CompatibilityStatus.Incompatible;
+    }
+    
+    public bool IsCaseCompatible(BuildWithComponents buildWithComponents)
+    {
+        var caseMotherboardResult = CheckCaseAndMotherboardCompatibility(buildWithComponents.Case, buildWithComponents.Motherboard);
+        var caseGpuResult = CheckCaseAndGpuCompatibility(buildWithComponents.Case, buildWithComponents.Gpu);
+        var caseStorageResult = CheckCaseAndStorageCompatibility(buildWithComponents.Case, buildWithComponents.Storages);
+        var caseAirCoolerResult = CheckCaseAndAirCoolerCompatibility(buildWithComponents.Case, buildWithComponents.Cooler);
+        var caseWaterCoolerResult = CheckCaseAndWaterCoolerCompatibility(buildWithComponents.Case, buildWithComponents.Cooler);
+        var casePsuResult = CheckCaseAndPowerSupplyCompatibility(buildWithComponents.Case, buildWithComponents.Psu);
+
+        return caseMotherboardResult.Status != CompatibilityStatus.Incompatible && 
+               caseGpuResult.Status != CompatibilityStatus.Incompatible && 
+               caseStorageResult.Status != CompatibilityStatus.Incompatible && 
+               caseAirCoolerResult.Status != CompatibilityStatus.Incompatible && 
+               caseWaterCoolerResult.Status != CompatibilityStatus.Incompatible && 
+               casePsuResult.Status != CompatibilityStatus.Incompatible;
+    }
+    
+    public bool IsStorageCompatible(BuildWithComponents buildWithComponents)
+    {
+        var motherboardStorageResult = CheckMotherboardAndStorageCompatibility(buildWithComponents.Motherboard, buildWithComponents.Storages);
+        var psuStorageResult = CheckPsuAndStoragesCompatibility(buildWithComponents.Psu, buildWithComponents.Storages);
+        var caseStorageResult = CheckCaseAndStorageCompatibility(buildWithComponents.Case, buildWithComponents.Storages);
+
+        return motherboardStorageResult.Status != CompatibilityStatus.Incompatible && 
+               psuStorageResult.Status != CompatibilityStatus.Incompatible &&
+               caseStorageResult.Status != CompatibilityStatus.Incompatible;
     }
 }

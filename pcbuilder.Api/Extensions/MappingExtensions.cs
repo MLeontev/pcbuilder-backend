@@ -82,9 +82,9 @@ public static class MappingExtensions
         };
     }
 
-    public static SaveBuildDto ToSaveBuildDto(this SaveBuildRequest request, int userId)
+    public static SaveUpdateBuildDto ToSaveUpdateBuildDto(this SaveUpdateBuildRequest request, int userId)
     {
-        return new SaveBuildDto
+        return new SaveUpdateBuildDto
         {
             UserId = userId,
             Name = request.Name,

@@ -115,7 +115,7 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Problem(
             "Case.Motherboard.FormFactorMismatch",
-            $"Форм-фактор материнской платы {motherboard.FormFactor.Name} превышает максимально поддерживаемый размер для корпуса {pcCase.MaxMotherboardFormFactor.Name}");
+            $"Форм-фактор материнской платы ({motherboard.FormFactor.Name}) превышает максимально поддерживаемый размер для корпуса ({pcCase.MaxMotherboardFormFactor.Name})");
     }
 
     public static CompatibilityError GpuTooLongForCase(Gpu gpu, Case pcCase)
@@ -166,7 +166,7 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Problem(
             "Psu.Motherboard.MissingPowerConnector",
-            $"Материнская плата требует {connectorValue} разъем(а/ов) {connectorName}, но блок питания предоставляет только {availableQuantity}");
+            $"Недостаточно разъемов питания ({connectorName}) для материнской платы. Требуется: {connectorValue}, доступно: {availableQuantity}");
     }
 
     public static CompatibilityError MissingPowerConnectorGpu(PowerSupply psu, Gpu gpu, 

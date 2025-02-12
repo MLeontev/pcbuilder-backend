@@ -54,25 +54,25 @@ public class RamService : IRamService
         var build = getComponentsResult.Value;
         build.Rams = [];
         
-        var availableRams = await _ramRepository.Get(searchQuery, 1, int.MaxValue);
+        var availableComponents = await _ramRepository.Get(searchQuery, 1, int.MaxValue);
 
-        var compatibleRams = new List<Ram>();
+        var compatibleComponents = new List<Ram>();
         
-        foreach (var ram in availableRams.Items)
+        foreach (var component in availableComponents.Items)
         {
-            build.Rams = [ram];
+            build.Rams = [component];
             if (_compatibilityChecker.IsRamCompatible(build))
             {
-                compatibleRams.Add(ram);
+                compatibleComponents.Add(component);
             }
         }
         
-        var pagedCompatibleRams = compatibleRams
+        var pagedCompatibleComponents = compatibleComponents
             .Skip((page - 1) * pageSize)
             .Take(pageSize)            
             .ToList();
 
-        var pagedResult = new PagedList<Ram>(pagedCompatibleRams, page, pageSize, compatibleRams.Count);
+        var pagedResult = new PagedList<Ram>(pagedCompatibleComponents, page, pageSize, compatibleComponents.Count);
 
         return Result.Success(pagedResult);
     }
