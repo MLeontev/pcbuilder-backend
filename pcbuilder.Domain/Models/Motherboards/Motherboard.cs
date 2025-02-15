@@ -26,7 +26,10 @@ public class Motherboard : PcComponent
 
     public int PcieSlotsCount { get; set; }
     public string PcieVersion { get; set; } = string.Empty;
-    
+
     public List<MotherboardStorage> MotherboardStorages { get; set; } = [];
     public List<MotherboardPowerConnector> MotherboardPowerConnectors { get; set; } = [];
+
+    public override string Description =>
+        $"{Socket.Name}, {MotherboardChipset.Name}, {MemorySlots}x{MemoryType.Name}-{MaxMemorySpeed} МГц, {PcieSlotsCount}xPCI-Ex16, {FormFactor.Name}";
 }

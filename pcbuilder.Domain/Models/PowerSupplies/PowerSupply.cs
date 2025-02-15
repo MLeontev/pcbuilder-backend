@@ -14,4 +14,7 @@ public class PowerSupply : PcComponent
     public int Length { get; set; }
 
     public List<PsuPowerConnector> PsuPowerConnectors { get; set; } = [];
+
+    public override string Description =>
+        $"{Power} Вт, 80+ {PsuEfficiency.Name}, {Length} мм";
 }

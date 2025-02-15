@@ -20,4 +20,6 @@ public class Case : PcComponent
     public int Slots35 { get; set; }
 
     public List<CaseWaterCoolingSize> CaseWaterCoolingSizes { get; set; } = [];
+
+    public override string Description => $"Форм-фактор материнской платы: {MaxMotherboardFormFactor.Name}";
 }

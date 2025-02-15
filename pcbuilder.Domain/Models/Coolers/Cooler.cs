@@ -14,4 +14,9 @@ public class Cooler : PcComponent
     public WaterCoolingSize? WaterCoolingSize { get; set; }
 
     public List<CoolerSocket> CoolerSockets { get; set; } = [];
+
+    public override string Description =>
+        Height.HasValue
+            ? $"TDP: {Tdp} Вт, высота: {Height} мм"
+            : $"TDP: {Tdp} Вт, размер радиатора: {WaterCoolingSize?.Size}";
 }
