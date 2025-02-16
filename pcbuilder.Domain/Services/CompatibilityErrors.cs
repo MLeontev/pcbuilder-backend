@@ -79,7 +79,7 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Problem(
             "Cpu.Cooler.TdpMismatch",
-            $"TDP кулера ({cooler.Tdp}W) меньше TDP процессора ({cpu.Tdp}W. Возможен перегрев процессора");
+            $"TDP кулера ({cooler.Tdp} Вт) меньше TDP процессора ({cpu.Tdp} Вт. Возможен перегрев процессора");
     }
 
     public static CompatibilityError NotEnoughSataPorts(int availableSlots, int requiredSlots)

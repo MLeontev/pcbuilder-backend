@@ -18,30 +18,11 @@ public class Error
 
     public ErrorType Type { get; }
 
-    public static Error Failure(string code, string message)
-    {
-        return new Error(code, message, ErrorType.Failure);
-    }
-
-    public static Error Validation(string code, string message)
-    {
-        return new Error(code, message, ErrorType.Validation);
-    }
-
-    public static Error NotFound(string code, string message)
-    {
-        return new Error(code, message, ErrorType.NotFound);
-    }
-
-    public static Error Conflict(string code, string message)
-    {
-        return new Error(code, message, ErrorType.Conflict);
-    }
-
-    public static Error Unauthorized(string code, string message)
-    {
-        return new Error(code, message, ErrorType.Unauthorized);
-    }
+    public static Error Failure(string code, string message) => new(code, message, ErrorType.Failure);
+    public static Error Validation(string code, string message) => new(code, message, ErrorType.Validation);
+    public static Error NotFound(string code, string message) => new(code, message, ErrorType.NotFound);
+    public static Error Conflict(string code, string message) => new(code, message, ErrorType.Conflict);
+    public static Error Unauthorized(string code, string message) => new(code, message, ErrorType.Unauthorized);
 }
 
 public enum ErrorType
