@@ -9,6 +9,6 @@ public class SaveUpdateBuildRequestValidator : AbstractValidator<SaveUpdateBuild
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Название обязательно")
-            .MaximumLength(100).WithMessage("Название не должно быть длинее 100 символов");
+            .MaximumLength(100).WithMessage("Название не должно быть длиннее 100 символов");
     }
 }
