@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using pcbuilder.Api.Contracts.Builds;
 using pcbuilder.Api.Extensions;
 using pcbuilder.Api.Validators.Builds;
+using pcbuilder.Application.DTOs.Builds;
 using pcbuilder.Application.Services.BuildService;
+using pcbuilder.Application.Services.ReportService;
 
 namespace pcbuilder.Api.Controllers;
 
@@ -13,17 +15,23 @@ namespace pcbuilder.Api.Controllers;
 public class BuildController : ControllerBase
 {
     private readonly IBuildService _buildService;
+    private readonly IReportService _reportService;
     private readonly GetBuildsRequestValidator _getBuildsRequestValidator;
     private readonly SaveUpdateBuildRequestValidator _saveUpdateBuildRequestValidator;
+    private readonly GenerateBuildReportRequestValidator _generateBuildReportRequestValidator;
 
     public BuildController(
         IBuildService buildService, 
         GetBuildsRequestValidator getBuildsRequestValidator, 
-        SaveUpdateBuildRequestValidator saveUpdateBuildRequestValidator)
+        SaveUpdateBuildRequestValidator saveUpdateBuildRequestValidator, 
+        IReportService reportService, 
+        GenerateBuildReportRequestValidator generateBuildReportRequestValidator)
     {
         _buildService = buildService;
         _getBuildsRequestValidator = getBuildsRequestValidator;
         _saveUpdateBuildRequestValidator = saveUpdateBuildRequestValidator;
+        _reportService = reportService;
+        _generateBuildReportRequestValidator = generateBuildReportRequestValidator;
     }
 
     [HttpGet]
@@ -118,5 +126,36 @@ public class BuildController : ControllerBase
         return result.IsFailure
             ? result.ToErrorResponse()
             : Ok(result.Value.ToCompatibilityResponse());
+    }
+
+    [HttpPost("generate-excel-report")]
+    public async Task<IActionResult> GenerateExcelReport([FromBody] GenerateBuildReportRequest request)
+    {
+        var validationResult = await _generateBuildReportRequestValidator.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var errorResponse = validationResult.ToValidationErrorResponse();
+            return BadRequest(errorResponse);
+        }
+        
+        var getComponentsResult = await _buildService.GetAllComponents(request.Components);
+
+        if (getComponentsResult.IsFailure)
+        {
+            return getComponentsResult.ToErrorResponse();
+        }
+        
+        var buildComponents = getComponentsResult.Value;
+
+        var generateBuildReportDto = new GenerateBuildReportDto
+        {
+            Name = request.Name,
+            Description = request.Description,
+            Components = buildComponents
+        };
+        
+        var fileBytes = await _reportService.GenerateBuildExcelReport(generateBuildReportDto);
+        return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "BuildReport.xlsx");
     }
 }

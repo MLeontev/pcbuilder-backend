@@ -15,6 +15,7 @@ using pcbuilder.Application.Services.GpuService;
 using pcbuilder.Application.Services.MotherboardService;
 using pcbuilder.Application.Services.PowerSupplyService;
 using pcbuilder.Application.Services.RamService;
+using pcbuilder.Application.Services.ReportService;
 using pcbuilder.Application.Services.StorageService;
 using pcbuilder.Application.Services.UserService;
 using pcbuilder.Domain.Interfaces;
@@ -103,6 +104,8 @@ builder.Services.AddScoped<IPowerSupplyRepository, PowerSupplyRepository>();
 builder.Services.AddScoped<IBuildService, BuildService>();
 builder.Services.AddScoped<IBuildRepository, BuildRepository>();
 builder.Services.AddScoped<CompatibilityChecker>();
+
+builder.Services.AddScoped<IReportService, ReportService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterUserRequestValidator>();
 
