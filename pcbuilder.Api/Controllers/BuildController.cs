@@ -158,4 +158,35 @@ public class BuildController : ControllerBase
         var fileBytes = await _reportService.GenerateBuildExcelReport(generateBuildReportDto);
         return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "BuildReport.xlsx");
     }
+    
+    [HttpPost("generate-pdf-report")]
+    public async Task<IActionResult> GeneratePdfReport([FromBody] GenerateBuildReportRequest request)
+    {
+        var validationResult = await _generateBuildReportRequestValidator.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var errorResponse = validationResult.ToValidationErrorResponse();
+            return BadRequest(errorResponse);
+        }
+        
+        var getComponentsResult = await _buildService.GetAllComponents(request.Components);
+
+        if (getComponentsResult.IsFailure)
+        {
+            return getComponentsResult.ToErrorResponse();
+        }
+        
+        var buildComponents = getComponentsResult.Value;
+
+        var generateBuildReportDto = new GenerateBuildReportDto
+        {
+            Name = request.Name,
+            Description = request.Description,
+            Components = buildComponents
+        };
+        
+        var fileBytes = _reportService.GenerateBuildPdfReport(generateBuildReportDto);
+        return File(fileBytes, "application/pdf", "BuildReport.pdf");
+    }
 }

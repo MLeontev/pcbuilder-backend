@@ -4,5 +4,7 @@ namespace pcbuilder.Application.Services.ReportService;
 
 public interface IReportService
 {
-    Task<byte[]> GenerateBuildExcelReport(GenerateBuildReportDto generateBuildReportDto);
+    public Task<byte[]> GenerateBuildExcelReport(GenerateBuildReportDto build);
+    
+    public byte[] GenerateBuildPdfReport(GenerateBuildReportDto build);
 }
