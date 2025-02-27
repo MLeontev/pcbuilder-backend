@@ -18,20 +18,17 @@ public class BuildController : ControllerBase
     private readonly IReportService _reportService;
     private readonly GetBuildsRequestValidator _getBuildsRequestValidator;
     private readonly SaveUpdateBuildRequestValidator _saveUpdateBuildRequestValidator;
-    private readonly GenerateBuildReportRequestValidator _generateBuildReportRequestValidator;
 
     public BuildController(
         IBuildService buildService, 
         GetBuildsRequestValidator getBuildsRequestValidator, 
         SaveUpdateBuildRequestValidator saveUpdateBuildRequestValidator, 
-        IReportService reportService, 
-        GenerateBuildReportRequestValidator generateBuildReportRequestValidator)
+        IReportService reportService)
     {
         _buildService = buildService;
         _getBuildsRequestValidator = getBuildsRequestValidator;
         _saveUpdateBuildRequestValidator = saveUpdateBuildRequestValidator;
         _reportService = reportService;
-        _generateBuildReportRequestValidator = generateBuildReportRequestValidator;
     }
 
     [HttpGet]
@@ -131,14 +128,6 @@ public class BuildController : ControllerBase
     [HttpPost("generate-excel-report")]
     public async Task<IActionResult> GenerateExcelReport([FromBody] GenerateBuildReportRequest request)
     {
-        var validationResult = await _generateBuildReportRequestValidator.ValidateAsync(request);
-
-        if (!validationResult.IsValid)
-        {
-            var errorResponse = validationResult.ToValidationErrorResponse();
-            return BadRequest(errorResponse);
-        }
-        
         var getComponentsResult = await _buildService.GetAllComponents(request.Components);
 
         if (getComponentsResult.IsFailure)
@@ -162,14 +151,6 @@ public class BuildController : ControllerBase
     [HttpPost("generate-pdf-report")]
     public async Task<IActionResult> GeneratePdfReport([FromBody] GenerateBuildReportRequest request)
     {
-        var validationResult = await _generateBuildReportRequestValidator.ValidateAsync(request);
-
-        if (!validationResult.IsValid)
-        {
-            var errorResponse = validationResult.ToValidationErrorResponse();
-            return BadRequest(errorResponse);
-        }
-        
         var getComponentsResult = await _buildService.GetAllComponents(request.Components);
 
         if (getComponentsResult.IsFailure)

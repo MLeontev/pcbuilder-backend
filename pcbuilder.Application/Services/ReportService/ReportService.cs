@@ -18,13 +18,13 @@ public class ReportService : IReportService
         var worksheet = package.Workbook.Worksheets.Add("Конфигурация ПК");
         
         worksheet.Cells["A1:B1"].Merge = true;
-        worksheet.Cells["A1"].Value = $"Конфигурация ПК \"{build.Name}\"";
+        worksheet.Cells["A1"].Value = string.IsNullOrWhiteSpace(build.Name) ? "Конфигурация ПК" : $"Конфигурация ПК \"{build.Name}\"";
         worksheet.Cells["A1"].Style.Font.Bold = true;
         worksheet.Cells["A1"].Style.Font.Size = 16;
         worksheet.Cells["A1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
         worksheet.Cells["A2:B2"].Merge = true;
-        worksheet.Cells["A2"].Value = build.Description ?? "Описание отсутствует";
+        worksheet.Cells["A2"].Value = string.IsNullOrWhiteSpace(build.Description) ? "Описание отсутствует" : build.Description;
         worksheet.Cells["A2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
         worksheet.Cells["A3"].Value = "Категория";
@@ -102,7 +102,9 @@ public class ReportService : IReportService
 
                 page.Header()
                     .AlignCenter()
-                    .Text($"Конфигурация ПК \"{build.Name}\"")
+                    .Text(string.IsNullOrWhiteSpace(build.Name) 
+                        ? "Конфигурация ПК" 
+                        : $"Конфигурация ПК \"{build.Name}\"")
                     .Bold()
                     .FontSize(16);
 
@@ -110,7 +112,9 @@ public class ReportService : IReportService
                 {
                     col.Spacing(10);
 
-                    col.Item().Text(build.Description ?? "Описание отсутствует");
+                    col.Item().Text(string.IsNullOrWhiteSpace(build.Description) 
+                        ? "Описание отсутствует" 
+                        : build.Description);
 
                     col.Item().Table(table =>
                     {
