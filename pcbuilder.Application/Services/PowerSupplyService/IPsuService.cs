@@ -5,7 +5,7 @@ using pcbuilder.Shared;
 
 namespace pcbuilder.Application.Services.PowerSupplyService;
 
-public interface IPowerSupplyService
+public interface IPsuService
 {
     public Task<Result<PowerSupply>> GetById(int id);
 

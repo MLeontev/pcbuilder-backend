@@ -3,7 +3,7 @@ using pcbuilder.Domain.Models.PowerSupplies;
 
 namespace pcbuilder.Domain.Interfaces;
 
-public interface IPowerSupplyRepository
+public interface IPsuRepository
 {
     public Task<PagedList<PowerSupply>> Get(string? searchQuery, int page, int pageSize);
 

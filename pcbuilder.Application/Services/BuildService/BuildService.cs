@@ -29,7 +29,7 @@ public class BuildService : IBuildService
     private readonly IStorageRepository _storageRepository;
     private readonly IGpuRepository _gpuRepository;
     private readonly ICaseRepository _caseRepository;
-    private readonly IPowerSupplyRepository _powerSupplyRepository;
+    private readonly IPsuRepository _psuRepository;
 
     public BuildService(
         CompatibilityChecker compatibilityChecker,
@@ -41,7 +41,7 @@ public class BuildService : IBuildService
         IStorageRepository storageRepository, 
         IGpuRepository gpuRepository, 
         ICaseRepository caseRepository, 
-        IPowerSupplyRepository powerSupplyRepository)
+        IPsuRepository psuRepository)
     {
         _compatibilityChecker = compatibilityChecker;
         _cpuRepository = cpuRepository;
@@ -52,7 +52,7 @@ public class BuildService : IBuildService
         _storageRepository = storageRepository;
         _gpuRepository = gpuRepository;
         _caseRepository = caseRepository;
-        _powerSupplyRepository = powerSupplyRepository;
+        _psuRepository = psuRepository;
     }
 
     public async Task<Result<CompatibilityResult>> CheckBuildCompatibility(BuildComponentIds build)
@@ -234,7 +234,7 @@ public class BuildService : IBuildService
         PowerSupply? psu = null;
         if (build.PsuId.HasValue)
         {
-            psu = await _powerSupplyRepository.GetById(build.PsuId.Value);
+            psu = await _psuRepository.GetById(build.PsuId.Value);
             if (psu == null)
                 return Result.Failure<BuildWithComponents>(ComponentErrors.NotFound(build.PsuId.Value));
         }

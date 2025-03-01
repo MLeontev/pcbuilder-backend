@@ -9,25 +9,25 @@ using pcbuilder.Shared;
 
 namespace pcbuilder.Application.Services.PowerSupplyService;
 
-public class PowerSupplyService : IPowerSupplyService
+public class PsuService : IPsuService
 {
-    private readonly IPowerSupplyRepository _powerSupplyRepository;
+    private readonly IPsuRepository _psuRepository;
     private readonly IBuildService _buildService;
     private readonly CompatibilityChecker _compatibilityChecker;
 
-    public PowerSupplyService(
-        IPowerSupplyRepository powerSupplyRepository, 
+    public PsuService(
+        IPsuRepository psuRepository, 
         IBuildService buildService, 
         CompatibilityChecker compatibilityChecker)
     {
-        _powerSupplyRepository = powerSupplyRepository;
+        _psuRepository = psuRepository;
         _buildService = buildService;
         _compatibilityChecker = compatibilityChecker;
     }
     
     public async Task<Result<PowerSupply>> GetById(int id)
     {
-        var powerSupply = await _powerSupplyRepository.GetById(id);
+        var powerSupply = await _psuRepository.GetById(id);
         
         return powerSupply == null
             ? Result.Failure<PowerSupply>(ComponentErrors.NotFound(id))
@@ -36,7 +36,7 @@ public class PowerSupplyService : IPowerSupplyService
 
     public async Task<Result<PagedList<PowerSupply>>> Get(string? searchQuery, int page, int pageSize)
     {
-        var powerSupplies = await _powerSupplyRepository.Get(searchQuery, page, pageSize);
+        var powerSupplies = await _psuRepository.Get(searchQuery, page, pageSize);
         return Result.Success(powerSupplies);
     }
 
@@ -51,7 +51,7 @@ public class PowerSupplyService : IPowerSupplyService
         
         var build = getComponentsResult.Value;
         
-        var availableComponents = await _powerSupplyRepository.Get(searchQuery, 1, int.MaxValue);
+        var availableComponents = await _psuRepository.Get(searchQuery, 1, int.MaxValue);
 
         var compatibleComponents = new List<PowerSupply>();
         

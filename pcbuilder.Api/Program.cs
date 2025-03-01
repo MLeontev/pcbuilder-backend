@@ -98,8 +98,8 @@ builder.Services.AddScoped<IGpuRepository, GpuRepository>();
 builder.Services.AddScoped<ICaseService, CaseService>();
 builder.Services.AddScoped<ICaseRepository, CaseRepository>();
 
-builder.Services.AddScoped<IPowerSupplyService, PowerSupplyService>();
-builder.Services.AddScoped<IPowerSupplyRepository, PowerSupplyRepository>();
+builder.Services.AddScoped<IPsuService, PsuService>();
+builder.Services.AddScoped<IPsuRepository, PsuRepository>();
 
 builder.Services.AddScoped<IBuildService, BuildService>();
 builder.Services.AddScoped<IBuildRepository, BuildRepository>();

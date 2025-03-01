@@ -9,16 +9,16 @@ namespace pcbuilder.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PowerSupplyController : ControllerBase
+public class PsuController : ControllerBase
 {
-    private readonly IPowerSupplyService _powerSupplyService;
+    private readonly IPsuService _psuService;
     private readonly GetComponentsRequestValidator _getComponentsRequestValidator;
 
-    public PowerSupplyController(
-        IPowerSupplyService powerSupplyService, 
+    public PsuController(
+        IPsuService psuService, 
         GetComponentsRequestValidator getComponentsRequestValidator)
     {
-        _powerSupplyService = powerSupplyService;
+        _psuService = psuService;
         _getComponentsRequestValidator = getComponentsRequestValidator;
     }
     
@@ -33,7 +33,7 @@ public class PowerSupplyController : ControllerBase
             return BadRequest(errorResponse);
         }
 
-        var result = await _powerSupplyService.Get(request.SearchQuery, request.Page, request.PageSize);
+        var result = await _psuService.Get(request.SearchQuery, request.Page, request.PageSize);
         
         return result.IsFailure 
             ? result.ToErrorResponse()
@@ -43,7 +43,7 @@ public class PowerSupplyController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var result = await _powerSupplyService.GetById(id);
+        var result = await _psuService.GetById(id);
         
         return result.IsFailure
             ? result.ToErrorResponse()
@@ -61,7 +61,7 @@ public class PowerSupplyController : ControllerBase
             return BadRequest(errorResponse);
         }
 
-        var result = await _powerSupplyService.GetCompatible(request.SearchQuery, request.Page, request.PageSize, buildComponentIds);
+        var result = await _psuService.GetCompatible(request.SearchQuery, request.Page, request.PageSize, buildComponentIds);
 
         return result.IsFailure
             ? result.ToErrorResponse()

@@ -5,11 +5,11 @@ using pcbuilder.Domain.Models.PowerSupplies;
 
 namespace pcbuilder.Infrastructure.Persistence.Repositories;
 
-public class PowerSupplyRepository : IPowerSupplyRepository
+public class PsuRepository : IPsuRepository
 {
     private readonly ApplicationDbContext _dbContext;
 
-    public PowerSupplyRepository(ApplicationDbContext dbContext)
+    public PsuRepository(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
     }
