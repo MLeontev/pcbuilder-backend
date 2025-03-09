@@ -92,6 +92,12 @@ public class BuildService : IBuildService
 
     public async Task<Result<int>> SaveBuild(SaveUpdateBuildDto saveBuildDto)
     {
+        var existingBuild = await _buildRepository.GetByName(saveBuildDto.UserId, saveBuildDto.Name);
+        if (existingBuild != null)
+        {
+            return Result.Failure<int>(BuildErrors.DuplicateName);
+        }
+        
         var getComponentsResult = await GetAllComponents(saveBuildDto.Components);
         if (getComponentsResult.IsFailure)
         {
@@ -127,6 +133,12 @@ public class BuildService : IBuildService
         if (build.UserId != userId)
         {
             return Result.Failure(BuildErrors.ForbiddenAccess);
+        }
+        
+        var existingBuild = await _buildRepository.GetByName(updateBuildDto.UserId, updateBuildDto.Name);
+        if (existingBuild != null && existingBuild.Id != buildId)
+        {
+            return Result.Failure<int>(BuildErrors.DuplicateName);
         }
         
         var getComponentsResult = await GetAllComponents(updateBuildDto.Components);

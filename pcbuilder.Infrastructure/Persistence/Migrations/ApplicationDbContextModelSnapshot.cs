@@ -239,6 +239,9 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Property<int>("PcComponentId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
                     b.HasKey("BuildId", "PcComponentId");
 
                     b.HasIndex("PcComponentId");
@@ -1193,7 +1196,7 @@ namespace pcbuilder.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("pcbuilder.Domain.Models.PowerSupplies.PowerConnector", "SourceConnector")
-                        .WithMany()
+                        .WithMany("CompatibleConnectors")
                         .HasForeignKey("SourceConnectorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1419,6 +1422,11 @@ namespace pcbuilder.Infrastructure.Migrations
                     b.Navigation("SupportedFormFactors");
 
                     b.Navigation("SupportedInterfaces");
+                });
+
+            modelBuilder.Entity("pcbuilder.Domain.Models.PowerSupplies.PowerConnector", b =>
+                {
+                    b.Navigation("CompatibleConnectors");
                 });
 
             modelBuilder.Entity("pcbuilder.Domain.Models.Cases.Case", b =>

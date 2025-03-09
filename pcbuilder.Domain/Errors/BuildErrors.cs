@@ -4,6 +4,9 @@ namespace pcbuilder.Domain.Errors;
 
 public class BuildErrors
 {
+    public static Error DuplicateName => Error.Conflict(
+        "Builds.DuplicateName", "Сборка с таким названием уже сохранена");
+    
     public static Error ForbiddenAccess => Error.Forbidden(
         "Builds.ForbiddenAccess", "У вас нет прав на доступ к этой сборке");
 

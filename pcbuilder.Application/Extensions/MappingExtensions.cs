@@ -37,11 +37,11 @@ public static class MappingExtensions
             CoolerId = buildComponents.FirstOrDefault(bc => bc.PcComponent is Cooler)?.PcComponentId,
             RamIds = buildComponents
                 .Where(bc => bc.PcComponent is Ram)
-                .Select(bc => bc.PcComponentId)
+                .SelectMany(bc => Enumerable.Repeat(bc.PcComponentId, bc.Quantity))
                 .ToList(),
             StorageIds = buildComponents
                 .Where(bc => bc.PcComponent is Storage)
-                .Select(bc => bc.PcComponentId)
+                .SelectMany(bc => Enumerable.Repeat(bc.PcComponentId, bc.Quantity))
                 .ToList(),
             PsuId = buildComponents.FirstOrDefault(bc => bc.PcComponent is PowerSupply)?.PcComponentId,
             CaseId = buildComponents.FirstOrDefault(bc => bc.PcComponent is Case)?.PcComponentId
@@ -64,17 +64,39 @@ public static class MappingExtensions
         if (components.Cooler != null)
             buildComponents.Add(new BuildComponent { PcComponentId = components.Cooler.Id });
         
-        if (components.Rams != null)
-            buildComponents.AddRange(components.Rams.Select(ram => new BuildComponent { PcComponentId = ram.Id }));
-        
-        if (components.Storages != null)
-            buildComponents.AddRange(components.Storages.Select(storage => new BuildComponent { PcComponentId = storage.Id }));
-        
         if (components.Psu != null)
             buildComponents.Add(new BuildComponent { PcComponentId = components.Psu.Id });
         
         if (components.Case != null)
             buildComponents.Add(new BuildComponent { PcComponentId = components.Case.Id });
+        
+        if (components.Rams != null)
+        {
+            var ramGroups = components.Rams
+                .GroupBy(ram => ram.Id)
+                .Select(group => new BuildComponent
+                {
+                    PcComponentId = group.Key,
+                    Quantity = group.Count()
+                })
+                .ToList();
+
+            buildComponents.AddRange(ramGroups);
+        }
+
+        if (components.Storages != null)
+        {
+            var storageGroups = components.Storages
+                .GroupBy(storage => storage.Id)
+                .Select(group => new BuildComponent
+                {
+                    PcComponentId = group.Key,
+                    Quantity = group.Count()
+                })
+                .ToList();
+
+            buildComponents.AddRange(storageGroups);
+        }
 
         return buildComponents;
     }

@@ -42,6 +42,13 @@ public class BuildRepository : IBuildRepository
             .FirstOrDefaultAsync(b => b.Id == id);
     }
 
+    public async Task<Build?> GetByName(int userId, string name)
+    {
+        return await _dbContext.Builds
+            .Where(b => b.UserId == userId && b.Name.ToLower() == name.ToLower())
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<int> Add(Build build)
     {
         _dbContext.Builds.Add(build);
