@@ -50,8 +50,8 @@ public static class MappingExtensions
             Id = buildDto.Id,
             Name = buildDto.Name,
             Description = buildDto.Description,
-            CreatedAt = buildDto.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss"),
-            UpdatedAt = buildDto.UpdatedAt.ToString("dd.MM.yyyy HH:mm:ss")
+            CreatedAt = buildDto.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),
+            UpdatedAt = buildDto.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
         };
     }
 
@@ -76,8 +76,8 @@ public static class MappingExtensions
             Id = buildDto.Id,
             Name = buildDto.Name,
             Description = buildDto.Description,
-            CreatedAt = buildDto.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss"),
-            UpdatedAt = buildDto.UpdatedAt.ToString("dd.MM.yyyy HH:mm:ss"),
+            CreatedAt = buildDto.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),
+            UpdatedAt = buildDto.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),
             Components = buildDto.Components
         };
     }
@@ -191,6 +191,7 @@ public static class MappingExtensions
             { "Тип памяти", motherboard.MemoryType.Name },
             { "Максимальный объем памяти", $"{motherboard.MaxMemoryCapacity} ГБ" },
             { "Максимальная частота памяти", $"{motherboard.MaxMemorySpeed} МГц" },
+            { "Количество слотов памяти", $"{motherboard.MemorySlots}" },
             { "Количество портов SATA", sataPortsCount.ToString() },
             { "Количество разъемов M.2", m2Slots.Count.ToString() },
             { "Разъемы M.2", string.Join(", ", m2SlotDescriptions)},
@@ -269,7 +270,8 @@ public static class MappingExtensions
 
         var powerConnectors = gpu.GpuPowerConnectors
             .OrderBy(pc => pc.PowerConnector.Pins)
-            .Select(pc => $"{pc.Quantity} x {pc.PowerConnector.Pins}-pin")
+            //.Select(pc => $"{pc.Quantity} x {pc.PowerConnector.Pins}-pin")
+            .Select(pc => $"{pc.PowerConnector.Name}")
             .ToList();
         
         response.Specifications = new Dictionary<string, string>
@@ -304,9 +306,10 @@ public static class MappingExtensions
             { "Максимальная высота кулера", $"{pcCase.MaxCoolerHeight} мм" },
             { "Максимальная длина блока питания", $"{pcCase.MaxPsuLength} мм" },
             { "Форм-фактор материнской платы", pcCase.MaxMotherboardFormFactor.Name },
-            { "Количество слотов 2.5", $"{pcCase.Slots25}" },
-            { "Количество слотов 3.5", $"{pcCase.Slots35}" },
-            { "Поддерживаемые размеры водяного охлаждения", string.Join(", ", caseWaterCoolingSizes) }
+            { "Количество внутренних отсеков 2.5", $"{pcCase.Slots25}" },
+            { "Количество внутренних отсеков 3.5", $"{pcCase.Slots35}" },
+            { "Поддерживаемые размеры водяного охлаждения", caseWaterCoolingSizes.Count > 0 ? string.Join(", ", caseWaterCoolingSizes) : "Не поддерживается" }
+
         };
 
         return response;

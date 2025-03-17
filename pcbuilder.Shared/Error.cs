@@ -3,7 +3,6 @@ namespace pcbuilder.Shared;
 public class Error
 {
     public static readonly Error None = new(string.Empty, string.Empty, ErrorType.Failure);
-    public static readonly Error NullValue = new("NullValue", "Null value was provided", ErrorType.Failure);
 
     private Error(string code, string message, ErrorType type)
     {

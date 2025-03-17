@@ -24,6 +24,8 @@
 
     <ItemGroup>
         <Folder Include="wwwroot\images\cpus\"/>
+        <Folder Include="wwwroot\images\gpus\" />
+        <Folder Include="wwwroot\images\motherboards\" />
     </ItemGroup>
 
 </Project>

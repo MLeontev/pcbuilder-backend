@@ -79,7 +79,7 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Problem(
             "Cpu.Cooler.TdpMismatch",
-            $"TDP кулера ({cooler.Tdp} Вт) меньше TDP процессора ({cpu.Tdp} Вт. Возможен перегрев процессора");
+            $"TDP кулера ({cooler.Tdp} Вт) меньше TDP процессора ({cpu.Tdp}) Вт. Возможен перегрев процессора");
     }
 
     public static CompatibilityError NotEnoughSataPorts(int availableSlots, int requiredSlots)
@@ -101,7 +101,7 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Warning(
             "Gpu.Motherboard.PcieVersionMismatch",
-            $"Версия PCI-Express видеокарты ({gpu.PcieVersion}) выше версии материнсккой платы ({motherboard.PcieVersion}). Возможно снижение производительности");
+            $"Версия PCI-Express видеокарты ({gpu.PcieVersion}) выше версии материнской платы ({motherboard.PcieVersion}). Возможно снижение производительности");
     }
 
     public static CompatibilityError NoAvailablePcieSlots(Motherboard motherboard)
@@ -130,7 +130,7 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Problem(
             "Case.Storage.SlotsMismatch",
-            $"В корпусе недостаточно отсеков для {storageType}. Требуется: {required}, доступно: {available}");
+            $"В корпусе недостаточно отсеков для {storageType} накопителей. Требуется: {required}, доступно: {available}");
     }
 
     public static CompatibilityError CoolerTooTallForCase(Case pcCase, Cooler cooler)
@@ -193,7 +193,7 @@ public static class CompatibilityErrors
     
     public static CompatibilityError MissingRequiredComponentsError(List<string> missingComponents)
     {
-        return CompatibilityError.Warning(
+        return CompatibilityError.Note(
             "Build.RequiredComponentsMissing", 
             $"Отсутствуют обязательные компоненты: {string.Join(", ", missingComponents)}");
     }

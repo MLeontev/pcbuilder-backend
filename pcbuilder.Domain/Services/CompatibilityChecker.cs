@@ -32,7 +32,7 @@ public class CompatibilityChecker
         
         if (build.Gpu == null && build.Cpu?.IntegratedGpu == null) missingComponents.Add("Видеокарта");
         
-        if (build.Storages == null || build.Storages.Count == 0) missingComponents.Add("Накопители");
+        if (build.Storages == null || build.Storages.Count == 0) missingComponents.Add("Накопитель");
         
         if (missingComponents.Count != 0)
         {
