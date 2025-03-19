@@ -30,7 +30,7 @@ public class CompatibilityChecker
         
         if (build.Psu == null) missingComponents.Add("Блок питания");
         
-        if (build.Gpu == null && build.Cpu?.IntegratedGpu == null) missingComponents.Add("Видеокарта");
+        if (build.Gpu == null && build.Cpu?.IntegratedGpu == false) missingComponents.Add("Видеокарта");
         
         if (build.Storages == null || build.Storages.Count == 0) missingComponents.Add("Накопитель");
         
