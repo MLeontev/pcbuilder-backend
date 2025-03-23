@@ -195,6 +195,6 @@ public static class CompatibilityErrors
     {
         return CompatibilityError.Note(
             "Build.RequiredComponentsMissing", 
-            $"Отсутствуют обязательные компоненты: {string.Join(", ", missingComponents)}");
+            $"Отсутствуют обязательные комплектующие: {string.Join(", ", missingComponents)}");
     }
 }
